@@ -1,5 +1,6 @@
 package org.tangaya.quranasrclient;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,11 @@ public class ServerConfigActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "connecting...", Toast.LENGTH_SHORT).show();
     }
 
+    public void onClickStartButton(View view) {
+        Intent intent = new Intent(this, MurojaahActivity.class);
+        startActivity(intent);
+    }
+
     private class CheckServerTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
@@ -60,7 +66,7 @@ public class ServerConfigActivity extends AppCompatActivity {
 
             if (isServerAvailable) {
                 serverStatusTextView.setText("server tersedia");
-                //connectBtn.setEnabled(false);
+                connectBtn.setEnabled(false);
             } else {
                 serverStatusTextView.setText("server tidak tersedia");
             }
