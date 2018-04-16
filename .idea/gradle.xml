@@ -9,9 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/net-speech-api" />
-            <option value="$PROJECT_DIR$/speechutils" />
-            <option value="$PROJECT_DIR$/speechutils/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

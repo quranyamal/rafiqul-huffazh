@@ -15,9 +15,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void recordButtonClickAction(View view) {
+    public void onClickMurojaahBtn(View view) {
 
-        Toast.makeText(this, "record button clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "goto muroja'ah activity", Toast.LENGTH_SHORT).show();
 
     }
 
