@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.domain;
 
 import android.util.Log;
 
@@ -9,6 +9,8 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketListener;
 import com.neovisionaries.ws.client.WebSocketState;
+
+import org.tangaya.quranasrclient.domain.DecoderWSRepository;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -41,16 +43,20 @@ public class DecoderWebSocket implements DecoderWSRepository {
         mTranscriptionId = transcriptionId;
         mEndpoint = endpoint;
         mArgument = getArguments();
+        Log.d("TWS", "DecoderWebSocket constructor 1 called. endpoint = " + endpoint);
     }
 
     public DecoderWebSocket(String endpoint) {
 
         mEndpoint = endpoint;
         mArgument = "";
+        Log.d("TWS", "DecoderWebSocket constructor 1 called. endpoint = " + endpoint);
     }
 
     @Override
     public void connect(final Callback callback) {
+
+        Log.d("TWS", "connect");
 
         try {
             mWebSocket = new WebSocketFactory()
@@ -96,18 +102,21 @@ public class DecoderWebSocket implements DecoderWSRepository {
     public void disconnect() {
 
         mWebSocket.disconnect();
+        Log.d("TWS", "disconnect");
     }
 
     @Override
     public void sendBinary(byte[] binary) {
 
         mWebSocket.sendBinary(binary);
+        Log.d("TWS", "sendBinary");
     }
 
     @Override
     public void sendText(String text) {
 
         mWebSocket.sendText(text);
+        Log.d("TWS", "sendText");
     }
 
     private static class Listener implements WebSocketListener {
@@ -131,6 +140,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                 Map<String, List<String>> headers) throws Exception {
 
             mCallback.onConnected(headers);
+            Log.d("TWS", "onTextMessage:");
         }
 
         @Override
@@ -138,6 +148,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                    WebSocketException cause) throws Exception {
 
             Timber.d(cause.getMessage());
+            Log.d("TWS", "onTextMessage:");
         }
 
         @Override
@@ -147,6 +158,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                    boolean closedByServer) throws Exception {
 
             mCallback.onDisconnected();
+            Log.d("TWS", "onTextMessage:");
         }
 
         @Override
@@ -177,6 +189,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                   WebSocketFrame frame) throws Exception {
 
             Timber.d("onBinaryFrame");
+            Log.d("TWS", "onTextMessage:");
         }
 
         @Override
@@ -184,6 +197,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                  WebSocketFrame frame) throws Exception {
 
             Timber.d("onCloseFrame");
+            Log.d("TWS", "onCloseFrame:");
         }
 
         @Override
@@ -191,6 +205,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                 WebSocketFrame frame) throws Exception {
 
             Timber.d("onPingFrame");
+            Log.d("TWS", "onPingFrame:");
         }
 
         @Override
@@ -198,6 +213,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                 WebSocketFrame frame) throws Exception {
 
             Timber.d("onPongFrame");
+            Log.d("TWS", "onPongFrame:");
         }
 
         @Override
@@ -221,6 +237,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                    WebSocketFrame frame) throws Exception {
 
             Timber.d("onSendingFrame");
+            Log.d("TWS", "onSendingFrame:");
         }
 
         @Override
@@ -228,6 +245,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                 WebSocketFrame frame) throws Exception {
 
             Timber.d("onFrameSent");
+            Log.d("TWS", "onFrameSent:");
         }
 
         @Override
@@ -235,6 +253,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                   WebSocketFrame frame) throws Exception {
 
             Timber.d("onFrameUnSent");
+            Log.d("TWS", "onFrameUnSent:");
         }
 
         @Override
@@ -242,6 +261,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                     ThreadType threadType, Thread thread) throws Exception {
 
             Timber.d("onThreadCreated");
+            Log.d("TWS", "onThreadCreated:");
         }
 
         @Override
@@ -249,6 +269,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                     ThreadType threadType, Thread thread) throws Exception {
 
             Timber.d("onThreadStarted");
+            Log.d("TWS", "onThreadStarted:");
         }
 
         @Override
@@ -256,6 +277,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                      Thread thread) throws Exception {
 
             Timber.d("onThreadStopping");
+            Log.d("TWS", "onThreadStopping:");
         }
 
         @Override
@@ -263,6 +285,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                             WebSocketException cause) throws Exception {
 
             mCallback.onError(cause.getMessage());
+            Log.d("TWS", "onError:");
         }
 
         @Override
@@ -270,6 +293,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                  WebSocketException cause, WebSocketFrame frame) throws Exception {
 
             Timber.d("onFrameError");
+            Log.d("TWS", "onFrameError:");
         }
 
         @Override
@@ -277,6 +301,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                    WebSocketException cause, List<WebSocketFrame> frames) throws Exception {
 
             Timber.d("onMessageError");
+            Log.d("TWS", "onMessageError:");
         }
 
         @Override
@@ -285,6 +310,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                                 byte[] compressed) throws Exception {
 
             Timber.d("onMessageDecompressionError");
+            Log.d("TWS", "onMessageDecompressionError:");
         }
 
         @Override
@@ -292,6 +318,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                        WebSocketException cause, byte[] data) throws Exception {
 
             Timber.d("onTextMessageError");
+            Log.d("TWS", "onTextMessage:");
         }
 
         @Override
@@ -300,6 +327,8 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                 WebSocketFrame frame) throws Exception {
 
             mCallback.onSendError(cause.getMessage());
+            Log.d("TWS", "onSendError:");
+            Log.d("TWS", "onSendError:");
         }
 
         @Override
@@ -307,6 +336,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                       WebSocketException cause) throws Exception {
 
             Timber.d("onUnexpectedError");
+            Log.d("TWS", "onUnexpectedError:");
         }
 
         @Override
@@ -314,6 +344,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                         Throwable cause) throws Exception {
 
             Timber.d("handleCallbackError");
+            Log.d("TWS", "handleCallbackError:");
         }
 
         @Override
@@ -322,6 +353,7 @@ public class DecoderWebSocket implements DecoderWSRepository {
                                        List<String[]> headers) throws Exception {
 
             Timber.d("onSendingHandshake");
+            Log.d("TWS", "onSendingHandshake:");
         }
     }
 }

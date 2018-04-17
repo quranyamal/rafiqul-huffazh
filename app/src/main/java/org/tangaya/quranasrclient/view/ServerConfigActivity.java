@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.view;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
+
+import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.view.MurojaahActivity;
 
 import java.io.IOException;
 
