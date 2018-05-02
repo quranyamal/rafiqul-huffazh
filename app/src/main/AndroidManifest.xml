@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.ServerConfigActivity" />
-        <activity android:name=".view.MurojaahActivity"></activity>
+        <activity android:name=".view.MurojaahActivity" />
+        <activity android:name=".MurojaahActivityNew"></activity>
     </application>
 
 </manifest>

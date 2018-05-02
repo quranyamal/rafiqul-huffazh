@@ -21,4 +21,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void gotoMorojaahNew(View view) {
+        Intent intent = new Intent(this, MurojaahActivityNew.class);
+        startActivity(intent);
+    }
+
 }

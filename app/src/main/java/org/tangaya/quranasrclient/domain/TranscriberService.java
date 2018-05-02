@@ -42,7 +42,7 @@ public class TranscriberService implements DecoderRepository {
     public TranscriberService(Application application) {
 
         mContext = application.getApplicationContext();
-        mEndpoint = "http://192.168.1.217:8888/client/dynamic/";
+        mEndpoint = "http://192.168.1.4:8888/client/dynamic/";
 
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        try {
@@ -122,7 +122,7 @@ public class TranscriberService implements DecoderRepository {
             UploadNotificationConfig config = new UploadNotificationConfig();
             config.setTitleForAllStatuses("Transcriber");
 
-            transcription.local_uri = "/storage/emulated/0/DCIM/1-1.wav";
+            transcription.local_uri = "/storage/emulated/0/DCIM/100-1.wav";
 
             service.addHeader("User-Id", userId);
             service.addHeader("name", transcription.name);

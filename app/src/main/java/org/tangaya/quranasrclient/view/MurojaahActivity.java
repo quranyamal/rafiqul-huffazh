@@ -140,6 +140,7 @@ public class MurojaahActivity extends AppCompatActivity
 
 
         formInput.local_uri = "file:///storage/emulated/0/Download/100-1.wav";
+        //formInput.local_uri = uri;
         Log.d("MAct", "local_uri:" + formInput.local_uri);
 
         Timber.d(formInput.local_uri);
