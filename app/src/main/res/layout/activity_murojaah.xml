@@ -2,35 +2,93 @@
 <android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MurojaahActivity"
-    android:orientation="vertical">
+    tools:context=".MurojaahActivity"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:layout_weight="10">
 
-    <Button
-        android:id="@+id/btn_mode_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="mode file" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/murojaah_next_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="next"
-        android:onClick="onClickNextButton"/>
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="[transkripsi]"
+            android:gravity="center"
+            android:textAlignment="center"/>
 
-    <Button
-        android:id="@+id/show_result_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="show result"
-        android:onClick="showResult"/>
+        <TextView
+            android:id="@+id/result2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="tes update"
+            android:gravity="center"
+            android:textAlignment="center"/>
 
-    <TextView
-        android:id="@+id/result_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="result: none"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="instruksi"
+            android:layout_gravity="center"
+            android:textAlignment="center"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mulai"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/repeat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ulangi"
+            android:layout_marginTop="20dp"/>
+        <Button
+            android:id="@+id/next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Lanjut"
+            android:layout_marginTop="20dp"
+            android:onClick="onClickNextButton"/>
+        <Button
+            android:id="@+id/hint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tampilkan"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

@@ -1,11 +1,11 @@
 package org.tangaya.quranasrclient;
 
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import org.tangaya.quranasrclient.view.ServerConfigActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,16 +13,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+
     }
 
 
-    public void onClickMurojaahBtn(View view) {
-        Intent intent = new Intent(this, ServerConfigActivity.class);
+    public void gotoMorojaah(View view) {
+        Intent intent = new Intent(this, MurojaahActivity.class);
         startActivity(intent);
     }
 
-    public void gotoMorojaahNew(View view) {
-        Intent intent = new Intent(this, MurojaahActivityNew.class);
+    public void gotoRecordTest(View view) {
+        Intent intent = new Intent(this, AudioRecordTest.class);
         startActivity(intent);
     }
 
