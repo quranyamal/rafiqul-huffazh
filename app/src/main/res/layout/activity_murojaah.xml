@@ -10,6 +10,14 @@
     android:padding="15dp"
     android:layout_weight="10">
 
+    <TextView
+        android:id="@+id/server_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="[server status]"
+        android:layout_gravity="end"
+        android:textAlignment="textEnd"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -25,15 +33,6 @@
             android:gravity="center"
             android:textAlignment="center"/>
 
-        <TextView
-            android:id="@+id/result2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="tes update"
-            android:gravity="center"
-            android:textAlignment="center"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -43,18 +42,19 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <TextView
-            android:id="@+id/instruction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="instruksi"
-            android:layout_gravity="center"
-            android:textAlignment="center"/>
-
         <Button
+            android:id="@+id/record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mulai"/>
+            android:text="Rekam"
+            android:onClick="onClickRecord"/>
+
+        <Button
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:onClick="onClickPlay"/>
 
     </LinearLayout>
 
@@ -71,8 +71,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Ulangi"
-            android:layout_marginTop="20dp"/>
+            android:text="Recognize"
+            android:layout_marginTop="20dp"
+            android:onClick="onClickRecognize"/>
         <Button
             android:id="@+id/next"
             android:layout_width="0dp"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ServerConfigActivity"
-    android:orientation="vertical"
     android:padding="20dp">
 
     <EditText
@@ -21,20 +20,33 @@
         android:layout_height="wrap_content"
         android:hint="port"
         android:text="8888"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/hostname"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:id="@+id/connect_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="connect"
         android:layout_marginTop="20dp"
-        android:onClick="onClickConnect"/>
+        android:onClick="onClickConnect"
+        android:layout_below="@id/port"/>
 
     <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="status: -" />
+        android:text="status: -"
+        android:layout_below="@+id/connect_button"/>
 
-</android.support.v7.widget.LinearLayoutCompat>
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:onClick="onClickSave"/>
+
+</RelativeLayout>

@@ -27,17 +27,14 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
 
     private WebSocket ws;
     private TextView resultTv;
-
-    private String hostname;
-    private String port;
-    private String transcript;
+    private TextView serverStatusTv;
 
 
-    public ConnectToWSTask(WebSocket ws, TextView resultTv) {
+    public ConnectToWSTask(WebSocket ws, TextView serverStatusTv, TextView resultTv) {
         this.ws = ws;
         this.resultTv = resultTv;
+        this.serverStatusTv = serverStatusTv;
     }
-
 
 
     @Override
@@ -58,10 +55,9 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
     protected void onProgressUpdate(String... transcript) {
         super.onProgressUpdate(transcript);
 
-
         resultTv.setText(transcript[0]);
 
-        Log.d("async", "resultTv2: " + resultTv);
+        Log.d("async", "resultTv: " + resultTv);
     }
 
     @Override
@@ -70,11 +66,11 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
 
         if (isServerAvailable) {
             //statusTv.setText("server tersedia");
-            resultTv.setText("server tersedia");
+            serverStatusTv.setText("terhubung ke server");
             Log.d("MurojaahActivity", "server tersedia");
 
         } else {
-            resultTv.setText("server tidak tersedia");
+            serverStatusTv.setText("server tidak tersedia");
             //statusTv.setText("server tidak tersedia");
             Log.d("MurojaahActivity", "server tidak tersedia");
         }

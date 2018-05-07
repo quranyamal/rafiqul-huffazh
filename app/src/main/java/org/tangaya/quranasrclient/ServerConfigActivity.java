@@ -35,4 +35,8 @@ public class ServerConfigActivity extends AppCompatActivity {
         //checkServerTask.execute();
         //Toast.makeText(this,"connecting...", Toast.LENGTH_SHORT).show();
     }
+
+    public void onClickSave(View view) {
+        finish();
+    }
 }
