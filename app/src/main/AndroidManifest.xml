@@ -13,16 +13,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MurojaahActivity" />
-        <activity android:name=".ServerConfigActivity"></activity>
-        <activity android:name=".AudioRecordTest"></activity>
+        <activity android:name=".murojaah.MurojaahActivity" />
+        <activity android:name=".config.ServerConfigActivity"></activity>
+        <activity android:name=".util.AudioRecordTest"></activity>
     </application>
 
 </manifest>

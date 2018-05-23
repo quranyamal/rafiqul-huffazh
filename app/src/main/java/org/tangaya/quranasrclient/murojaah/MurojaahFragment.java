@@ -1,27 +1,31 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.murojaah;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.util.ConnectToWSTask;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -33,7 +37,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class MurojaahActivity extends AppCompatActivity {
+public class MurojaahFragment extends Fragment {
 
     WebSocket ws;
     TextView resultTv;
@@ -55,21 +59,32 @@ public class MurojaahActivity extends AppCompatActivity {
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
-    private Button recordButton;
-    private Button playButton;
+    private Button recordButton, playButton;
+    private Button retryBtn, nextBtn, showBtn;
 
     TextView statusTv;
 
     String hostname = "192.168.1.217";
     String port = "8888";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_murojaah);
 
-        resultTv = findViewById(R.id.result);
-        serverStatusTv = findViewById(R.id.server_status);
+    public static MurojaahFragment newInstance() {
+        return new MurojaahFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_murojaah, container, false);
+
+        resultTv = view.findViewById(R.id.result);
+        serverStatusTv = view.findViewById(R.id.server_status);
 
         initWS();
         ConnectToWSTask connectToWSTask = new ConnectToWSTask(ws, serverStatusTv, resultTv);
@@ -81,16 +96,62 @@ public class MurojaahActivity extends AppCompatActivity {
 
         mFileName = "/storage/emulated/0/DCIM/tesrekam.wav";
 
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+        ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        recordButton = findViewById(R.id.record);
-        playButton = findViewById(R.id.play);
+        recordButton = view.findViewById(R.id.record);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRecord(mStartRecording);
+                if (mStartRecording) {
+                    recordButton.setText("Stop recording");
+                } else {
+                    recordButton.setText("Start recording");
+                }
+                mStartRecording = !mStartRecording;
+            }
+        });
+
+        playButton = view.findViewById(R.id.play);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPlay(mStartPlaying);
+                if (mStartPlaying) {
+                    playButton.setText("Stop playing");
+                } else {
+                    playButton.setText("Start playing");
+                }
+                mStartPlaying =! mStartPlaying;
+            }
+        });
 
         mStartRecording = true;
         mStartPlaying = true;
 
         //statusTv = findViewById(R.id.server_status);
         //checkServerStatus();
+
+        retryBtn = view.findViewById(R.id.retry);
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MurojaahActivity", "Recognize button clicked");
+                recognize(mFileName);
+            }
+        });
+
+        nextBtn = view.findViewById(R.id.next);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MurojaahActivity", "Send button clicked");
+                recognize("/storage/emulated/0/DCIM/100-1.wav");
+                Log.d("MurojaahActivity", "sending binary...");
+            }
+        });
+
+        return view;
     }
 
     private void checkServerStatus() {
@@ -101,7 +162,7 @@ public class MurojaahActivity extends AppCompatActivity {
 
         ConnectToWsStatus connectToWsStatus = new ConnectToWsStatus(status_endpoint);
         connectToWsStatus.execute();
-        Toast.makeText(this,"connecting...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),"connecting...", Toast.LENGTH_SHORT).show();
     }
 
     private class ConnectToWsStatus extends AsyncTask<Void, Void, Boolean> {
@@ -135,33 +196,6 @@ public class MurojaahActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickRecord(View view) {
-
-        onRecord(mStartRecording);
-        if (mStartRecording) {
-            recordButton.setText("Stop recording");
-        } else {
-            recordButton.setText("Start recording");
-        }
-        mStartRecording = !mStartRecording;
-
-    }
-
-    public void onClickPlay(View view) {
-        onPlay(mStartPlaying);
-        if (mStartPlaying) {
-            playButton.setText("Stop playing");
-        } else {
-            playButton.setText("Start playing");
-        }
-        mStartPlaying =! mStartPlaying;
-    }
-
-    public void onClickRecognize(View view) {
-        Log.d("MurojaahActivity", "Recognize button clicked");
-        recognize(mFileName);
-    }
-
     private void recognize(String filename) {
         File file = new File(filename);
         int size = (int) file.length();
@@ -184,17 +218,17 @@ public class MurojaahActivity extends AppCompatActivity {
         ws.sendBinary(bytes);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted ) finish();
-
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode){
+//            case REQUEST_RECORD_AUDIO_PERMISSION:
+//                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//                break;
+//        }
+//        if (!permissionToRecordAccepted ) finish();
+//
+//    }
 
     private void onRecord(boolean start) {
         if (start) {
@@ -329,10 +363,5 @@ public class MurojaahActivity extends AppCompatActivity {
         resultTv.setText(transcript);
     }
 
-    public void onClickNextButton(View view) {
-        Log.d("MurojaahActivity", "Send button clicked");
-        recognize("/storage/emulated/0/DCIM/100-1.wav");
-        Log.d("MurojaahActivity", "sending binary...");
-    }
 
 }

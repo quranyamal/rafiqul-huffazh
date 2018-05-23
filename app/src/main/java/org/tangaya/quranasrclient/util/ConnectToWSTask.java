@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
