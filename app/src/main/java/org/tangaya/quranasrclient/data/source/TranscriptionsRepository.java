@@ -29,10 +29,14 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
     }
 
     @Override
+    public void getTranscription(@NonNull GetTranscriptionCallback callback) {
+        Transcription mockTranscription = new Transcription("mock", "mock transcription", 1);
+        callback.onTranscriptionLoaded(mockTranscription);
+    }
+
+    @Override
     public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
         Transcription cachedTranscription = getTranscriptionWithId(transcription_id);
-
-
     }
 
     @Nullable

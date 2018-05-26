@@ -21,7 +21,7 @@ public final class Transcription {
     private final String mId;
 
     @Nullable
-    private final String mTranStr;
+    private final String mTranscriptionText;
 
     @Nullable
     private final int mComplete;
@@ -30,11 +30,19 @@ public final class Transcription {
                          @Nullable String transStr,
                          @Nullable int isComplete) {
         mId = id;
-        mTranStr = transStr;
+        mTranscriptionText = transStr;
         mComplete = isComplete;
     }
 
     public String getId() {
         return mId;
+    }
+
+    public String getTranscriptioText() {
+        return mTranscriptionText;
+    }
+
+    public boolean isComplete() {
+        return mComplete==1;
     }
 }

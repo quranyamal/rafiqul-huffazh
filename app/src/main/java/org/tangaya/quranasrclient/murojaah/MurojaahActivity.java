@@ -1,6 +1,7 @@
 package org.tangaya.quranasrclient.murojaah;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -23,6 +24,8 @@ import com.neovisionaries.ws.client.WebSocket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.tangaya.quranasrclient.ViewModelFactory;
+import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.util.ConnectToWSTask;
 import org.tangaya.quranasrclient.R;
 
@@ -48,6 +51,13 @@ public class MurojaahActivity extends AppCompatActivity {
         transaction.replace(R.id.murojaahFrame, murojaahFragment);
         transaction.commit();
 
+    }
+
+    public static MurojaahViewModel obtainViewModel(MurojaahActivity activity,
+                                                    TranscriptionsRepository repository) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication(), repository);
+
+        return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
     }
 
     @NonNull

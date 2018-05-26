@@ -67,6 +67,18 @@ public class MurojaahFragment extends Fragment {
     String hostname = "192.168.1.217";
     String port = "8888";
 
+    // NEW WKWKWK
+
+    private MurojaahViewModel mViewModel;
+
+    public MurojaahFragment() {}
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //setupRecordButton();
+    }
 
     public static MurojaahFragment newInstance() {
         return new MurojaahFragment();

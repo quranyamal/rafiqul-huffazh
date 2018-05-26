@@ -34,6 +34,10 @@ public class TranscriptionsRemoteDataSource implements TranscriptionsDataSource 
     private TranscriptionsRemoteDataSource(){}
 
 
+    @Override
+    public void getTranscription(@NonNull GetTranscriptionCallback callback) {
+        getTranscription("mock getTranscription", callback);
+    }
 
     @Override
     public void getTranscription(@NonNull String transcription_id, @NonNull final GetTranscriptionCallback callback) {
@@ -43,7 +47,7 @@ public class TranscriptionsRemoteDataSource implements TranscriptionsDataSource 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                callback.onTrancriptionLoaded(transcription);
+                callback.onTranscriptionLoaded(transcription);
             }
         }, SERVICE_LATENCY_IN_MILLIS);
     }

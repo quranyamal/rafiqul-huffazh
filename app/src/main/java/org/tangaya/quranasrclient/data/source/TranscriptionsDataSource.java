@@ -12,10 +12,12 @@ public interface TranscriptionsDataSource {
 
     interface GetTranscriptionCallback {
 
-        void onTrancriptionLoaded(Transcription transcription);
+        void onTranscriptionLoaded(Transcription transcription);
 
         void onTranscriptionNotAvailable();
     }
+
+    void getTranscription(@NonNull GetTranscriptionCallback callback);
 
     void getTranscription(@NonNull String transcription_id,
                          @NonNull GetTranscriptionCallback callback);
