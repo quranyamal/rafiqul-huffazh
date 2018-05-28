@@ -1,8 +1,8 @@
-package org.tangaya.quranasrclient.data.source;
+package org.tangaya.quranasrclient.service.source;
 
 import android.support.annotation.NonNull;
 
-import org.tangaya.quranasrclient.data.Transcription;
+import org.tangaya.quranasrclient.service.model.Transcription;
 
 /**
  * Main entry point for accessing task data

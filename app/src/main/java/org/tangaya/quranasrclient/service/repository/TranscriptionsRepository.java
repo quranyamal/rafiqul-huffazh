@@ -1,9 +1,10 @@
-package org.tangaya.quranasrclient.data.source;
+package org.tangaya.quranasrclient.service.repository;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.tangaya.quranasrclient.data.Transcription;
+import org.tangaya.quranasrclient.service.model.Transcription;
+import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
 
 public class TranscriptionsRepository implements TranscriptionsDataSource {
 

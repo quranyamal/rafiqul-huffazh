@@ -3,7 +3,7 @@ package org.tangaya.quranasrclient;
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 
-import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
+import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 

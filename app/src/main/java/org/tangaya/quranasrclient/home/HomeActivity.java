@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import org.tangaya.quranasrclient.imtihan.ImtihanActivity;
 import org.tangaya.quranasrclient.util.AudioRecordTest;
 import org.tangaya.quranasrclient.murojaah.MurojaahActivity;
 import org.tangaya.quranasrclient.R;
@@ -37,6 +38,11 @@ public class HomeActivity extends AppCompatActivity {
 
     public void gotoMorojaah(View view) {
         Intent intent = new Intent(this, MurojaahActivity.class);
+        startActivity(intent);
+    }
+
+    public void gotoImtihan(View view) {
+        Intent intent = new Intent(this, ImtihanActivity.class);
         startActivity(intent);
     }
 

@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".murojaah.MurojaahActivity" />
+        <activity android:name=".imtihan.ImtihanActivity" />
         <activity android:name=".config.ServerConfigActivity"></activity>
         <activity android:name=".util.AudioRecordTest"></activity>
     </application>

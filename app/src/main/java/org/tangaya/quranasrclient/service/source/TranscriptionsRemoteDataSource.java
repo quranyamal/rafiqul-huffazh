@@ -1,10 +1,9 @@
-package org.tangaya.quranasrclient.data.source.remote;
+package org.tangaya.quranasrclient.service.source;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.service.model.Transcription;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

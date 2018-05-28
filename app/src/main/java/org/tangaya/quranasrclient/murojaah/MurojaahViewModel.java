@@ -8,11 +8,9 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
-import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
-
-import java.util.Observable;
+import org.tangaya.quranasrclient.service.model.Transcription;
+import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.GetTranscriptionCallback {
