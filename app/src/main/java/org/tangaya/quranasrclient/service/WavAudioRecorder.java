@@ -14,13 +14,19 @@ public class WavAudioRecorder {
 
     public static WavAudioRecorder getInstanse() {
         WavAudioRecorder result = null;
-        int i=0;
-        do {
-            result = new WavAudioRecorder(AudioSource.MIC,
-                    sampleRates[i],
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT);
-        } while((++i<sampleRates.length) & !(result.getState() == WavAudioRecorder.State.INITIALIZING));
+//        int i=0;
+//        do {
+//            result = new WavAudioRecorder(AudioSource.MIC,
+//                    sampleRates[i],
+//                    AudioFormat.CHANNEL_IN_MONO,
+//                    AudioFormat.ENCODING_PCM_16BIT);
+//        } while((++i<sampleRates.length) & !(result.getState() == WavAudioRecorder.State.INITIALIZING));
+
+        result = new WavAudioRecorder(AudioSource.MIC,
+                        16000,
+                        AudioFormat.CHANNEL_IN_MONO,
+                        AudioFormat.ENCODING_PCM_16BIT);
+
         return result;
     }
 

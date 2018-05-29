@@ -25,6 +25,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.util.ConnectToWSTask;
 
 import java.io.BufferedInputStream;
@@ -50,16 +51,16 @@ public class MurojaahFragment extends Fragment {
 
     private static final String LOG_TAG = "AudioRecordTest";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private static String mFileName = null;
+    private static String mRecordFilePath = null;
 
-    private MediaRecorder mRecorder = null;
+    private WavAudioRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
-    private Button recordButton, playButton;
+    private Button recordButton, playButton, clearButton;
     private Button retryBtn, nextBtn, showBtn;
 
     TextView statusTv;
@@ -102,54 +103,14 @@ public class MurojaahFragment extends Fragment {
         ConnectToWSTask connectToWSTask = new ConnectToWSTask(ws, serverStatusTv, resultTv);
         connectToWSTask.execute();
 
-        // Record to the external cache directory for visibility
-        //mFileName = getExternalCacheDir().getAbsolutePath();
-        //mFileName += "/audiorecordtest.wav";
-
-        mFileName = "/storage/emulated/0/DCIM/tesrekam.wav";
-
-        ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
-
-        recordButton = view.findViewById(R.id.record);
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onRecord(mStartRecording);
-                if (mStartRecording) {
-                    recordButton.setText("Stop recording");
-                } else {
-                    recordButton.setText("Start recording");
-                }
-                mStartRecording = !mStartRecording;
-            }
-        });
-
-        playButton = view.findViewById(R.id.play);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPlay(mStartPlaying);
-                if (mStartPlaying) {
-                    playButton.setText("Stop playing");
-                } else {
-                    playButton.setText("Start playing");
-                }
-                mStartPlaying =! mStartPlaying;
-            }
-        });
-
-        mStartRecording = true;
-        mStartPlaying = true;
-
-        //statusTv = findViewById(R.id.server_status);
-        //checkServerStatus();
+        mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
 
         retryBtn = view.findViewById(R.id.retry);
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("MurojaahActivity", "Recognize button clicked");
-                recognize(mFileName);
+                recognize(mRecordFilePath);
             }
         });
 
@@ -158,13 +119,50 @@ public class MurojaahFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("MurojaahActivity", "Send button clicked");
-                recognize("/storage/emulated/0/DCIM/100-1.wav");
+                //recognize("/storage/emulated/0/DCIM/100-1.wav");
+                recognize(mRecordFilePath);
                 Log.d("MurojaahActivity", "sending binary...");
+            }
+        });
+
+        recordButton = (Button) view.findViewById(R.id.record);
+        recordButton.setText("Start");
+        mRecorder = WavAudioRecorder.getInstanse();
+        mRecorder.setOutputFile(mRecordFilePath);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
+                    mRecorder.prepare();
+                    mRecorder.start();
+                    recordButton.setText("Stop");
+                } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
+                    mRecorder.release();
+                    mRecorder = WavAudioRecorder.getInstanse();
+                    mRecorder.setOutputFile(mRecordFilePath);
+                    recordButton.setText("Start");
+                } else {
+                    mRecorder.stop();
+                    mRecorder.reset();
+                    recordButton.setText("Start");
+                }
+            }
+        });
+        clearButton = (Button) view.findViewById(R.id.reset);
+        clearButton.setText("Clear");
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File pcmFile = new File(mRecordFilePath);
+                if (pcmFile.exists()) {
+                    pcmFile.delete();
+                }
             }
         });
 
         return view;
     }
+
 
     private void checkServerStatus() {
         hostname = "192.168.1.217";
@@ -230,79 +228,12 @@ public class MurojaahFragment extends Fragment {
         ws.sendBinary(bytes);
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        switch (requestCode){
-//            case REQUEST_RECORD_AUDIO_PERMISSION:
-//                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-//                break;
-//        }
-//        if (!permissionToRecordAccepted ) finish();
-//
-//    }
-
-    private void onRecord(boolean start) {
-        if (start) {
-            startRecording();
-        } else {
-            stopRecording();
-        }
-    }
-
-    private void onPlay(boolean start) {
-        if (start) {
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }
-
-    private void startPlaying() {
-        mPlayer = new MediaPlayer();
-        try {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-    }
-
-    private void stopPlaying() {
-        mPlayer.release();
-        mPlayer = null;
-    }
-
-    private void startRecording() {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-
-        mRecorder.start();
-    }
-
-    private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
-    }
-
     protected void initWS() {
 
         String endpoint = "ws://"+hostname+":"+port+"/client/ws/speech";
         int timeout = 5000;
 
         WebSocketFactory factory = new WebSocketFactory();
-
         try {
             ws = factory.createSocket(endpoint, timeout);
         } catch (IOException e) {
@@ -322,7 +253,6 @@ public class MurojaahFragment extends Fragment {
             public void onTextMessage(WebSocket webSocket, String message) throws Exception {
 
                 Log.d("ConnectToWSTask", "onTextMessage: " + message);
-
 
                 transcript = "undef";
                 int lastResultLength = 0;

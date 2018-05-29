@@ -10,7 +10,7 @@ import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
 
-public class MurojaahActivity extends AppCompatActivity {
+public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,4 +49,8 @@ public class MurojaahActivity extends AppCompatActivity {
         return murojaahFragment;
     }
 
+    @Override
+    public void onStartRecord() {
+
+    }
 }
