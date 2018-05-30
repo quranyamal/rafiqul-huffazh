@@ -12,6 +12,20 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
 
     private final TranscriptionsDataSource mTranscriptionsDataSource;
 
+    //coba
+    public TranscriptionsRepository() {
+        mTranscriptionsDataSource = new TranscriptionsDataSource() {
+            @Override
+            public void getTranscription(@NonNull GetTranscriptionCallback callback) {
+
+            }
+
+            @Override
+            public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
+
+            }
+        };
+    }
 
     private TranscriptionsRepository(@NonNull TranscriptionsDataSource transcriptionsDataSource) {
         mTranscriptionsDataSource = transcriptionsDataSource;
@@ -31,7 +45,7 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
 
     @Override
     public void getTranscription(@NonNull GetTranscriptionCallback callback) {
-        Transcription mockTranscription = new Transcription("mock", "mock transcription", 1);
+        Transcription mockTranscription = new Transcription("mock", "mock transcription");
         callback.onTranscriptionLoaded(mockTranscription);
     }
 
@@ -42,6 +56,6 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
 
     @Nullable
     private Transcription getTranscriptionWithId(@NonNull String id) {
-        return new Transcription("tr"+id, "from getTranscriptionWithId",  1);
+        return new Transcription("tr"+id, "from getTranscriptionWithId");
     }
 }

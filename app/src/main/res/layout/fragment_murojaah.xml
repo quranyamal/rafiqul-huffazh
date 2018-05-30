@@ -8,7 +8,7 @@
     tools:context=".murojaah.MurojaahFragment"
     android:orientation="vertical"
     android:padding="15dp"
-    android:layout_weight="10">
+    android:layout_weight="7">
 
     <TextView
         android:id="@+id/server_status"
@@ -63,35 +63,6 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:gravity="center">
 
-        <Button
-            android:id="@+id/retry"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Retry"
-            android:layout_marginTop="20dp"/>
-        <Button
-            android:id="@+id/next"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Lanjut"
-            android:layout_marginTop="20dp"/>
-        <Button
-            android:id="@+id/hint"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tampilkan"
-            android:layout_marginTop="20dp"/>
-
-    </LinearLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

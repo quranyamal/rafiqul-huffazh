@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.murojaah;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.service.source.TranscriptionsRemoteDataSource;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
@@ -24,7 +27,14 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
 
     }
 
-    public static MurojaahViewModel obtainViewModel(MurojaahActivity activity,
+    public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
+
+        //return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
+        return new MurojaahViewModel(activity.getApplication(), null);
+    }
+
+    public static MurojaahViewModel obtainViewModel(FragmentActivity activity,
                                                     TranscriptionsRepository repository) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication(), repository);
 

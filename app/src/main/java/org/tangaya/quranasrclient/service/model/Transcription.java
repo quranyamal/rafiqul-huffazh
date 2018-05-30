@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.service.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,37 +13,39 @@ import android.support.annotation.Nullable;
  */
 
 
-@Entity(tableName = "transcription")
+@Entity(tableName = "transcriptions")
 public final class Transcription {
 
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "transcription_id")
-    private final String mId;
+    public final String mId;
 
     @Nullable
-    private final String mTranscriptionText;
+    @ColumnInfo(name = "transcription_text")
+    public final String mText;
 
-    @Nullable
-    private final int mComplete;
-
+    @Ignore
     public Transcription(String id,
-                         @Nullable String transStr,
-                         @Nullable int isComplete) {
+                         @Nullable String transStr) {
         mId = id;
-        mTranscriptionText = transStr;
-        mComplete = isComplete;
+        mText = transStr;
     }
 
+    public Transcription(){
+        mId = "0";
+        mText = "not-set";
+    }
+
+
+    @Nullable
     public String getId() {
         return mId;
     }
 
-    public String getTranscriptioText() {
-        return mTranscriptionText;
+    @Nullable
+    public String getText() {
+        return mText;
     }
 
-    public boolean isComplete() {
-        return mComplete==1;
-    }
 }

@@ -11,12 +11,26 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Application mApplication;
     private final TranscriptionsRepository mTranscriptionRepository;
 
-    public static ViewModelFactory getInstance(Application application,
-                                               TranscriptionsRepository repository) {
+    public static ViewModelFactory getInstance(Application application) {
+
+        TranscriptionsRepository repo = new TranscriptionsRepository();
+
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new ViewModelFactory(application, repository);
+                    INSTANCE = new ViewModelFactory(application, repo);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    public static ViewModelFactory getInstance(Application application, TranscriptionsRepository repo) {
+
+        if (INSTANCE == null) {
+            synchronized (ViewModelFactory.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new ViewModelFactory(application, repo);
                 }
             }
         }

@@ -8,9 +8,16 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.tangaya.quranasrclient.service.TranscriberService;
 import org.tangaya.quranasrclient.service.model.Transcription;
 import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.GetTranscriptionCallback {
@@ -36,8 +43,7 @@ public class MurojaahViewModel extends AndroidViewModel
     @Override
     public void onTranscriptionLoaded(Transcription transcription) {
         transcriptionId.set(transcription.getId());
-        transcriptionText.set(transcription.getTranscriptioText());
-        isCompleteTranscription.set(transcription.isComplete());
+        transcriptionText.set(transcription.getText());
     }
 
     @Override
@@ -66,4 +72,14 @@ public class MurojaahViewModel extends AndroidViewModel
 
         });
     }
+
+    void recognize() {
+        Log.d("MurojaahViewModel", "recognizing...");
+        //String audioFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
+        String audioFilePath = "/storage/emulated/0/DCIM/100-1.wav";
+
+        TranscriberService transcriber = new TranscriberService();
+        transcriber.startRecognize(audioFilePath);
+    }
+
 }

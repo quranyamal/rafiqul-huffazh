@@ -18,9 +18,9 @@ public class TranscriptionsRemoteDataSource implements TranscriptionsDataSource 
 
     static {
         TRANSCRIPTION_SERVICE_DATA = new LinkedHashMap<>(2);
-        addTranscriptin("trans1", "Bismillah", 0);
-        addTranscriptin("trans2", "Bismillahirrahman", 0);
-        addTranscriptin("trans3", "Bismillahirrahmanirrahim", 1);
+        addTranscriptin("trans1", "Bismillah");
+        addTranscriptin("trans2", "Bismillahirrahman");
+        addTranscriptin("trans3", "Bismillahirrahmanirrahim");
     }
 
     public static TranscriptionsRemoteDataSource getInstance() {
@@ -51,8 +51,8 @@ public class TranscriptionsRemoteDataSource implements TranscriptionsDataSource 
         }, SERVICE_LATENCY_IN_MILLIS);
     }
 
-    private static void addTranscriptin(String id, String transStr, int isFinal) {
-        Transcription newTranscription = new Transcription(id, transStr, isFinal);
+    private static void addTranscriptin(String id, String transStr) {
+        Transcription newTranscription = new Transcription(id, transStr);
         TRANSCRIPTION_SERVICE_DATA.put(newTranscription.getId(), newTranscription);
     }
 }

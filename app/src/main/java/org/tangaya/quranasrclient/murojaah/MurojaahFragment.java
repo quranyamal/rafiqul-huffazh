@@ -78,7 +78,34 @@ public class MurojaahFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //setupRecordButton();
+        setupRecognizeButton();
+        setupRetryButton();
+    }
+
+    private void setupRecognizeButton() {
+        Button nextBtn = getActivity().findViewById(R.id.next);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.recognize();
+//                Log.d("MurojaahActivity", "Send button clicked");
+//                //recognize("/storage/emulated/0/DCIM/100-1.wav");
+//                recognize(mRecordFilePath);
+//                Log.d("MurojaahActivity", "sending binary...");
+
+            }
+        });
+    }
+
+    private void setupRetryButton() {
+        Button retryBtn = getActivity().findViewById(R.id.retry);
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MurojaahActivity", "Retry button clicked");
+                //recognize(mRecordFilePath);
+            }
+        });
     }
 
     public static MurojaahFragment newInstance() {
@@ -96,34 +123,18 @@ public class MurojaahFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_murojaah, container, false);
 
+        mViewModel = MurojaahActivity.obtainViewModel(getActivity());
+
         resultTv = view.findViewById(R.id.result);
         serverStatusTv = view.findViewById(R.id.server_status);
 
-        initWS();
-        ConnectToWSTask connectToWSTask = new ConnectToWSTask(ws, serverStatusTv, resultTv);
-        connectToWSTask.execute();
+//        initWS();
+//        ConnectToWSTask connectToWSTask = new ConnectToWSTask(ws, serverStatusTv, resultTv);
+//        connectToWSTask.execute();
 
         mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
 
-        retryBtn = view.findViewById(R.id.retry);
-        retryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MurojaahActivity", "Recognize button clicked");
-                recognize(mRecordFilePath);
-            }
-        });
 
-        nextBtn = view.findViewById(R.id.next);
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MurojaahActivity", "Send button clicked");
-                //recognize("/storage/emulated/0/DCIM/100-1.wav");
-                recognize(mRecordFilePath);
-                Log.d("MurojaahActivity", "sending binary...");
-            }
-        });
 
         recordButton = (Button) view.findViewById(R.id.record);
         recordButton.setText("Start");
@@ -164,142 +175,142 @@ public class MurojaahFragment extends Fragment {
     }
 
 
-    private void checkServerStatus() {
-        hostname = "192.168.1.217";
-        port = "8888";
+    //    private void checkServerStatus() {
+    //        hostname = "192.168.1.217";
+    //        port = "8888";
+    //
+    //        String status_endpoint = "ws://"+hostname+":"+port+"/client/ws/status";
+    //
+    //        ConnectToWsStatus connectToWsStatus = new ConnectToWsStatus(status_endpoint);
+    //        connectToWsStatus.execute();
+    //        Toast.makeText(getActivity(),"connecting...", Toast.LENGTH_SHORT).show();
+    //    }
+    //
+    //    private class ConnectToWsStatus extends AsyncTask<Void, Void, Boolean> {
+    //
+    //        String endpoint;
+    //        int timeout = 5000;
+    //
+    //        ConnectToWsStatus(String endpoint) {
+    //            this.endpoint = endpoint;
+    //        }
+    //
+    //        @Override
+    //        protected Boolean doInBackground(Void... voids) {
+    //            try {
+    //                WebSocketFactory factory = new WebSocketFactory();
+    //                ws = factory.createSocket(endpoint, timeout);
+    //            } catch (IOException e) {
+    //                Log.d("MorojaahActivity", "Creating socket error");
+    //                e.printStackTrace();
+    //            }
+    //            return ws!=null;
+    //        }
+    //
+    //        @Override
+    //        protected void onPostExecute(Boolean isWsCreated) {
+    //            if (isWsCreated) {
+    //                statusTv.setText("terhubung");
+    //            } else {
+    //                statusTv.setText("tidak terhubung");
+    //            }
+    //        }
+    //    }
 
-        String status_endpoint = "ws://"+hostname+":"+port+"/client/ws/status";
+//    private void recognize(String filename) {
+//        File file = new File(filename);
+//        int size = (int) file.length();
+//        byte[] bytes = new byte[size];
+//
+//
+//        Log.d("MurojaahActivity", "Recognizing " + filename);
+//        try {
+//            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+//            buf.read(bytes, 0, bytes.length);
+//            buf.close();
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
+//        ws.sendBinary(bytes);
+//    }
 
-        ConnectToWsStatus connectToWsStatus = new ConnectToWsStatus(status_endpoint);
-        connectToWsStatus.execute();
-        Toast.makeText(getActivity(),"connecting...", Toast.LENGTH_SHORT).show();
-    }
-
-    private class ConnectToWsStatus extends AsyncTask<Void, Void, Boolean> {
-
-        String endpoint;
-        int timeout = 5000;
-
-        ConnectToWsStatus(String endpoint) {
-            this.endpoint = endpoint;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                WebSocketFactory factory = new WebSocketFactory();
-                ws = factory.createSocket(endpoint, timeout);
-            } catch (IOException e) {
-                Log.d("MorojaahActivity", "Creating socket error");
-                e.printStackTrace();
-            }
-            return ws!=null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean isWsCreated) {
-            if (isWsCreated) {
-                statusTv.setText("terhubung");
-            } else {
-                statusTv.setText("tidak terhubung");
-            }
-        }
-    }
-
-    private void recognize(String filename) {
-        File file = new File(filename);
-        int size = (int) file.length();
-        byte[] bytes = new byte[size];
-
-
-        Log.d("MurojaahActivity", "Recognizing " + filename);
-        try {
-            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-            buf.read(bytes, 0, bytes.length);
-            buf.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        ws.sendBinary(bytes);
-    }
-
-    protected void initWS() {
-
-        String endpoint = "ws://"+hostname+":"+port+"/client/ws/speech";
-        int timeout = 5000;
-
-        WebSocketFactory factory = new WebSocketFactory();
-        try {
-            ws = factory.createSocket(endpoint, timeout);
-        } catch (IOException e) {
-            Log.d("MorojaahActivity", "Creating socket error");
-            e.printStackTrace();
-        }
-
-        ws.addListener(new WebSocketAdapter() {
-            @Override
-            public void onConnected(WebSocket webSocket,
-                                    Map<String,List<String>> headers) throws Exception {
-
-                Log.d("ConnectToWSTask", "onConnected");
-            }
-
-            @Override
-            public void onTextMessage(WebSocket webSocket, String message) throws Exception {
-
-                Log.d("ConnectToWSTask", "onTextMessage: " + message);
-
-                transcript = "undef";
-                int lastResultLength = 0;
-
-                try {
-                    JSONObject json = new JSONObject(message);
-
-                    int status = json.getInt("status");
-
-                    if (status == 0) {  // 0=success
-
-                        JSONObject result = json.getJSONObject("result");
-                        boolean isFinal = result.getBoolean("final");
-                        JSONObject first_hypotheses = result.getJSONArray("hypotheses").getJSONObject(0);
-                        transcript = first_hypotheses.getString("transcript");
-
-                        //publishProgress(transcript);
-                        updateTranscript(transcript);
-
-                        String resultStr = transcript.substring(lastResultLength, transcript.length() - 1);
-                        if (!isFinal) {
-                            lastResultLength = transcript.length() - 1;
-                        }
-                        else  {
-                            lastResultLength = 0;
-                            resultStr += ".\n\n";
-                        }
-
-                    }
-                    else if (status == 1) {     // 1 = no speech
-                        // todo
-                    }
-                }
-                catch (JSONException e) {
-                    Timber.e(e.getMessage());
-                }
-
-            }
-
-            @Override
-            public void onBinaryMessage(WebSocket websocket,
-                                        byte[] binary) throws Exception {
-
-                Log.d("MANew", "onBinaryMessage: " + binary.toString());
-            }
-        });
-    }
+//    protected void initWS() {
+//
+//        String endpoint = "ws://"+hostname+":"+port+"/client/ws/speech";
+//        int timeout = 5000;
+//
+//        WebSocketFactory factory = new WebSocketFactory();
+//        try {
+//            ws = factory.createSocket(endpoint, timeout);
+//        } catch (IOException e) {
+//            Log.d("MorojaahActivity", "Creating socket error");
+//            e.printStackTrace();
+//        }
+//
+//        ws.addListener(new WebSocketAdapter() {
+//            @Override
+//            public void onConnected(WebSocket webSocket,
+//                                    Map<String,List<String>> headers) throws Exception {
+//
+//                Log.d("ConnectToWSTask", "onConnected");
+//            }
+//
+//            @Override
+//            public void onTextMessage(WebSocket webSocket, String message) throws Exception {
+//
+//                Log.d("ConnectToWSTask", "onTextMessage: " + message);
+//
+//                transcript = "undef";
+//                int lastResultLength = 0;
+//
+//                try {
+//                    JSONObject json = new JSONObject(message);
+//
+//                    int status = json.getInt("status");
+//
+//                    if (status == 0) {  // 0=success
+//
+//                        JSONObject result = json.getJSONObject("result");
+//                        boolean isFinal = result.getBoolean("final");
+//                        JSONObject first_hypotheses = result.getJSONArray("hypotheses").getJSONObject(0);
+//                        transcript = first_hypotheses.getString("transcript");
+//
+//                        //publishProgress(transcript);
+//                        updateTranscript(transcript);
+//
+//                        String resultStr = transcript.substring(lastResultLength, transcript.length() - 1);
+//                        if (!isFinal) {
+//                            lastResultLength = transcript.length() - 1;
+//                        }
+//                        else  {
+//                            lastResultLength = 0;
+//                            resultStr += ".\n\n";
+//                        }
+//
+//                    }
+//                    else if (status == 1) {     // 1 = no speech
+//                        // todo
+//                    }
+//                }
+//                catch (JSONException e) {
+//                    Timber.e(e.getMessage());
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onBinaryMessage(WebSocket websocket,
+//                                        byte[] binary) throws Exception {
+//
+//                Log.d("MANew", "onBinaryMessage: " + binary.toString());
+//            }
+//        });
+//    }
 
     private void updateTranscript(String transcript) {
         resultTv.setText(transcript);
