@@ -3,9 +3,8 @@ package org.tangaya.quranasrclient;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import org.tangaya.quranasrclient.service.model.TranscriptionsDatabase;
-import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
-import org.tangaya.quranasrclient.service.source.FakeTranscriptionsRemoteDataSource;
+import org.tangaya.quranasrclient.data.source.local.TranscriptionsDatabase;
+import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 

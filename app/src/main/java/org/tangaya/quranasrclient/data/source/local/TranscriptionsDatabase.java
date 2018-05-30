@@ -1,9 +1,11 @@
-package org.tangaya.quranasrclient.service.model;
+package org.tangaya.quranasrclient.data.source.local;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+
+import org.tangaya.quranasrclient.data.Transcription;
 
 @Database(entities = {Transcription.class}, version = 1)
 public abstract class TranscriptionsDatabase extends RoomDatabase {

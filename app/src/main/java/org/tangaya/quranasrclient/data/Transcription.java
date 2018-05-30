@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.service.model;
+package org.tangaya.quranasrclient.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -19,11 +19,11 @@ public final class Transcription {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "transcription_id")
-    public final String mId;
+    public String mId;
 
     @Nullable
     @ColumnInfo(name = "transcription_text")
-    public final String mText;
+    public String mText;
 
     @Ignore
     public Transcription(String id,
@@ -36,7 +36,6 @@ public final class Transcription {
         mId = "0";
         mText = "not-set";
     }
-
 
     @Nullable
     public String getId() {

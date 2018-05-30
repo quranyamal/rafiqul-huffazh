@@ -3,12 +3,14 @@ package org.tangaya.quranasrclient;
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 
-import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
+import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private static volatile ViewModelFactory INSTANCE;
+
     private final Application mApplication;
+
     private final TranscriptionsRepository mTranscriptionRepository;
 
     public static ViewModelFactory getInstance(Application application) {
@@ -41,5 +43,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         mApplication = application;
         mTranscriptionRepository = repository;
     }
+
+
 
 }

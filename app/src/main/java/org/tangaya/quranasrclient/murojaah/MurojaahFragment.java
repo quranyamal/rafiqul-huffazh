@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.util.ConnectToWSTask;
+import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -39,6 +40,8 @@ import java.util.Map;
 import timber.log.Timber;
 
 public class MurojaahFragment extends Fragment {
+
+
 
     WebSocket ws;
     TextView resultTv;
@@ -72,6 +75,8 @@ public class MurojaahFragment extends Fragment {
 
     private MurojaahViewModel mViewModel;
 
+    private FragmentMurojaahBinding mMurojaahFragDataBinding;
+
     public MurojaahFragment() {}
 
     @Override
@@ -80,6 +85,7 @@ public class MurojaahFragment extends Fragment {
 
         setupRecognizeButton();
         setupRetryButton();
+        setupHintButton();
     }
 
     private void setupRecognizeButton() {
@@ -108,6 +114,16 @@ public class MurojaahFragment extends Fragment {
         });
     }
 
+    private void setupHintButton() {
+        Button hintBtn = getActivity().findViewById(R.id.hint);
+        hintBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.showHint();
+            }
+        });
+    }
+
     public static MurojaahFragment newInstance() {
         return new MurojaahFragment();
     }
@@ -123,7 +139,12 @@ public class MurojaahFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_murojaah, container, false);
 
+        if (mMurojaahFragDataBinding==null) {
+            mMurojaahFragDataBinding = FragmentMurojaahBinding.bind(view);
+        }
         mViewModel = MurojaahActivity.obtainViewModel(getActivity());
+
+        mMurojaahFragDataBinding.setViewmodel(mViewModel);
 
         resultTv = view.findViewById(R.id.result);
         serverStatusTv = view.findViewById(R.id.server_status);
@@ -171,7 +192,7 @@ public class MurojaahFragment extends Fragment {
             }
         });
 
-        return view;
+        return mMurojaahFragDataBinding.getRoot();
     }
 
 

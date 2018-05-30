@@ -9,15 +9,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.tangaya.quranasrclient.service.TranscriberService;
-import org.tangaya.quranasrclient.service.model.Transcription;
-import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
-import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import org.tangaya.quranasrclient.data.Transcription;
+import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.GetTranscriptionCallback {
@@ -25,8 +19,11 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableField<String> transcriptionId = new ObservableField<>();
     public final ObservableField<String> transcriptionText = new ObservableField<>();
     public final ObservableField<Boolean> isCompleteTranscription = new ObservableField<>();
+    public final ObservableField<String> serverStatus = new ObservableField<>();
 
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
+
+    int count_tap = 0;
 
     Context mContext;
     TranscriptionsRepository mTranscriptionsRepository;
@@ -37,18 +34,25 @@ public class MurojaahViewModel extends AndroidViewModel
 
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
+
+        serverStatus.set("tidak diketahui");
+
     }
 
+//    public String getTranscriptionText() {
+//        return transcriptionText.toString();
+//    }
 
     @Override
     public void onTranscriptionLoaded(Transcription transcription) {
+        Log.d("VM", "onTranscriptionLoaded invoked");
         transcriptionId.set(transcription.getId());
         transcriptionText.set(transcription.getText());
     }
 
     @Override
     public void onTranscriptionNotAvailable() {
-
+        Log.d("VM", "onTranscriptionNotAvailable invoked");
     }
 
     public void start() {
@@ -62,14 +66,13 @@ public class MurojaahViewModel extends AndroidViewModel
 
             @Override
             public void onTranscriptionLoaded(Transcription transcription) {
-                Log.d("Murojaah VM", "onTranscriptionLoaded");
+                Log.d("Murojaah VM", "loadTranscriptions onTranscriptionLoaded");
             }
 
             @Override
             public void onTranscriptionNotAvailable() {
-                Log.d("Murojaah VM", "onTranscriptionNA");
+                Log.d("Murojaah VM", "loadTranscriptions onTranscriptionNA");
             }
-
         });
     }
 
@@ -80,6 +83,23 @@ public class MurojaahViewModel extends AndroidViewModel
 
         TranscriberService transcriber = new TranscriberService();
         transcriber.startRecognize(audioFilePath);
+    }
+
+    public void showHint() {
+        mTranscriptionsRepository.getTranscription(new TranscriptionsDataSource.GetTranscriptionCallback() {
+            @Override
+            public void onTranscriptionLoaded(Transcription transcription) {
+                Log.d("Murojaah VM", "showHint onTranscriptionNA");
+                transcriptionText.set(transcription.getText() + count_tap++);
+            }
+
+            @Override
+            public void onTranscriptionNotAvailable() {
+                Log.d("Murojaah VM", "showHint onTranscriptionNA");
+                transcriptionText.set("not available gan...");
+                serverStatus.set("terputus");
+            }
+        });
     }
 
 }

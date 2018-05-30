@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import org.tangaya.quranasrclient.ViewModelFactory;
-import org.tangaya.quranasrclient.service.repository.TranscriptionsRepository;
+import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
-import org.tangaya.quranasrclient.service.source.TranscriptionsRemoteDataSource;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
@@ -30,15 +28,10 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
     public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
 
+        TranscriptionsRepository repo = new TranscriptionsRepository();
+
+        return new MurojaahViewModel(activity.getApplication(), repo);
         //return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
-        return new MurojaahViewModel(activity.getApplication(), null);
-    }
-
-    public static MurojaahViewModel obtainViewModel(FragmentActivity activity,
-                                                    TranscriptionsRepository repository) {
-        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication(), repository);
-
-        return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
     }
 
     @NonNull
@@ -49,8 +42,8 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
 
         if (murojaahFragment == null) {
             murojaahFragment = MurojaahFragment.newInstance();
-
             // Send the task ID to the fragment
+
             // Bundle bundle = new Bundle();
             // bundle.putString(MurojaahFragment.ARGUMENT_EDIT_TASK_ID,
                //     getIntent().getStringExtra(AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID));

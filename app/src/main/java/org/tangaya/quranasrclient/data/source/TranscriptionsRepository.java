@@ -1,10 +1,9 @@
-package org.tangaya.quranasrclient.service.repository;
+package org.tangaya.quranasrclient.data.source;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.tangaya.quranasrclient.service.model.Transcription;
-import org.tangaya.quranasrclient.service.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.data.Transcription;
 
 public class TranscriptionsRepository implements TranscriptionsDataSource {
 
@@ -45,6 +44,7 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
 
     @Override
     public void getTranscription(@NonNull GetTranscriptionCallback callback) {
+        // exec transcription service here
         Transcription mockTranscription = new Transcription("mock", "mock transcription");
         callback.onTranscriptionLoaded(mockTranscription);
     }
