@@ -6,23 +6,79 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import org.tangaya.quranasrclient.ControlFragment;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
+
+import java.io.File;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
+
+    String surah = "not-set";
+
+    Button recordButton, clearButton;
+    WavAudioRecorder mRecorder;
+
+    String mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_murojaah);
 
-        MurojaahFragment murojaahFragment = obtainViewFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.murojaahFrame, murojaahFragment);
-        transaction.commit();
+        surah = getIntent().getExtras().getString("surah");
+        TextView surahTv = findViewById(R.id.surah_name);
+        surahTv.setText(surah);
 
+        setupView();
+
+        ControlFragment controlFragment = obtainViewFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.murojaah_control_frame, controlFragment);
+        transaction.commit();
+    }
+
+    private void setupView() {
+        recordButton = (Button) findViewById(R.id.record);
+        recordButton.setText("Start");
+        mRecorder = WavAudioRecorder.getInstanse();
+        mRecorder.setOutputFile(mRecordFilePath);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
+                    mRecorder.prepare();
+                    mRecorder.start();
+                    recordButton.setText("Stop");
+                } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
+                    mRecorder.release();
+                    mRecorder = WavAudioRecorder.getInstanse();
+                    mRecorder.setOutputFile(mRecordFilePath);
+                    recordButton.setText("Start");
+                } else {
+                    mRecorder.stop();
+                    mRecorder.reset();
+                    recordButton.setText("Start");
+                }
+            }
+        });
+        clearButton = (Button) findViewById(R.id.reset);
+        clearButton.setText("Clear");
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File pcmFile = new File(mRecordFilePath);
+                if (pcmFile.exists()) {
+                    pcmFile.delete();
+                }
+            }
+        });
     }
 
     public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
@@ -35,25 +91,17 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
     }
 
     @NonNull
-    private MurojaahFragment obtainViewFragment() {
+    private ControlFragment obtainViewFragment() {
         // View Fragment
-        MurojaahFragment murojaahFragment = (MurojaahFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.murojaahFrame);
+        ControlFragment controlFragment = (ControlFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.murojaah_control_frame);
 
-        if (murojaahFragment == null) {
-            murojaahFragment = MurojaahFragment.newInstance();
-            // Send the task ID to the fragment
-
-            // Bundle bundle = new Bundle();
-            // bundle.putString(MurojaahFragment.ARGUMENT_EDIT_TASK_ID,
-               //     getIntent().getStringExtra(AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID));
-            // addEditTaskFragment.setArguments(bundle);
+        if (controlFragment == null) {
+            controlFragment = ControlFragment.newInstance();
         }
-        return murojaahFragment;
+        return controlFragment;
     }
 
     @Override
-    public void onStartRecord() {
-
-    }
+    public void onStartRecord() {}
 }

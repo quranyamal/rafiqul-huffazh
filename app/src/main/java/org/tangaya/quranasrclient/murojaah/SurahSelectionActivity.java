@@ -1,9 +1,13 @@
 package org.tangaya.quranasrclient.murojaah;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.data.Surah;
@@ -28,13 +32,28 @@ public class SurahSelectionActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.verses_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                LinearLayoutManager.VERTICAL));
+
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(),
+                mRecyclerView, new RecyclerTouchListener.ClickListener() {
+
+            @Override
+            public void onClick(View view, int position) {
+                Surah surah = surahsList.get(position);
+                Log.d("onClick", surah.getTitle()+" selected");
+
+                Intent intent = new Intent(getApplicationContext(), MurojaahActivity.class);
+                intent.putExtra("surah", surah.getTitle());
+                startActivity(intent);
+            }
+        }));
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new SurahsAdapter(surahsList);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     private void prepareSurahsData() {
@@ -50,7 +69,7 @@ public class SurahSelectionActivity extends AppCompatActivity {
         surahsList.add(new Surah(10, "Taha"));
         surahsList.add(new Surah(10, "Hud"));
         surahsList.add(new Surah(10, "Yusuf"));
-        surahsList.add(new Surah(10, "Ar-Ra'du"));
+        surahsList.add(new Surah(10, "Ar-Ra'd"));
         surahsList.add(new Surah(10, "Ibrahim"));
         surahsList.add(new Surah(10, "Ibrahim"));
         surahsList.add(new Surah(10, "Ibrahim"));

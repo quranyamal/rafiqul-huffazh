@@ -10,51 +10,88 @@
     </data>
 
 
-<android.support.v7.widget.LinearLayoutCompat
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".murojaah.MurojaahActivity"
-    android:orientation="vertical"
-    android:padding="15dp"
-    android:layout_weight="10">
-
-    <FrameLayout
-        android:id="@+id/murojaahFrame"
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        tools:context=".murojaah.MurojaahFragment"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:padding="5dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/retry"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/surah_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Retry"
-            android:layout_marginTop="20dp"/>
-        <Button
-            android:id="@+id/next"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Lanjut"
-            android:layout_marginTop="20dp"/>
-        <Button
-            android:id="@+id/hint"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tampilkan"
-            android:layout_marginTop="20dp"/>
+            android:text="Surat ..."/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/server_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@={viewmodel.serverStatus}"
+            android:layout_gravity="end"
+            android:textAlignment="textEnd"/>
 
-</android.support.v7.widget.LinearLayoutCompat>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="[transkripsi]"
+                android:gravity="center"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/coba_viewmodel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@={viewmodel.transcriptionText}"
+                android:gravity="center"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rekam"/>
+
+            <Button
+                android:id="@+id/play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Play"/>
+
+            <Button
+                android:id="@+id/reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/murojaah_control_frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:elevation="3dp">
+        </FrameLayout>
+
+    </android.support.v7.widget.LinearLayoutCompat>
 </layout>

@@ -9,8 +9,6 @@ public class Surah {
     public Surah(int id, String title) {
         mId = id;
         mTitle = title;
-
-        Log.d("Surah", "surah " + id + ". " +title+" created");
     }
 
     public int getId() {
