@@ -1,15 +1,19 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.home;
 
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.neovisionaries.ws.client.WebSocket;
+import org.tangaya.quranasrclient.imtihan.ImtihanActivity;
+import org.tangaya.quranasrclient.murojaah.SurahSelectionActivity;
+import org.tangaya.quranasrclient.util.AudioRecordTest;
+import org.tangaya.quranasrclient.murojaah.MurojaahActivity;
+import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.config.ServerConfigActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     String defaultHost = "192.168.0.217";
     String defailtPort = "8888";
@@ -17,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -34,7 +38,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoMorojaah(View view) {
-        Intent intent = new Intent(this, MurojaahActivity.class);
+        Intent intent = new Intent(this, SurahSelectionActivity.class);
+        startActivity(intent);
+    }
+
+    public void gotoImtihan(View view) {
+        Intent intent = new Intent(this, ImtihanActivity.class);
         startActivity(intent);
     }
 

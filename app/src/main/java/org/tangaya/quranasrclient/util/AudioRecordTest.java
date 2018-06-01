@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.util;
 
 import android.Manifest;
 import android.content.Context;

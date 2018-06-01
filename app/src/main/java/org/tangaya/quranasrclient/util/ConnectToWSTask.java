@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -36,6 +36,9 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
         this.serverStatusTv = serverStatusTv;
     }
 
+    public ConnectToWSTask(WebSocket ws) {
+        this.ws = ws;
+    }
 
     @Override
     protected Boolean doInBackground(WebSocket... webSockets) {
@@ -55,25 +58,25 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
     protected void onProgressUpdate(String... transcript) {
         super.onProgressUpdate(transcript);
 
-        resultTv.setText(transcript[0]);
-
-        Log.d("async", "resultTv: " + resultTv);
+//        resultTv.setText(transcript[0]);
+//
+//        Log.d("async", "resultTv: " + resultTv);
     }
 
     @Override
     protected void onPostExecute(Boolean isServerAvailable) {
         super.onPostExecute(isServerAvailable);
 
-        if (isServerAvailable) {
-            //statusTv.setText("server tersedia");
-            serverStatusTv.setText("terhubung ke server");
-            Log.d("MurojaahActivity", "server tersedia");
-
-        } else {
-            serverStatusTv.setText("server tidak tersedia");
-            //statusTv.setText("server tidak tersedia");
-            Log.d("MurojaahActivity", "server tidak tersedia");
-        }
+//        if (isServerAvailable) {
+//            //statusTv.setText("server tersedia");
+//            serverStatusTv.setText("terhubung ke server");
+//            Log.d("MurojaahActivity", "server tersedia");
+//
+//        } else {
+//            serverStatusTv.setText("server tidak tersedia");
+//            //statusTv.setText("server tidak tersedia");
+//            Log.d("MurojaahActivity", "server tidak tersedia");
+//        }
     }
 
 }

@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient;
+package org.tangaya.quranasrclient.config;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
+
+import org.tangaya.quranasrclient.R;
 
 public class ServerConfigActivity extends AppCompatActivity {
 
