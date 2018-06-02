@@ -22,13 +22,15 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableField<Boolean> isCompleteTranscription = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
+    public final ObservableField<Integer> currentSurahNum = new ObservableField<>();
+    public final ObservableField<Integer> currentAyahNum = new ObservableField<>();
+
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
 
     int count_tap = 0;
 
     Context mContext;
     TranscriptionsRepository mTranscriptionsRepository;
-    Quran myQuran;
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository) {
@@ -36,7 +38,6 @@ public class MurojaahViewModel extends AndroidViewModel
 
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
-        myQuran = new Quran(context);
         serverStatus.set("tidak diketahui");
 
     }
@@ -84,8 +85,9 @@ public class MurojaahViewModel extends AndroidViewModel
     }
 
     public void showHint() {
-        Log.d("showHint", myQuran.getSurah(1).getAyah(2));
-        transcriptionText.set(myQuran.getSurah(1).getAyah(++count_tap));
+        Log.d("showHint", Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
+        transcriptionText.set(Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
+        currentAyahNum.set(currentAyahNum.get()+1);
     }
 
 }

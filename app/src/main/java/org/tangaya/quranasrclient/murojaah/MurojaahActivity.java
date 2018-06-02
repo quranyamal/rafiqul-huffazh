@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.tangaya.quranasrclient.ControlFragment;
 import org.tangaya.quranasrclient.ViewModelFactory;
+import org.tangaya.quranasrclient.data.Quran;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
@@ -55,6 +56,10 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
 
         mViewModel = obtainViewModel(this);
         mMurojaahDataBinding.setViewmodel(mViewModel);
+
+        Quran.init(getApplicationContext());
+        mViewModel.currentSurahNum.set(SURAH_NUM);
+        mViewModel.currentAyahNum.set(1);
     }
 
     private void setupRecordButton() {

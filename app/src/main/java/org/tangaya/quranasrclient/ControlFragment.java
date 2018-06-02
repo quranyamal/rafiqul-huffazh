@@ -25,8 +25,6 @@ public class ControlFragment extends Fragment {
     Button hintBtn, nextBtn, retryBtn;
     View rootView;
 
-    Quran myQuran;
-
     public ControlFragment() {}
 
     public static ControlFragment newInstance() {
@@ -45,7 +43,6 @@ public class ControlFragment extends Fragment {
         rootView= inflater.inflate(R.layout.fragment_control, container, false);
 
         mViewModel = MurojaahActivity.obtainViewModel(getActivity());
-        myQuran = new Quran(getActivity());
 
         setupHintButton();
         setupRetryButton();
@@ -58,9 +55,9 @@ public class ControlFragment extends Fragment {
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bismillah = myQuran.getSurah(1).getAyah(1);
+                String bismillah = Quran.getSurah(1).getAyah(1);
                 hintBtn.setText(bismillah);
-                Log.d("test Quran", myQuran.getSurah(18).getAyah(1));
+                Log.d("test Quran", Quran.getSurah(18).getAyah(1));
             }
         });
     }
