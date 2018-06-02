@@ -8,6 +8,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.tangaya.quranasrclient.data.Quran;
 import org.tangaya.quranasrclient.service.TranscriberService;
 import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
@@ -27,6 +28,7 @@ public class MurojaahViewModel extends AndroidViewModel
 
     Context mContext;
     TranscriptionsRepository mTranscriptionsRepository;
+    Quran myQuran;
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository) {
@@ -34,14 +36,10 @@ public class MurojaahViewModel extends AndroidViewModel
 
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
-
+        myQuran = new Quran(context);
         serverStatus.set("tidak diketahui");
 
     }
-
-//    public String getTranscriptionText() {
-//        return transcriptionText.toString();
-//    }
 
     @Override
     public void onTranscriptionLoaded(Transcription transcription) {
@@ -86,20 +84,8 @@ public class MurojaahViewModel extends AndroidViewModel
     }
 
     public void showHint() {
-        mTranscriptionsRepository.getTranscription(new TranscriptionsDataSource.GetTranscriptionCallback() {
-            @Override
-            public void onTranscriptionLoaded(Transcription transcription) {
-                Log.d("Murojaah VM", "showHint onTranscriptionNA");
-                transcriptionText.set(transcription.getText() + count_tap++);
-            }
-
-            @Override
-            public void onTranscriptionNotAvailable() {
-                Log.d("Murojaah VM", "showHint onTranscriptionNA");
-                transcriptionText.set("not available gan...");
-                serverStatus.set("terputus");
-            }
-        });
+        Log.d("showHint", myQuran.getSurah(1).getAyah(2));
+        transcriptionText.set(myQuran.getSurah(1).getAyah(++count_tap));
     }
 
 }

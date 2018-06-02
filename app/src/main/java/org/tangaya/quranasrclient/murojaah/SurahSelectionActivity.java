@@ -44,7 +44,8 @@ public class SurahSelectionActivity extends AppCompatActivity {
                 Log.d("onClick", surah.getTitle()+" selected");
 
                 Intent intent = new Intent(getApplicationContext(), MurojaahActivity.class);
-                intent.putExtra("surah", surah.getTitle());
+                intent.putExtra("SURAH_NUM", surah.getId());
+                intent.putExtra("SURAH_NAME", surah.getTitle());
                 startActivity(intent);
             }
         }));

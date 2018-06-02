@@ -1,14 +1,21 @@
 package org.tangaya.quranasrclient.data;
 
-import android.util.Log;
+import java.util.ArrayList;
 
 public class Surah {
     private int mId;
     private String mTitle;
 
+    private ArrayList listOfAyah;
+
+    public Surah() {
+        listOfAyah = new ArrayList();
+    }
+
     public Surah(int id, String title) {
         mId = id;
         mTitle = title;
+        listOfAyah = new ArrayList();
     }
 
     public int getId() {
@@ -17,5 +24,13 @@ public class Surah {
 
     public String getTitle() {
         return mTitle;
+    }
+
+    void addAyah(String str) {
+        listOfAyah.add(str);
+    }
+
+    public String getAyah(int i) {
+        return listOfAyah.get(i-1).toString();
     }
 }

@@ -1,6 +1,7 @@
 package org.tangaya.quranasrclient.murojaah;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -15,36 +16,48 @@ import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.databinding.ActivityMurojaahBinding;
 
 import java.io.File;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
-    String surah = "not-set";
+    private int SURAH_NUM = 0;
+    private String SURAH_NAME = "not-set";
 
     Button recordButton, clearButton;
     WavAudioRecorder mRecorder;
+
+    private MurojaahViewModel mViewModel;
+    private ActivityMurojaahBinding mMurojaahDataBinding;
 
     String mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_murojaah);
+//        setContentView(R.layout.activity_murojaah);
+        mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
+        mMurojaahDataBinding.setLifecycleOwner(this);
 
-        surah = getIntent().getExtras().getString("surah");
+        SURAH_NUM = getIntent().getExtras().getInt("SURAH_NUM");
+        SURAH_NAME = getIntent().getExtras().getString("SURAH_NAME");
         TextView surahTv = findViewById(R.id.surah_name);
-        surahTv.setText(surah);
+        surahTv.setText(SURAH_NUM+"."+SURAH_NAME);
 
-        setupView();
+        setupRecordButton();
+        setupClearButton();
 
         ControlFragment controlFragment = obtainViewFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.murojaah_control_frame, controlFragment);
         transaction.commit();
+
+        mViewModel = obtainViewModel(this);
+        mMurojaahDataBinding.setViewmodel(mViewModel);
     }
 
-    private void setupView() {
+    private void setupRecordButton() {
         recordButton = (Button) findViewById(R.id.record);
         recordButton.setText("Start");
         mRecorder = WavAudioRecorder.getInstanse();
@@ -68,6 +81,10 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
                 }
             }
         });
+    }
+
+    private void setupClearButton() {
+
         clearButton = (Button) findViewById(R.id.reset);
         clearButton.setText("Clear");
         clearButton.setOnClickListener(new View.OnClickListener() {
@@ -103,5 +120,7 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
     }
 
     @Override
-    public void onStartRecord() {}
+    public void onClickHint() {
+        mViewModel.showHint();
+    }
 }

@@ -41,8 +41,6 @@ import timber.log.Timber;
 
 public class MurojaahFragment extends Fragment {
 
-
-
     WebSocket ws;
     TextView resultTv;
     TextView serverStatusTv;
