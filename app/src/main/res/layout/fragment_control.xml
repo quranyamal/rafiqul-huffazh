@@ -21,12 +21,12 @@
             android:text="Retry"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/next"
+            app:layout_constraintEnd_toStartOf="@+id/record"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/next"
+            android:id="@+id/record"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginBottom="8dp"
@@ -34,7 +34,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/circle"
-            android:text="Lanjut"
+            android:text="Rekam"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/next"
+            app:layout_constraintStart_toEndOf="@+id/record"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

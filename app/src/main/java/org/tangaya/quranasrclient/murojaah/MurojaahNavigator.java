@@ -2,6 +2,10 @@ package org.tangaya.quranasrclient.murojaah;
 
 public interface MurojaahNavigator {
 
-    void onClickHint();
+    void startRecording();
+
+    void retryRecording();
+
+    void showHint();
 
 }

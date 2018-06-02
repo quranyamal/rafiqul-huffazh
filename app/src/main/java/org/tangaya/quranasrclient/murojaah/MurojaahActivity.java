@@ -1,7 +1,7 @@
 package org.tangaya.quranasrclient.murojaah;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -19,20 +19,18 @@ import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.databinding.ActivityMurojaahBinding;
 
-import java.io.File;
-
-public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
+public class MurojaahActivity extends AppCompatActivity {
 
     private int SURAH_NUM = 0;
     private String SURAH_NAME = "not-set";
 
-    Button recordButton, clearButton;
-    WavAudioRecorder mRecorder;
+    Button recordBtn, playBtn, clearBtn;
 
-    private MurojaahViewModel mViewModel;
+    public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
 
-    String mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
+    //String mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
+//    String mRecordFilePath = Environment.getExternalStorageDirectory() + "/testwaveee.wav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,8 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         surahTv.setText(SURAH_NUM+"."+SURAH_NAME);
 
         setupRecordButton();
-        setupClearButton();
+        setupPlayButton();
+        setupDecodeTestButton();
 
         ControlFragment controlFragment = obtainViewFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -63,42 +62,34 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
     }
 
     private void setupRecordButton() {
-        recordButton = (Button) findViewById(R.id.record);
-        recordButton.setText("Start");
-        mRecorder = WavAudioRecorder.getInstanse();
-        mRecorder.setOutputFile(mRecordFilePath);
-        recordButton.setOnClickListener(new View.OnClickListener() {
+        recordBtn = (Button) findViewById(R.id.record_old);
+        recordBtn.setText("Start");
+//        mRecorder = WavAudioRecorder.getInstanse();
+//        mRecorder.setOutputFile(mRecordFilePath);
+        recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
-                    mRecorder.prepare();
-                    mRecorder.start();
-                    recordButton.setText("Stop");
-                } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
-                    mRecorder.release();
-                    mRecorder = WavAudioRecorder.getInstanse();
-                    mRecorder.setOutputFile(mRecordFilePath);
-                    recordButton.setText("Start");
-                } else {
-                    mRecorder.stop();
-                    mRecorder.reset();
-                    recordButton.setText("Start");
-                }
+                //startRecording();
             }
         });
     }
 
-    private void setupClearButton() {
-
-        clearButton = (Button) findViewById(R.id.reset);
-        clearButton.setText("Clear");
-        clearButton.setOnClickListener(new View.OnClickListener() {
+    private void setupPlayButton() {
+        playBtn = findViewById(R.id.play);
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File pcmFile = new File(mRecordFilePath);
-                if (pcmFile.exists()) {
-                    pcmFile.delete();
-                }
+                mViewModel.playRecordedAudio();
+            }
+        });
+    }
+
+    private void setupDecodeTestButton() {
+        Button decodeTestBtn = findViewById(R.id.test_decode);
+        decodeTestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.testDecode();
             }
         });
     }
@@ -124,8 +115,4 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         return controlFragment;
     }
 
-    @Override
-    public void onClickHint() {
-        mViewModel.showHint();
-    }
 }

@@ -66,7 +66,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/record"
+                android:id="@+id/record_old"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/circle"
@@ -79,10 +79,10 @@
                 android:text="Play"/>
 
             <Button
-                android:id="@+id/reset"
+                android:id="@+id/test_decode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reset"/>
+                android:text="test decode"/>
 
         </LinearLayout>
 

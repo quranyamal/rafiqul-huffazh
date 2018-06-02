@@ -2,13 +2,8 @@ package org.tangaya.quranasrclient.murojaah;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,28 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketFactory;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
-import org.tangaya.quranasrclient.util.ConnectToWSTask;
 import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import timber.log.Timber;
 
 public class MurojaahFragment extends Fragment {
 
@@ -81,24 +62,8 @@ public class MurojaahFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setupRecognizeButton();
         setupRetryButton();
         setupHintButton();
-    }
-
-    private void setupRecognizeButton() {
-        Button nextBtn = getActivity().findViewById(R.id.next);
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.recognize();
-//                Log.d("MurojaahActivity", "Send button clicked");
-//                //recognize("/storage/emulated/0/DCIM/100-1.wav");
-//                recognize(mRecordFilePath);
-//                Log.d("MurojaahActivity", "sending binary...");
-
-            }
-        });
     }
 
     private void setupRetryButton() {
@@ -155,7 +120,7 @@ public class MurojaahFragment extends Fragment {
 
 
 
-        recordButton = (Button) view.findViewById(R.id.record);
+        recordButton = (Button) view.findViewById(R.id.record_old);
         recordButton.setText("Start");
         mRecorder = WavAudioRecorder.getInstanse();
         mRecorder.setOutputFile(mRecordFilePath);
