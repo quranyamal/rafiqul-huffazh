@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.neovisionaries.ws.client.WebSocket;
 
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
 
 import java.io.File;
@@ -122,7 +122,7 @@ public class MurojaahFragment extends Fragment {
 
         recordButton = (Button) view.findViewById(R.id.record_old);
         recordButton.setText("Start");
-        mRecorder = WavAudioRecorder.getInstanse();
+        mRecorder = WavAudioRecorder.getInstance();
         mRecorder.setOutputFile(mRecordFilePath);
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +133,7 @@ public class MurojaahFragment extends Fragment {
                     recordButton.setText("Stop");
                 } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
                     mRecorder.release();
-                    mRecorder = WavAudioRecorder.getInstanse();
+                    mRecorder = WavAudioRecorder.getInstance();
                     mRecorder.setOutputFile(mRecordFilePath);
                     recordButton.setText("Start");
                 } else {

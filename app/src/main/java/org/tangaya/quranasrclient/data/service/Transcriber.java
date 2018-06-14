@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.service;
+package org.tangaya.quranasrclient.data.service;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -21,13 +21,13 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class TranscriberService {
+public class Transcriber {
 
     WebSocket ws;
     String hostname = "192.168.1.217";
     String port = "8888";
 
-    public TranscriberService() {}
+    public Transcriber() {}
 
     public void startRecognize(String filename) {
 

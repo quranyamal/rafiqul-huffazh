@@ -1,7 +1,6 @@
 package org.tangaya.quranasrclient.murojaah;
 
 import android.databinding.DataBindingUtil;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -14,9 +13,9 @@ import android.widget.TextView;
 import org.tangaya.quranasrclient.ControlFragment;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.Quran;
+import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.databinding.ActivityMurojaahBinding;
 
 public class MurojaahActivity extends AppCompatActivity {
@@ -64,12 +63,12 @@ public class MurojaahActivity extends AppCompatActivity {
     private void setupRecordButton() {
         recordBtn = (Button) findViewById(R.id.record_old);
         recordBtn.setText("Start");
-//        mRecorder = WavAudioRecorder.getInstanse();
+//        mRecorder = WavAudioRecorder.getInstance();
 //        mRecorder.setOutputFile(mRecordFilePath);
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startRecording();
+                //performRecording();
             }
         });
     }
@@ -97,9 +96,10 @@ public class MurojaahActivity extends AppCompatActivity {
     public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
 
-        TranscriptionsRepository repo = new TranscriptionsRepository();
+        TranscriptionsRepository transcriptionRepo = new TranscriptionsRepository();
+        RecordingRepository recordingRepo = new RecordingRepository();
 
-        return new MurojaahViewModel(activity.getApplication(), repo);
+        return new MurojaahViewModel(activity.getApplication(), transcriptionRepo, recordingRepo);
         //return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
     }
 

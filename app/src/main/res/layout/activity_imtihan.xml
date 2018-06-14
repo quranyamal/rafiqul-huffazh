@@ -39,6 +39,24 @@
         android:id="@+id/Textdisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="displlay"/>
+        android:text="display"/>
+
+    <Button
+        android:id="@+id/record_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="record new"/>
+
+    <Button
+        android:id="@+id/stop_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stop new"/>
+
+    <Button
+        android:id="@+id/play_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="play new"/>
 
 </LinearLayout>

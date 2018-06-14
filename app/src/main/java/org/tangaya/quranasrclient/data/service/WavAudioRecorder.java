@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.service;
+package org.tangaya.quranasrclient.data.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import android.util.Log;
 public class WavAudioRecorder {
     private final static int[] sampleRates = {44100, 22050, 11025, 8000};
 
-    public static WavAudioRecorder getInstanse() {
+    public static WavAudioRecorder getInstance() {
         WavAudioRecorder result = null;
 //        int i=0;
 //        do {
@@ -87,6 +87,9 @@ public class WavAudioRecorder {
         return state;
     }
 
+    public boolean isRecording() {
+        return state==State.RECORDING;
+    }
 
     private AudioRecord.OnRecordPositionUpdateListener updateListener = new AudioRecord.OnRecordPositionUpdateListener() {
         //	periodic updates on the progress of the record head

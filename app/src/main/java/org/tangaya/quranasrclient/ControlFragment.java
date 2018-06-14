@@ -2,7 +2,6 @@ package org.tangaya.quranasrclient;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,26 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
 import org.tangaya.quranasrclient.murojaah.MurojaahActivity;
-import org.tangaya.quranasrclient.murojaah.MurojaahNavigator;
 import org.tangaya.quranasrclient.murojaah.MurojaahViewModel;
-import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 
-public class ControlFragment extends Fragment implements MurojaahNavigator {
+public class ControlFragment extends Fragment {
 
     private MurojaahViewModel mViewModel;
     private FragmentMurojaahBinding mMurojaahFragDataBinding;
 
-    WavAudioRecorder mRecorder;
-
     Button hintBtn, recordBtn, retryBtn;
     View rootView;
 
-    String mRecordFilePath = Environment.getExternalStorageDirectory() + "/testwaveee.wav";
+    private RecordingRepository mRepository;
 
-    public ControlFragment() {}
+    private static final int IDLE = MurojaahViewModel.STATE_IDLE;
+    private static final int RECORDING = MurojaahViewModel.STATE_RECORDING;
+    private static final int RECOGNIZING = MurojaahViewModel.STATE_RECOGNIZING;
+
+    public ControlFragment() {
+    }
 
     public static ControlFragment newInstance() {
         return new ControlFragment();
@@ -39,20 +40,20 @@ public class ControlFragment extends Fragment implements MurojaahNavigator {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRecorder = WavAudioRecorder.getInstanse();
-        mRecorder.setOutputFile(mRecordFilePath);
+//        mRecorder = WavAudioRecorder.getInstance();
+//        mRecorder.setOutputFile(mRecordFilePath);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView= inflater.inflate(R.layout.fragment_control, container, false);
+        rootView = inflater.inflate(R.layout.fragment_control, container, false);
 
         //mViewModel = MurojaahActivity.obtainViewModel(getActivity());
-        mViewModel = ((MurojaahActivity)getActivity()).mViewModel;
+        mViewModel = ((MurojaahActivity) getActivity()).mViewModel;
 
-        setupRecordButton();
+        setupAttemptButton();
         setupHintButton();
         setupRetryButton();
 
@@ -64,13 +65,22 @@ public class ControlFragment extends Fragment implements MurojaahNavigator {
         super.onAttach(context);
     }
 
-    private void setupRecordButton() {
-        recordBtn = rootView.findViewById(R.id.record);
+    private void setupAttemptButton() {
+        recordBtn = rootView.findViewById(R.id.attempt);
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startRecording();
+                if (mViewModel.getAttemptState() == IDLE) {
+                    mViewModel.createAttempt();
+                    recordBtn.setText("recording...");
+                } else if (mViewModel.getAttemptState() == RECORDING) {
+                    mViewModel.submitAttempt();
+                    recordBtn.setText("recognizing...");
+                } else {
+                    mViewModel.cancelAttempt();
+                    mViewModel.playRecordedAudio();
+                    recordBtn.setText("record");
+                }
             }
         });
     }
@@ -91,38 +101,27 @@ public class ControlFragment extends Fragment implements MurojaahNavigator {
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                showHint();
+                mViewModel.showHint();
             }
         });
     }
 
-    @Override
-    public void startRecording() {
-        if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
-            mRecorder.prepare();
-            mRecorder.start();
-            recordBtn.setText("Stop");
-        } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
-            mRecorder.release();
-            mRecorder = WavAudioRecorder.getInstanse();
-            mRecorder.setOutputFile(mRecordFilePath);
-            recordBtn.setText("Start");
-        } else {
-            mRecorder.stop();
-            mRecorder.reset();
-            recordBtn.setText("Start");
-        }
-    }
-
-    @Override
-    public void retryRecording() {
-
-    }
-
-    @Override
-    public void showHint() {
-        mViewModel.showHint();
-    }
+//    @Override old
+//    public void performRecording() {
+//        if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
+//            mRecorder.prepare();
+//            mRecorder.start();
+//            recordBtn.setText("Stop");
+//        } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
+//            mRecorder.release();
+//            mRecorder = WavAudioRecorder.getInstance();
+//            mRecorder.setOutputFile(mRecordFilePath);
+//            recordBtn.setText("Start");
+//        } else {
+//            mRecorder.stop();
+//            mRecorder.reset();
+//            recordBtn.setText("Start");
+//        }
+//    }
 
 }
