@@ -25,6 +25,11 @@
             android:text="Surat ..."/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={`` + viewmodel.currentAyahNum}"/>
+
+        <TextView
             android:id="@+id/server_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,6 +88,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="test decode"/>
+
+            <Button
+                android:id="@+id/skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="skip"/>
 
         </LinearLayout>
 

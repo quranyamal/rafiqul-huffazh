@@ -3,14 +3,11 @@ package org.tangaya.quranasrclient.murojaah;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.content.Context;
-import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -21,7 +18,6 @@ import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
-import org.tangaya.quranasrclient.util.AppExecutors;
 
 import java.io.IOException;
 
@@ -48,6 +44,7 @@ public class MurojaahViewModel extends AndroidViewModel
     Context mContext;
     TranscriptionsRepository mTranscriptionsRepository;
     RecordingRepository mRecordingRepository;
+    MurojaahNavigator mNavigator;
 
     Uri audioFileUri;
 
@@ -59,13 +56,17 @@ public class MurojaahViewModel extends AndroidViewModel
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
         mRecordingRepository = recordingRepository;
-
         serverStatus.set("tidak diketahui");
+        currentAyahNum.set(0);
         attemptState.set(STATE_IDLE);
 
         transcriber = new Transcriber();
         //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
+    }
+
+    void onActivityCreated(MurojaahNavigator navigator) {
+        mNavigator = navigator;
     }
 
     @Override
@@ -103,7 +104,7 @@ public class MurojaahViewModel extends AndroidViewModel
     void recognize() {
         Log.d("MurojaahViewModel", "recognizing...");
         //String audioFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
-        String audioFilePath = "/storage/emulated/0/DCIM/100-1.wav";
+        String audioFilePath = "/storage/emulated/0/DCIM/100-2.wav";
         transcriber.startRecognize(audioFilePath);
     }
 
@@ -111,18 +112,7 @@ public class MurojaahViewModel extends AndroidViewModel
         Log.d("cek surat", "surat="+currentSurahNum.get());
         Log.d("showHint", Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
         transcriptionText.set(Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
-        currentAyahNum.set(currentAyahNum.get()+1);
     }
-
-//    public void startStopRecording(RecordingRepository.Callback callback) {
-//        if (mRecordingRepository.isRecording()) {
-//            Log.d("MVM", "stopping...");
-//            mRecordingRepository.stopRecording();
-//        } else {
-//            Log.d("MVM", "starting...");
-//            mRecordingRepository.performRecording(this);
-//        }
-//    }
 
     public void createAttempt() {
         attemptState.set(STATE_RECORDING);
@@ -134,7 +124,12 @@ public class MurojaahViewModel extends AndroidViewModel
     public void submitAttempt() {
         mRecordingRepository.stopRecording();
         attemptState.set(STATE_RECOGNIZING);
-        currentAyahNum.set(currentAyahNum.get()+1); // todo
+
+        if (isEndOfSurah()) {
+            mNavigator.gotoEvaluation();
+        } else {
+            incrementAyah();
+        }
     }
 
     public void cancelAttempt() {
@@ -159,6 +154,14 @@ public class MurojaahViewModel extends AndroidViewModel
 
     public int getAttemptState() {
         return attemptState.get();
+    }
+
+    public boolean isEndOfSurah() {
+        return !Quran.getSurah(currentSurahNum.get()).isValidAyahNum(currentAyahNum.get()+1);
+    }
+
+    public void incrementAyah() {
+        currentAyahNum.set(currentAyahNum.get()+1);
     }
 
 }

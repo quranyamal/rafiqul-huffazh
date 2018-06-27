@@ -45,7 +45,7 @@ public class ConnectToWSTask extends AsyncTask<WebSocket, String, Boolean> {
 
         try {
             ws.connect();
-            Log.d("MANew", "connecting to ws");
+            Log.d("ConnectToWSTask", "connecting to ws");
         } catch (WebSocketException e) {
             e.printStackTrace();
             return false;

@@ -33,4 +33,8 @@ public class Surah {
     public String getAyah(int i) {
         return listOfAyah.get(i-1).toString();
     }
+
+    public boolean isValidAyahNum(int num) {
+        return num>0 && num <=listOfAyah.size();
+    }
 }

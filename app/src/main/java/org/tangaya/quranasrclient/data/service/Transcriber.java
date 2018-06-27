@@ -41,7 +41,7 @@ public class Transcriber {
         byte[] bytes = new byte[size];
 
 
-        Log.d("MurojaahActivity", "Recognizing " + filename);
+        Log.d("Transcriber", "Recognizing " + filename);
         try {
             BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
             buf.read(bytes, 0, bytes.length);
@@ -54,7 +54,11 @@ public class Transcriber {
             e.printStackTrace();
         }
 
+        Log.d("Transcriber", "before sendBinary");
+        Log.d("Transcriber", "binary size: " + bytes.length);
+
         ws.sendBinary(bytes);
+        Log.d("WS", "aftersendBinary");
     }
 
     protected void initWS() {
@@ -66,7 +70,7 @@ public class Transcriber {
         try {
             ws = factory.createSocket(endpoint, timeout);
         } catch (IOException e) {
-            Log.d("MorojaahActivity", "Creating socket error");
+            Log.d("Transcriber", "Creating socket error");
             e.printStackTrace();
         }
 
@@ -75,13 +79,13 @@ public class Transcriber {
             public void onConnected(WebSocket webSocket,
                                     Map<String,List<String>> headers) throws Exception {
 
-                Log.d("ConnectToWSTask", "onConnected");
+                Log.d("Transcriber", "onConnected");
             }
 
             @Override
             public void onTextMessage(WebSocket webSocket, String message) throws Exception {
 
-                Log.d("ConnectToWSTask", "onTextMessage: " + message);
+                Log.d("Transcriber", "onTextMessage: " + message);
 
                 //transcript = "undef";
                 int lastResultLength = 0;
@@ -109,13 +113,16 @@ public class Transcriber {
                         //    lastResultLength = 0;
                         //    resultStr += ".\n\n";
                         //}
-
+                        Log.d("Transcriber", "inside status==0. final hyp:");
+                        Log.d("Transcriber", first_hypotheses.toString());
                     }
                     //else if (status == 1) {     // 1 = no speech
                         // todo
                     //}
+                    Log.d("Transcriber", "end of try block");
                 }
                 catch (JSONException e) {
+                    Log.d("Transcriber", "inside catch block");
                     Timber.e(e.getMessage());
                 }
 
@@ -125,7 +132,7 @@ public class Transcriber {
             public void onBinaryMessage(WebSocket websocket,
                                         byte[] binary) throws Exception {
 
-                Log.d("MANew", "onBinaryMessage: " + binary.toString());
+                Log.d("Transcriber", "onBinaryMessage: " + binary.toString());
             }
         });
     }

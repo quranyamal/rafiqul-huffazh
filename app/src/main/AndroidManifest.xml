@@ -24,7 +24,8 @@
         <activity android:name=".imtihan.ImtihanActivity" />
         <activity android:name=".config.ServerConfigActivity" />
         <activity android:name=".util.AudioRecordTest" />
-        <activity android:name=".murojaah.SurahSelectionActivity"></activity>
+        <activity android:name=".murojaah.SurahSelectionActivity" />
+        <activity android:name=".eval.EvalActivity"></activity>
     </application>
 
 </manifest>

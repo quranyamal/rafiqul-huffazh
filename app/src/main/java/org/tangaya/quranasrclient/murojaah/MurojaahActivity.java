@@ -1,5 +1,6 @@
 package org.tangaya.quranasrclient.murojaah;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -17,8 +18,9 @@ import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.databinding.ActivityMurojaahBinding;
+import org.tangaya.quranasrclient.eval.EvalActivity;
 
-public class MurojaahActivity extends AppCompatActivity {
+public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
     private int SURAH_NUM = 0;
     private String SURAH_NAME = "not-set";
@@ -46,6 +48,7 @@ public class MurojaahActivity extends AppCompatActivity {
         setupRecordButton();
         setupPlayButton();
         setupDecodeTestButton();
+        setupSkipButton();
 
         ControlFragment controlFragment = obtainViewFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -53,11 +56,14 @@ public class MurojaahActivity extends AppCompatActivity {
         transaction.commit();
 
         mViewModel = obtainViewModel(this);
+
         mMurojaahDataBinding.setViewmodel(mViewModel);
 
         Quran.init(getApplicationContext());
         mViewModel.currentSurahNum.set(SURAH_NUM);
         mViewModel.currentAyahNum.set(1);
+
+        mViewModel.onActivityCreated(this);
     }
 
     private void setupRecordButton() {
@@ -93,6 +99,20 @@ public class MurojaahActivity extends AppCompatActivity {
         });
     }
 
+    private void setupSkipButton() {
+        Button skipAyahBtn = findViewById(R.id.skip);
+        skipAyahBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewModel.isEndOfSurah()) {
+                    gotoEvaluation();
+                } else {
+                    mViewModel.incrementAyah();
+                }
+            }
+        });
+    }
+
     public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
 
@@ -115,4 +135,10 @@ public class MurojaahActivity extends AppCompatActivity {
         return controlFragment;
     }
 
+    @Override
+    public void gotoEvaluation() {
+        Intent intent = new Intent(this, EvalActivity.class);
+        finish();
+        startActivity(intent);
+    }
 }

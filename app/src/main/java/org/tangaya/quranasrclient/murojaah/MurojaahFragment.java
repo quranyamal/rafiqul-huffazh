@@ -47,7 +47,7 @@ public class MurojaahFragment extends Fragment {
 
     TextView statusTv;
 
-    String hostname = "192.168.1.217";
+    String hostname = "192.168.43.236";
     String port = "8888";
 
     // NEW WKWKWK
