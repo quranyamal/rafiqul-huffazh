@@ -10,15 +10,19 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.data.Recording;
+import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.service.AudioRecorder;
+import org.tangaya.quranasrclient.data.service.Transcriber;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 
 import java.io.File;
 
 public class ImtihanActivity extends AppCompatActivity {
 
-    private Button btnControl, btnClear;
+    private Button btnControl, btnClear, btnRecognize;
     private TextView textDisplay;
     private WavAudioRecorder mRecorder;
     private static final String mRcordFilePath = Environment.getExternalStorageDirectory() + "/testwaveee.wav";
@@ -70,18 +74,6 @@ public class ImtihanActivity extends AppCompatActivity {
 
         final AudioRecorder recorder = new AudioRecorder();
         Button recBtnNew = findViewById(R.id.record_new);
-//        recBtnNew.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                recorder.startRecording(new RecordingRepository.Callback() {
-//                    @Override
-//                    public void onReadResult(byte[] audioByte) {
-//                        Log.d("recording", "onReadResult");
-//                        notifyOnAudioData(audioByte);
-//                    }
-//                });
-//            }
-//        });
 
         Button stopBtnNew = findViewById(R.id.stop_new);
         stopBtnNew.setOnClickListener(new View.OnClickListener() {
@@ -93,12 +85,19 @@ public class ImtihanActivity extends AppCompatActivity {
 
         Button playBtnNew = findViewById(R.id.play_new);
 
-    }
 
-//    private void notifyOnAudioData(byte[] audioByte) {
-//        mHandler.postDelayed(mRunnable, 1000);
-//        Log.d("IA", "notifyOnAudioData called");
-//    }
+        final Transcriber transcriber = new Transcriber();
+        final Recording recording = new Recording(1,1, "/storage/emulated/0/DCIM/100-1.wav");
+
+        btnRecognize = findViewById(R.id.recognize_new);
+        btnRecognize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transcriber.getTranscription(recording);
+            }
+        });
+
+    }
 
     private Runnable mRunnable = new Runnable() {
         @Override

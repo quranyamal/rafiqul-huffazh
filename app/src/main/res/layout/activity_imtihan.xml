@@ -59,4 +59,10 @@
         android:layout_height="wrap_content"
         android:text="play new"/>
 
+    <Button
+        android:id="@+id/recognize_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tes Recognize New"/>
+
 </LinearLayout>

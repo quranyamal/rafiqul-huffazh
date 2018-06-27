@@ -3,44 +3,37 @@ package org.tangaya.quranasrclient.data.source;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
+import org.tangaya.quranasrclient.data.service.Transcriber;
 
 public class TranscriptionsRepository implements TranscriptionsDataSource {
 
-    private static TranscriptionsRepository INSTANCE = null;
+    private TranscriptionsDataSource mTranscriptionsDataSource;
 
-    private final TranscriptionsDataSource mTranscriptionsDataSource;
-
-    //coba
     public TranscriptionsRepository() {
-        mTranscriptionsDataSource = new TranscriptionsDataSource() {
-            @Override
-            public void getTranscription(@NonNull GetTranscriptionCallback callback) {
-
-            }
-
-            @Override
-            public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
-
-            }
-        };
+        initTranscriptionDataSource();
     }
 
-    private TranscriptionsRepository(@NonNull TranscriptionsDataSource transcriptionsDataSource) {
-        mTranscriptionsDataSource = transcriptionsDataSource;
-    }
+    void initTranscriptionDataSource() {
+            mTranscriptionsDataSource = new TranscriptionsDataSource() {
+                        @Override
+                        public void getTranscription(@NonNull GetTranscriptionCallback callback) {
+                            // todo
+                        }
 
-    public static TranscriptionsRepository getInstance(TranscriptionsDataSource transcriptionsDataSource) {
+                        @Override
+                        public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
+                            // todo
+                        }
 
-        if (INSTANCE == null) {
-            INSTANCE = new TranscriptionsRepository(transcriptionsDataSource);
+                        @Override
+                        public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
+                            Transcriber transcriber = new Transcriber();
+
+                        }
+                    };
         }
-        return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
 
     @Override
     public void getTranscription(@NonNull GetTranscriptionCallback callback) {
@@ -52,6 +45,14 @@ public class TranscriptionsRepository implements TranscriptionsDataSource {
     @Override
     public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
         Transcription cachedTranscription = getTranscriptionWithId(transcription_id);
+    }
+
+    @Override
+    public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
+        mTranscriptionsDataSource.performRecognition(recording, callback);
+
+        callback.onRecognitionCompleted();
+
     }
 
     @Nullable

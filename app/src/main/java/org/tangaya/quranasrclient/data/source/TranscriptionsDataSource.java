@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.data.source;
 
 import android.support.annotation.NonNull;
 
+import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
 
 /**
@@ -11,6 +12,13 @@ import org.tangaya.quranasrclient.data.Transcription;
 public interface TranscriptionsDataSource {
 
     String TRANSCRIBER_ENDPOINT = "ws://192.168.0.217:8888/client/ws/status";
+
+    interface PerformRecognitionCallback {
+
+        void onRecognitionCompleted();
+
+        void onRecognitionError();
+    }
 
     interface GetTranscriptionCallback {
 
@@ -23,5 +31,8 @@ public interface TranscriptionsDataSource {
 
     void getTranscription(@NonNull String transcription_id,
                          @NonNull GetTranscriptionCallback callback);
+
+    void performRecognition(@NonNull Recording recording,
+                          @NonNull PerformRecognitionCallback callback);
 
 }

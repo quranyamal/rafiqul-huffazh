@@ -1,6 +1,8 @@
 package org.tangaya.quranasrclient.data;
 
 
+import android.support.annotation.Nullable;
+
 public class Recording {
 
     private static int count = 0;
@@ -17,7 +19,13 @@ public class Recording {
         mId = Recording.count++;
         mAyahNum = surahNum;
         mSurahNum = ayahNum;
-        mFilename =  "rh_recording_" + mId;
+    }
+
+    public Recording(int surahNum, int ayahNum, String filename) {
+        mId = Recording.count++;
+        mAyahNum = surahNum;
+        mSurahNum = ayahNum;
+        mFilename = filename;
     }
 
 }

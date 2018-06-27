@@ -13,7 +13,7 @@ import android.util.Log;
 
 import org.tangaya.quranasrclient.data.Quran;
 import org.tangaya.quranasrclient.data.Recording;
-import org.tangaya.quranasrclient.data.service.Transcriber;
+import org.tangaya.quranasrclient.data.service.TranscriberOld;
 import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
@@ -22,7 +22,8 @@ import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import java.io.IOException;
 
 public class MurojaahViewModel extends AndroidViewModel
-        implements TranscriptionsDataSource.GetTranscriptionCallback {
+        implements TranscriptionsDataSource.GetTranscriptionCallback,
+        TranscriptionsDataSource.PerformRecognitionCallback {
 
     public final ObservableField<String> transcriptionId = new ObservableField<>();
     public final ObservableField<String> transcriptionText = new ObservableField<>();
@@ -38,7 +39,7 @@ public class MurojaahViewModel extends AndroidViewModel
 
     public final ObservableField<Integer> attemptState= new ObservableField<>();
 
-    Transcriber transcriber;
+    TranscriberOld transcriberOld;
     MediaPlayer mediaPlayer;
 
     Context mContext;
@@ -60,7 +61,7 @@ public class MurojaahViewModel extends AndroidViewModel
         currentAyahNum.set(0);
         attemptState.set(STATE_IDLE);
 
-        transcriber = new Transcriber();
+        transcriberOld = new TranscriberOld();
         //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
     }
@@ -104,8 +105,8 @@ public class MurojaahViewModel extends AndroidViewModel
     void recognize() {
         Log.d("MurojaahViewModel", "recognizing...");
         //String audioFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
-        String audioFilePath = "/storage/emulated/0/DCIM/100-2.wav";
-        transcriber.startRecognize(audioFilePath);
+        String audioFilePath = "/storage/emulated/0/DCIM/100-1.wav";
+        transcriberOld.startRecognize(audioFilePath);
     }
 
     public void showHint() {
@@ -164,4 +165,13 @@ public class MurojaahViewModel extends AndroidViewModel
         currentAyahNum.set(currentAyahNum.get()+1);
     }
 
+    @Override
+    public void onRecognitionCompleted() {
+
+    }
+
+    @Override
+    public void onRecognitionError() {
+
+    }
 }

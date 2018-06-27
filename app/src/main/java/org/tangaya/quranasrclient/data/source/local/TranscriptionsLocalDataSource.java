@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.data.source.local;
 
 import android.support.annotation.NonNull;
 
+import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.util.AppExecutors;
@@ -60,5 +61,10 @@ public class TranscriptionsLocalDataSource implements TranscriptionsDataSource {
         };
 
         mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
+
     }
 }

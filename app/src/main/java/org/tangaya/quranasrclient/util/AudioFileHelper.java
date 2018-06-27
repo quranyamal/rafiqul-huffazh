@@ -19,7 +19,7 @@ import timber.log.Timber;
 public class AudioFileHelper {
 
     public static String TRANSCRIBER_DIR = Environment.getExternalStorageDirectory() +
-            File.separator + "Transcriber";
+            File.separator + "TranscriberOld";
 
     private FileOutputStream mOuput;
     private File mRawFile;

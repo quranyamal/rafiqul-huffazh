@@ -3,7 +3,9 @@ package org.tangaya.quranasrclient.data.source.remote;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
+import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
+import org.tangaya.quranasrclient.data.service.Transcriber;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 
 import java.util.LinkedHashMap;
@@ -50,6 +52,21 @@ public class TranscriptionsRemoteDataSource implements TranscriptionsDataSource 
                 callback.onTranscriptionLoaded(transcription);
             }
         }, SERVICE_LATENCY_IN_MILLIS);
+    }
+
+    @Override
+    public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
+        Transcriber transcriber = new Transcriber();
+
+        Handler handler= new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        final Transcription transcription  = transcriber.getTranscription(recording);
+        //callback.onTranscriptionLoaded(transcription);
     }
 
     private static void addTranscriptin(String id, String transStr) {
