@@ -44,22 +44,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/result"
+                android:id="@+id/hint"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="[transkripsi]"
+                android:text="@={viewmodel.ayahText}"
                 android:gravity="center"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:id="@+id/coba_viewmodel"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@={viewmodel.transcriptionText}"
-                android:gravity="center"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:visibility="@{viewmodel.ayahTextVisibility}"/>
 
         </LinearLayout>
 

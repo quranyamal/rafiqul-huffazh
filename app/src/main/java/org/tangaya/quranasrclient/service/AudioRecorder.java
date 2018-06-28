@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.data.service;
+package org.tangaya.quranasrclient.service;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -7,7 +7,6 @@ import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import android.util.Log;
 
-import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.util.AppExecutors;
 import org.tangaya.quranasrclient.util.AudioFileHelper;
 

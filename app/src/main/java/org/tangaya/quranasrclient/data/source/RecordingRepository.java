@@ -4,7 +4,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import org.tangaya.quranasrclient.data.Recording;
-import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 public class RecordingRepository {
 

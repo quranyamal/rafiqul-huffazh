@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.data.service;
+package org.tangaya.quranasrclient.service;
 
 import java.io.File;
 import java.io.IOException;

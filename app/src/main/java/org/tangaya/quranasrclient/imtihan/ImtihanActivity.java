@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.data.Recording;
-import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.data.service.AudioRecorder;
-import org.tangaya.quranasrclient.data.service.Transcriber;
-import org.tangaya.quranasrclient.data.source.RecordingRepository;
-import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
-import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
+import org.tangaya.quranasrclient.service.AudioRecorder;
+import org.tangaya.quranasrclient.service.Transcriber;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.File;
 

@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.data.service.Transcriber;
+import org.tangaya.quranasrclient.service.Transcriber;
 
 public class TranscriptionsRepository implements TranscriptionsDataSource {
 

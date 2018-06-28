@@ -84,7 +84,7 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewModel.playRecordedAudio();
+                mViewModel.playAttemptRecording();
             }
         });
     }

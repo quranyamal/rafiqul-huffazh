@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
@@ -20,7 +21,8 @@ public class ControlFragment extends Fragment {
     private MurojaahViewModel mViewModel;
     private FragmentMurojaahBinding mMurojaahFragDataBinding;
 
-    Button hintBtn, recordBtn, retryBtn;
+    Button hintBtn, retryBtn;
+    ImageView recordBtn;
     View rootView;
 
     private RecordingRepository mRepository;
@@ -72,14 +74,17 @@ public class ControlFragment extends Fragment {
             public void onClick(View v) {
                 if (mViewModel.getAttemptState() == IDLE) {
                     mViewModel.createAttempt();
-                    recordBtn.setText("recording...");
+                    //recordBtn.setText("recording...");
+                    recordBtn.setImageResource(R.drawable.stop_circle_100);
                 } else if (mViewModel.getAttemptState() == RECORDING) {
                     mViewModel.submitAttempt();
-                    recordBtn.setText("recognizing...");
+                    //recordBtn.setText("recognizing...");
+                    recordBtn.setImageResource(R.drawable.load_circle_100);
                 } else {
                     mViewModel.cancelAttempt();
-                    mViewModel.playRecordedAudio();
-                    recordBtn.setText("record");
+                    mViewModel.playAttemptRecording();
+                    //recordBtn.setText("record");
+                    recordBtn.setImageResource(R.drawable.mic_circle_100);
                 }
             }
         });

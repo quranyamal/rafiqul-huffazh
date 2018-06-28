@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.data.service;
+package org.tangaya.quranasrclient.service;
 
 import android.os.AsyncTask;
 import android.util.Log;

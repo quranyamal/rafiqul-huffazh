@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.data.Recording;
 import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.data.service.Transcriber;
+import org.tangaya.quranasrclient.service.Transcriber;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 
 import java.util.LinkedHashMap;

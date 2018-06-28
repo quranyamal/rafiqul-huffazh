@@ -4,43 +4,41 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.content.Context;
 import android.databinding.ObservableField;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import org.tangaya.quranasrclient.data.Quran;
 import org.tangaya.quranasrclient.data.Recording;
-import org.tangaya.quranasrclient.data.service.TranscriberOld;
+import org.tangaya.quranasrclient.service.AudioPlayer;
+import org.tangaya.quranasrclient.service.TranscriberOld;
 import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
-
-import java.io.IOException;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.GetTranscriptionCallback,
         TranscriptionsDataSource.PerformRecognitionCallback {
 
     public final ObservableField<String> transcriptionId = new ObservableField<>();
-    public final ObservableField<String> transcriptionText = new ObservableField<>();
-    public final ObservableField<Boolean> isCompleteTranscription = new ObservableField<>();
+    public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
     public final ObservableField<Integer> currentSurahNum = new ObservableField<>();
     public final ObservableField<Integer> currentAyahNum = new ObservableField<>();
+    public final ObservableField<Integer> attemptState= new ObservableField<>();
+    public final ObservableField<Integer> ayahTextVisibility = new ObservableField<>();
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_RECORDING = 1;
     public static final int STATE_RECOGNIZING = 2;
 
-    public final ObservableField<Integer> attemptState= new ObservableField<>();
 
     TranscriberOld transcriberOld;
-    MediaPlayer mediaPlayer;
+    AudioPlayer audioPlayer;
 
     Context mContext;
     TranscriptionsRepository mTranscriptionsRepository;
@@ -48,6 +46,8 @@ public class MurojaahViewModel extends AndroidViewModel
     MurojaahNavigator mNavigator;
 
     Uri audioFileUri;
+
+
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
@@ -63,6 +63,8 @@ public class MurojaahViewModel extends AndroidViewModel
 
         transcriberOld = new TranscriberOld();
         //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
+
+        audioPlayer = new AudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
     }
 
@@ -74,7 +76,7 @@ public class MurojaahViewModel extends AndroidViewModel
     public void onTranscriptionLoaded(Transcription transcription) {
         Log.d("VM", "onTranscriptionLoaded invoked");
         transcriptionId.set(transcription.getId());
-        transcriptionText.set(transcription.getText());
+        ayahText.set(transcription.getText());
     }
 
     @Override
@@ -112,7 +114,8 @@ public class MurojaahViewModel extends AndroidViewModel
     public void showHint() {
         Log.d("cek surat", "surat="+currentSurahNum.get());
         Log.d("showHint", Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
-        transcriptionText.set(Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
+        ayahText.set(Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
+        ayahTextVisibility.set(View.VISIBLE);
     }
 
     public void createAttempt() {
@@ -137,16 +140,8 @@ public class MurojaahViewModel extends AndroidViewModel
         attemptState.set(STATE_IDLE);
     }
 
-    public void playRecordedAudio() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        try {
-            mediaPlayer.setDataSource(getApplication(), audioFileUri);
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
+    public void playAttemptRecording() {
+        audioPlayer.play(audioFileUri);
     }
 
     public void testDecode() {
@@ -163,6 +158,7 @@ public class MurojaahViewModel extends AndroidViewModel
 
     public void incrementAyah() {
         currentAyahNum.set(currentAyahNum.get()+1);
+        ayahTextVisibility.set(View.GONE);
     }
 
     @Override
@@ -174,4 +170,5 @@ public class MurojaahViewModel extends AndroidViewModel
     public void onRecognitionError() {
 
     }
+
 }

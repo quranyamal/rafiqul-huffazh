@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.neovisionaries.ws.client.WebSocket;
 
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
 import org.tangaya.quranasrclient.databinding.FragmentMurojaahBinding;
 
 import java.io.File;
@@ -109,7 +109,7 @@ public class MurojaahFragment extends Fragment {
 
         mMurojaahFragDataBinding.setViewmodel(mViewModel);
 
-        resultTv = view.findViewById(R.id.result);
+        resultTv = view.findViewById(R.id.hint);
         serverStatusTv = view.findViewById(R.id.server_status);
 
 //        initWS();
