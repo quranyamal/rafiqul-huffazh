@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.data.source;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class QuranScriptRepository {
     private QuranScriptRepository() {}
 
     private static Context mContext;
-    private static BufferedReader br;
+    private static BufferedReader brChapter, brVerse;
     private static Chapter[] listOfChapter;
 
     public static void init(Context context) {
@@ -21,7 +22,9 @@ public class QuranScriptRepository {
         AssetManager assetManager = mContext.getAssets();
 
         try {
-            br = new BufferedReader(new InputStreamReader(
+            brChapter = new BufferedReader(new InputStreamReader(
+                    assetManager.open("quran_surahs_name.csv")));
+            brVerse = new BufferedReader(new InputStreamReader(
                     assetManager.open("quran-uthmani.txt")));
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,21 +35,30 @@ public class QuranScriptRepository {
     private static void initData() {
         System.out.println("loading data ...");
 
-        String line;
-        String[] linePart;
+        String lineChapter, lineVerse;
+        String[] lineChapterPart, lineVersePart;
 
-        listOfChapter = new Chapter[145];
-        for (int i=1; i<=144; i++) {
+        listOfChapter = new Chapter[115];
+        for (int i=1; i<=114; i++) {
             listOfChapter[i] = new Chapter();
         }
 
         try {
-            for (int i=0; i<6236; i++) {
-                line=br.readLine();
-                linePart = line.split("\\|");
+            lineChapter = brChapter.readLine();
 
-                int surahNum = Integer.parseInt(linePart[0]);
-                String verseStr = linePart[2];
+            for (int i=1; i<=114; i++) {
+                lineChapter = brChapter.readLine();
+                Log.d("QSR", "lineChapter = " + lineChapter);
+                lineChapterPart = lineChapter.split(",");
+                listOfChapter[i].mTitle = lineChapterPart[2];
+            }
+
+            for (int i=0; i<6236; i++) {
+                lineVerse = brVerse.readLine();
+                lineVersePart = lineVerse.split("\\|");
+
+                int surahNum = Integer.parseInt(lineVersePart[0]);
+                String verseStr = lineVersePart[2];
 
                 listOfChapter[surahNum].addVerse(verseStr);
             }
@@ -66,7 +78,7 @@ public class QuranScriptRepository {
 
         private ArrayList<String> listOfVerse;
 
-        public Chapter() {
+        private Chapter() {
             listOfVerse = new ArrayList();
         }
 

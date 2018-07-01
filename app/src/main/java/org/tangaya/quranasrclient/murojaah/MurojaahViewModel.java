@@ -23,21 +23,17 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
     public final ObservableField<Integer> chapterNum = new ObservableField<>();
+    public final ObservableField<String> chapterName = new ObservableField<>();
     public final ObservableField<Integer> verseNum = new ObservableField<>();
     public final ObservableField<Integer> attemptState= new ObservableField<>();
 
-    public final ObservableField<String> surahName = new ObservableField<>();
-    public final ObservableField<String> verseIndicator = new ObservableField<>();
     public final ObservableField<String> hintText = new ObservableField<>();
     public final ObservableField<Integer> hintVisibility = new ObservableField<>();
     public final ObservableField<String> instructionText = new ObservableField<>();
 
-    public static final int STATE_IDLE = 0;
-    public static final int STATE_RECORDING = 1;
-    public static final int STATE_RECOGNIZING = 2;
+    public final ObservableField<Integer> isRecording = new ObservableField<>();
+    public final ObservableField<Integer> isHintRequested = new ObservableField<>();;
 
-    private boolean isRecording;
-    private boolean isHintRequested;
     private boolean isLastVerse;
 
     AudioPlayer audioPlayer;
@@ -49,7 +45,6 @@ public class MurojaahViewModel extends AndroidViewModel
 
     Uri audioFileUri;
 
-
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
                              @NonNull RecordingRepository recordingRepository) {
@@ -60,33 +55,43 @@ public class MurojaahViewModel extends AndroidViewModel
         mRecordingRepository = recordingRepository;
         serverStatus.set("tidak diketahui");
         verseNum.set(1);
-        attemptState.set(STATE_IDLE);
 
         //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
 
         audioPlayer = new AudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
+
+        isRecording.set(0);
+        isHintRequested.set(0);
     }
 
     void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
         chapterNum.set(chapter);
-        //Quran.init(getApplication());
-        QuranScriptRepository.init(getApplication());
-        Log.d("MVM", "onActivityCreated. chapter="+chapter);
+//        QuranScriptRepository.init(getApplication());
+        chapterName.set(QuranScriptRepository.getChapter(chapter).getTitle());
+        Log.d("MVM", "chapterNum = " + chapterNum.get());
+        Log.d("MVM", "chapterName = " + chapterName.get());
+        Log.d("MVM", "chaper = " + QuranScriptRepository.getChapter(chapter).getTitle());
+
     }
 
     public void showHint() {
         Log.d("cek surat", "surat="+ chapterNum.get());
         Log.d("cek ayat", "ayat="+ verseNum.get());
         Log.d("showHint", QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
+
+        chapterName.set(QuranScriptRepository.getChapter(chapterNum.get()).getTitle());
+        Log.d("MVM", "chapterName = " + chapterName.get());
+
         ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
         hintVisibility.set(View.VISIBLE);
+        isHintRequested.set(1);
     }
 
     public void createAttempt() {
-        attemptState.set(STATE_RECORDING);
         mRecordingRepository.createRecording(chapterNum.get(), verseNum.get());
+        isRecording.set(1);
     }
 
     public void submitAttempt() {
@@ -96,25 +101,23 @@ public class MurojaahViewModel extends AndroidViewModel
                 // todo
             }
         });
-        attemptState.set(STATE_RECOGNIZING);
 
         if (isEndOfSurah()) {
             mNavigator.gotoEvaluation();
         } else {
             incrementAyah();
         }
+
+        isRecording.set(0);
     }
 
     public void cancelAttempt() {
-        attemptState.set(STATE_IDLE);
+        // reset recorder todo
+        isRecording.set(0);
     }
 
     public void playAttemptRecording() {
         audioPlayer.play(audioFileUri);
-    }
-
-    public int getAttemptState() {
-        return attemptState.get();
     }
 
     public boolean isEndOfSurah() {
@@ -124,6 +127,7 @@ public class MurojaahViewModel extends AndroidViewModel
     public void incrementAyah() {
         verseNum.set(verseNum.get()+1);
         hintVisibility.set(View.INVISIBLE);
+        isHintRequested.set(0);
     }
 
     @Override

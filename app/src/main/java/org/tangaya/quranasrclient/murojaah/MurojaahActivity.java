@@ -2,14 +2,12 @@ package org.tangaya.quranasrclient.murojaah;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
-
-import org.tangaya.quranasrclient.ControlFragment;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
@@ -19,14 +17,12 @@ import org.tangaya.quranasrclient.eval.EvalActivity;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
-    private int CHAPTER_NUM = 0;
-    private String CHAPTER_NAME = "not-set";
+    private int CHAPTER_NUM;
 
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
 
-    //String mRecordFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
-//    String mRecordFilePath = Environment.getExternalStorageDirectory() + "/testwaveee.wav";
+    ImageView hintBtn, retryBtn, recordBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +31,15 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
         mMurojaahDataBinding.setLifecycleOwner(this);
 
-        CHAPTER_NUM = getIntent().getExtras().getInt("CHAPTER_NUM") + 1;
-        CHAPTER_NAME = getIntent().getExtras().getString("CHAPTER_NAME");
+        CHAPTER_NUM = getIntent().getExtras().getInt("CHAPTER_NUM");
+        Log.d("MA", "chapter num:"+CHAPTER_NUM);
 
-        ControlFragment controlFragment = obtainViewFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.murojaah_control_frame, controlFragment);
-        transaction.commit();
+        setupRecordBtn();
+        setupHintBtn();
+        setupCancelBtn();
 
         mViewModel = obtainViewModel(this);
-
         mMurojaahDataBinding.setViewmodel(mViewModel);
-
         mViewModel.onActivityCreated(this, CHAPTER_NUM);
     }
 
@@ -60,22 +53,45 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         //return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
     }
 
-    @NonNull
-    private ControlFragment obtainViewFragment() {
-        // View Fragment
-        ControlFragment controlFragment = (ControlFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.murojaah_control_frame);
-
-        if (controlFragment == null) {
-            controlFragment = ControlFragment.newInstance();
-        }
-        return controlFragment;
-    }
-
     @Override
     public void gotoEvaluation() {
         Intent intent = new Intent(this, EvalActivity.class);
         finish();
         startActivity(intent);
+    }
+
+    private void setupRecordBtn() {
+        recordBtn = findViewById(R.id.record);
+        recordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewModel.isRecording.get()==1) {
+                    mViewModel.submitAttempt();
+                } else {
+                    mViewModel.createAttempt();
+                }
+            }
+        });
+    }
+
+    private void setupCancelBtn() {
+        retryBtn = findViewById(R.id.cancel_icon);
+        retryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MurojaahActivity", "cancel button clicked");
+                mViewModel.cancelAttempt();
+            }
+        });
+    }
+
+    private void setupHintBtn() {
+        hintBtn = findViewById(R.id.hint_icon);
+        hintBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.showHint();
+            }
+        });
     }
 }

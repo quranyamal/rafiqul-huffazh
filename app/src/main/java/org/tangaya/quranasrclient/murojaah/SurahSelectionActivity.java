@@ -11,6 +11,7 @@ import android.view.View;
 
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.data.Surah;
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,7 @@ public class SurahSelectionActivity extends AppCompatActivity {
                 Log.d("onClick", surah.getTitle()+" selected");
 
                 Intent intent = new Intent(getApplicationContext(), MurojaahActivity.class);
-                intent.putExtra("SURAH_NUM", surah.getId());
-                intent.putExtra("SURAH_NAME", surah.getTitle());
+                intent.putExtra("CHAPTER_NUM", surah.getId());
                 startActivity(intent);
             }
         }));
@@ -58,22 +58,29 @@ public class SurahSelectionActivity extends AppCompatActivity {
     }
 
     private void prepareSurahsData() {
-        surahsList.add(new Surah(1, "Al-Fatihah"));
-        surahsList.add(new Surah(2, "Al-Baqarah"));
-        surahsList.add(new Surah(3, "Ali Imran"));
-        surahsList.add(new Surah(4, "An-Nisa"));
-        surahsList.add(new Surah(5, "Al-Maidah"));
-        surahsList.add(new Surah(6, "Al-An'am"));
-        surahsList.add(new Surah(7, "Al-A'raf"));
-        surahsList.add(new Surah(8, "Al-Anfal"));
-        surahsList.add(new Surah(9, "At-Taubah"));
-        surahsList.add(new Surah(10, "Taha"));
-        surahsList.add(new Surah(10, "Hud"));
-        surahsList.add(new Surah(10, "Yusuf"));
-        surahsList.add(new Surah(10, "Ar-Ra'd"));
-        surahsList.add(new Surah(10, "Ibrahim"));
-        surahsList.add(new Surah(10, "Ibrahim"));
-        surahsList.add(new Surah(10, "Ibrahim"));
-        surahsList.add(new Surah(10, "Ibrahim"));
+
+        QuranScriptRepository.init(getApplication());
+
+        for (int i=1; i<=114; i++) {
+            surahsList.add(new Surah(i, QuranScriptRepository.getChapter(i).getTitle()));
+        }
+
+//        surahsList.add(new Surah(1, "Al-Fatihah"));
+//        surahsList.add(new Surah(2, "Al-Baqarah"));
+//        surahsList.add(new Surah(3, "Ali Imran"));
+//        surahsList.add(new Surah(4, "An-Nisa"));
+//        surahsList.add(new Surah(5, "Al-Maidah"));
+//        surahsList.add(new Surah(6, "Al-An'am"));
+//        surahsList.add(new Surah(7, "Al-A'raf"));
+//        surahsList.add(new Surah(8, "Al-Anfal"));
+//        surahsList.add(new Surah(9, "At-Taubah"));
+//        surahsList.add(new Surah(10, "Taha"));
+//        surahsList.add(new Surah(10, "Hud"));
+//        surahsList.add(new Surah(10, "Yusuf"));
+//        surahsList.add(new Surah(10, "Ar-Ra'd"));
+//        surahsList.add(new Surah(10, "Ibrahim"));
+//        surahsList.add(new Surah(10, "Ibrahim"));
+//        surahsList.add(new Surah(10, "Ibrahim"));
+//        surahsList.add(new Surah(10, "Ibrahim"));
     }
 }

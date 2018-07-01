@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quran ASR Client</string>
+    <string name="recording_true">press next button to finish verse recitation</string>
+    <string name="recording_false">press record button and recite verse</string>
 </resources>
