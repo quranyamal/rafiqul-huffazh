@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
@@ -21,7 +20,7 @@ public class ControlFragment extends Fragment {
     private MurojaahViewModel mViewModel;
     private FragmentMurojaahBinding mMurojaahFragDataBinding;
 
-    Button hintBtn, retryBtn;
+    ImageView hintBtn, retryBtn;
     ImageView recordBtn;
     View rootView;
 
@@ -68,30 +67,30 @@ public class ControlFragment extends Fragment {
     }
 
     private void setupAttemptButton() {
-        recordBtn = rootView.findViewById(R.id.attempt);
+        recordBtn = rootView.findViewById(R.id.record);
         recordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mViewModel.getAttemptState() == IDLE) {
                     mViewModel.createAttempt();
                     //recordBtn.setText("recording...");
-                    recordBtn.setImageResource(R.drawable.stop_circle_100);
+                    recordBtn.setImageResource(R.drawable.stop_black_100);
                 } else if (mViewModel.getAttemptState() == RECORDING) {
                     mViewModel.submitAttempt();
                     //recordBtn.setText("recognizing...");
-                    recordBtn.setImageResource(R.drawable.load_circle_100);
+                    recordBtn.setImageResource(R.drawable.arrow_black_100);
                 } else {
                     mViewModel.cancelAttempt();
                     mViewModel.playAttemptRecording();
                     //recordBtn.setText("record");
-                    recordBtn.setImageResource(R.drawable.mic_circle_100);
+                    recordBtn.setImageResource(R.drawable.mic_black_100);
                 }
             }
         });
     }
 
     private void setupRetryButton() {
-        retryBtn = rootView.findViewById(R.id.retry);
+        retryBtn = rootView.findViewById(R.id.cancel_icon);
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +101,7 @@ public class ControlFragment extends Fragment {
     }
 
     private void setupHintButton() {
-        hintBtn = rootView.findViewById(R.id.hint);
+        hintBtn = rootView.findViewById(R.id.hint_icon);
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,23 +109,5 @@ public class ControlFragment extends Fragment {
             }
         });
     }
-
-//    @Override old
-//    public void performRecording() {
-//        if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
-//            mRecorder.prepare();
-//            mRecorder.start();
-//            recordBtn.setText("Stop");
-//        } else if (WavAudioRecorder.State.ERROR == mRecorder.getState()) {
-//            mRecorder.release();
-//            mRecorder = WavAudioRecorder.getInstance();
-//            mRecorder.setOutputFile(mRecordFilePath);
-//            recordBtn.setText("Start");
-//        } else {
-//            mRecorder.stop();
-//            mRecorder.reset();
-//            recordBtn.setText("Start");
-//        }
-//    }
 
 }

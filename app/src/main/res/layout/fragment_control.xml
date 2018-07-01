@@ -5,68 +5,56 @@
     android:layout_height="wrap_content"
     tools:context="org.tangaya.quranasrclient.ControlFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
-        <Button
-            android:id="@+id/retry"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle"
-            android:text="Retry"
-            android:textColor="#fff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/attempt"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/cancel_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/record"
+            android:src="@drawable/cancel_black_100" />
 
-        <!--<Button-->
-            <!--android:id="@+id/attempt"-->
-            <!--android:layout_width="130dp"-->
-            <!--android:layout_height="130dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:background="@drawable/circle"-->
-            <!--android:text="Rekam"-->
-            <!--android:textColor="#fff"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent" />-->
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"
+            android:layout_below="@id/cancel_icon"
+            android:layout_alignLeft="@id/cancel_icon"
+            android:layout_alignRight="@id/cancel_icon"
+            android:gravity="center"
+            android:textColor="#000"/>
 
         <ImageView
-            android:id="@+id/attempt"
+            android:id="@+id/record"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/mic_circle_100"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/mic_black_100"
+            android:layout_centerInParent="true"
+            android:layout_margin="25dp"/>
 
-        <Button
+        <ImageView
+            android:id="@+id/hint_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/eye_black_100"
+            android:layout_toRightOf="@id/record"
+            android:layout_centerVertical="true"/>
+
+        <TextView
             android:id="@+id/hint"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/circle"
-            android:text="Tampilkan"
-            android:textColor="#fff"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/attempt"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="hint"
+            android:layout_below="@id/hint_icon"
+            android:layout_alignLeft="@id/hint_icon"
+            android:layout_alignRight="@id/hint_icon"
+            android:gravity="center"
+            android:textColor="#000"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 
 </FrameLayout>

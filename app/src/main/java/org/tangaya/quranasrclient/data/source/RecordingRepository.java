@@ -12,11 +12,10 @@ public class RecordingRepository {
 
     String recordingPath = Environment.getExternalStorageDirectory().toString();
 
-    //public interface Callback {
-        //void onReadResult(byte[] audioByte);
+    public interface Callback {
 
-        //void onFinishRecording();
-    //}
+        void onSaveRecording();
+    }
 
     public RecordingRepository() {
         mRecorder = WavAudioRecorder.getInstance();
@@ -26,11 +25,13 @@ public class RecordingRepository {
 
     public void createRecording(int surahNum, int ayahNum) {
         Recording recording = new Recording(surahNum, ayahNum);
+        startRecording(recording);
     }
 
-    public void performRecording(Recording recording) {
+    public void startRecording(Recording recording) {
+
         Log.d("RR", "recording is starting");
-        String filePath = recordingPath + "/001.wav";
+        String filePath = recordingPath + "/recording"+recording.getChapter()+"-"+recording.getVerse()+".wav";
 
         mRecorder.setOutputFile(filePath);
         if (WavAudioRecorder.State.INITIALIZING == mRecorder.getState()) {
@@ -41,9 +42,11 @@ public class RecordingRepository {
         }
     }
 
-    public void stopRecording() {
+    public void saveRecording(Callback callback) {
         mRecorder.stop();
         mRecorder.reset();
+
+        callback.onSaveRecording();
     }
 
     public Recording getRecording(int recordingId) {

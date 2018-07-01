@@ -6,7 +6,7 @@ public class Surah {
     private int mId;
     private String mTitle;
 
-    private ArrayList listOfAyah;
+    private ArrayList<String> listOfAyah;
 
     public Surah() {
         listOfAyah = new ArrayList();
@@ -15,7 +15,7 @@ public class Surah {
     public Surah(int id, String title) {
         mId = id;
         mTitle = title;
-        listOfAyah = new ArrayList();
+        listOfAyah = new ArrayList<>();
     }
 
     public int getId() {

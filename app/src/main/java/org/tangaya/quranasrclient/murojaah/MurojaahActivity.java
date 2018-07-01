@@ -7,13 +7,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.tangaya.quranasrclient.ControlFragment;
 import org.tangaya.quranasrclient.ViewModelFactory;
-import org.tangaya.quranasrclient.data.Quran;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
@@ -22,10 +19,8 @@ import org.tangaya.quranasrclient.eval.EvalActivity;
 
 public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
 
-    private int SURAH_NUM = 0;
-    private String SURAH_NAME = "not-set";
-
-    Button recordBtn, playBtn, clearBtn;
+    private int CHAPTER_NUM = 0;
+    private String CHAPTER_NAME = "not-set";
 
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
@@ -36,19 +31,12 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_murojaah);
+
         mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
         mMurojaahDataBinding.setLifecycleOwner(this);
 
-        SURAH_NUM = getIntent().getExtras().getInt("SURAH_NUM");
-        SURAH_NAME = getIntent().getExtras().getString("SURAH_NAME");
-        TextView surahTv = findViewById(R.id.surah_name);
-        surahTv.setText(SURAH_NUM+"."+SURAH_NAME);
-
-        setupRecordButton();
-        setupPlayButton();
-        setupDecodeTestButton();
-        setupSkipButton();
+        CHAPTER_NUM = getIntent().getExtras().getInt("CHAPTER_NUM") + 1;
+        CHAPTER_NAME = getIntent().getExtras().getString("CHAPTER_NAME");
 
         ControlFragment controlFragment = obtainViewFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -59,58 +47,7 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
 
         mMurojaahDataBinding.setViewmodel(mViewModel);
 
-        Quran.init(getApplicationContext());
-        mViewModel.currentSurahNum.set(SURAH_NUM);
-        mViewModel.currentAyahNum.set(1);
-
-        mViewModel.onActivityCreated(this);
-    }
-
-    private void setupRecordButton() {
-        recordBtn = (Button) findViewById(R.id.record_old);
-        recordBtn.setText("Start");
-//        mRecorder = WavAudioRecorder.getInstance();
-//        mRecorder.setOutputFile(mRecordFilePath);
-        recordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //performRecording();
-            }
-        });
-    }
-
-    private void setupPlayButton() {
-        playBtn = findViewById(R.id.play);
-        playBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.playAttemptRecording();
-            }
-        });
-    }
-
-    private void setupDecodeTestButton() {
-        Button decodeTestBtn = findViewById(R.id.test_decode);
-        decodeTestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.testDecode();
-            }
-        });
-    }
-
-    private void setupSkipButton() {
-        Button skipAyahBtn = findViewById(R.id.skip);
-        skipAyahBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mViewModel.isEndOfSurah()) {
-                    gotoEvaluation();
-                } else {
-                    mViewModel.incrementAyah();
-                }
-            }
-        });
+        mViewModel.onActivityCreated(this, CHAPTER_NUM);
     }
 
     public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {

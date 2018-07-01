@@ -10,34 +10,36 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
-import org.tangaya.quranasrclient.data.Quran;
-import org.tangaya.quranasrclient.data.Recording;
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.service.AudioPlayer;
-import org.tangaya.quranasrclient.service.TranscriberOld;
-import org.tangaya.quranasrclient.data.Transcription;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 
 public class MurojaahViewModel extends AndroidViewModel
-        implements TranscriptionsDataSource.GetTranscriptionCallback,
-        TranscriptionsDataSource.PerformRecognitionCallback {
+        implements TranscriptionsDataSource.PerformRecognitionCallback {
 
-    public final ObservableField<String> transcriptionId = new ObservableField<>();
     public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
-    public final ObservableField<Integer> currentSurahNum = new ObservableField<>();
-    public final ObservableField<Integer> currentAyahNum = new ObservableField<>();
+    public final ObservableField<Integer> chapterNum = new ObservableField<>();
+    public final ObservableField<Integer> verseNum = new ObservableField<>();
     public final ObservableField<Integer> attemptState= new ObservableField<>();
-    public final ObservableField<Integer> ayahTextVisibility = new ObservableField<>();
+
+    public final ObservableField<String> surahName = new ObservableField<>();
+    public final ObservableField<String> verseIndicator = new ObservableField<>();
+    public final ObservableField<String> hintText = new ObservableField<>();
+    public final ObservableField<Integer> hintVisibility = new ObservableField<>();
+    public final ObservableField<String> instructionText = new ObservableField<>();
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_RECORDING = 1;
     public static final int STATE_RECOGNIZING = 2;
 
+    private boolean isRecording;
+    private boolean isHintRequested;
+    private boolean isLastVerse;
 
-    TranscriberOld transcriberOld;
     AudioPlayer audioPlayer;
 
     Context mContext;
@@ -46,7 +48,6 @@ public class MurojaahViewModel extends AndroidViewModel
     MurojaahNavigator mNavigator;
 
     Uri audioFileUri;
-
 
 
     public MurojaahViewModel(@NonNull Application context,
@@ -58,75 +59,43 @@ public class MurojaahViewModel extends AndroidViewModel
         mTranscriptionsRepository = transcriptionsRepository;
         mRecordingRepository = recordingRepository;
         serverStatus.set("tidak diketahui");
-        currentAyahNum.set(0);
+        verseNum.set(1);
         attemptState.set(STATE_IDLE);
 
-        transcriberOld = new TranscriberOld();
         //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
 
         audioPlayer = new AudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
     }
 
-    void onActivityCreated(MurojaahNavigator navigator) {
+    void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
-    }
-
-    @Override
-    public void onTranscriptionLoaded(Transcription transcription) {
-        Log.d("VM", "onTranscriptionLoaded invoked");
-        transcriptionId.set(transcription.getId());
-        ayahText.set(transcription.getText());
-    }
-
-    @Override
-    public void onTranscriptionNotAvailable() {
-        Log.d("VM", "onTranscriptionNotAvailable invoked");
-    }
-
-    public void start() {
-        loadTranscriptions();
-    }
-
-    public void loadTranscriptions() {
-
-        mTranscriptionsRepository.getTranscription(new TranscriptionsDataSource.GetTranscriptionCallback() {
-
-            @Override
-            public void onTranscriptionLoaded(Transcription transcription) {
-                Log.d("Murojaah VM", "loadTranscriptions onTranscriptionLoaded");
-            }
-
-            @Override
-            public void onTranscriptionNotAvailable() {
-                Log.d("Murojaah VM", "loadTranscriptions onTranscriptionNA");
-            }
-        });
-    }
-
-    void recognize() {
-        Log.d("MurojaahViewModel", "recognizing...");
-        //String audioFilePath = "/storage/emulated/0/DCIM/bismillah.wav";
-        String audioFilePath = "/storage/emulated/0/DCIM/100-1.wav";
-        transcriberOld.startRecognize(audioFilePath);
+        chapterNum.set(chapter);
+        //Quran.init(getApplication());
+        QuranScriptRepository.init(getApplication());
+        Log.d("MVM", "onActivityCreated. chapter="+chapter);
     }
 
     public void showHint() {
-        Log.d("cek surat", "surat="+currentSurahNum.get());
-        Log.d("showHint", Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
-        ayahText.set(Quran.getSurah(currentSurahNum.get()).getAyah(currentAyahNum.get()));
-        ayahTextVisibility.set(View.VISIBLE);
+        Log.d("cek surat", "surat="+ chapterNum.get());
+        Log.d("cek ayat", "ayat="+ verseNum.get());
+        Log.d("showHint", QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
+        ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
+        hintVisibility.set(View.VISIBLE);
     }
 
     public void createAttempt() {
         attemptState.set(STATE_RECORDING);
-        Recording newRecording = new Recording(currentSurahNum.get(),currentAyahNum.get());
-        mRecordingRepository.performRecording(newRecording);
-        mRecordingRepository.addRecording(newRecording);
+        mRecordingRepository.createRecording(chapterNum.get(), verseNum.get());
     }
 
     public void submitAttempt() {
-        mRecordingRepository.stopRecording();
+        mRecordingRepository.saveRecording(new RecordingRepository.Callback() {
+            @Override
+            public void onSaveRecording() {
+                // todo
+            }
+        });
         attemptState.set(STATE_RECOGNIZING);
 
         if (isEndOfSurah()) {
@@ -144,21 +113,17 @@ public class MurojaahViewModel extends AndroidViewModel
         audioPlayer.play(audioFileUri);
     }
 
-    public void testDecode() {
-        recognize();
-    }
-
     public int getAttemptState() {
         return attemptState.get();
     }
 
     public boolean isEndOfSurah() {
-        return !Quran.getSurah(currentSurahNum.get()).isValidAyahNum(currentAyahNum.get()+1);
+        return !QuranScriptRepository.getChapter(chapterNum.get()).isValidVerseNum(verseNum.get()+1);
     }
 
     public void incrementAyah() {
-        currentAyahNum.set(currentAyahNum.get()+1);
-        ayahTextVisibility.set(View.GONE);
+        verseNum.set(verseNum.get()+1);
+        hintVisibility.set(View.INVISIBLE);
     }
 
     @Override

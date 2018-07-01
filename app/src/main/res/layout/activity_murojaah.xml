@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,83 +8,64 @@
             type="org.tangaya.quranasrclient.murojaah.MurojaahViewModel" />
     </data>
 
-
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".murojaah.MurojaahFragment"
         android:orientation="vertical"
         android:layout_weight="10"
-        android:padding="5dp">
-
-        <TextView
-            android:id="@+id/surah_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Surat ..."/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@={`` + viewmodel.currentAyahNum}"/>
-
-        <TextView
-            android:id="@+id/server_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@={viewmodel.serverStatus}"
-            android:layout_gravity="end"
-            android:textAlignment="textEnd"/>
+        android:padding="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="7"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Muroja'ah"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`Chapter ` + viewmodel.surahName, default=`Chapter 10. Taha`}"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@={viewmodel.ayahText}"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:visibility="@{viewmodel.ayahTextVisibility}"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <Button
-                android:id="@+id/record_old"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/circle"
-                android:text="Rekam"/>
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="30dp">
 
-            <Button
-                android:id="@+id/play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Play"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Verse ` + viewmodel.verseNum, default=`Verse X`}"
+                    android:textSize="32dp"/>
 
-            <Button
-                android:id="@+id/test_decode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="test decode"/>
+                <TextView
+                    android:id="@+id/hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:text="@{viewmodel.ayahText, default=`بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ`}"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="50dp"
+                    android:visibility="@{viewmodel.hintVisibility}"/>
 
-            <Button
-                android:id="@+id/skip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="skip"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="recording ..."/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="press record button and recite verse"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

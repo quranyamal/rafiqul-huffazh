@@ -1,31 +1,36 @@
 package org.tangaya.quranasrclient.data;
 
-
-import android.support.annotation.Nullable;
-
 public class Recording {
 
     private static int count = 0;
 
     private int mId;
 
-    private int mSurahNum;
+    private int mChapter;
 
-    private int mAyahNum;
+    private int mVerse;
 
     private String mFilename;
 
-    public Recording(int surahNum, int ayahNum) {
+    public Recording(int chapter, int verse) {
         mId = Recording.count++;
-        mAyahNum = surahNum;
-        mSurahNum = ayahNum;
+        mChapter = chapter;
+        mVerse = verse;
     }
 
-    public Recording(int surahNum, int ayahNum, String filename) {
+    public Recording(int chapter, int verse, String filename) {
         mId = Recording.count++;
-        mAyahNum = surahNum;
-        mSurahNum = ayahNum;
+        mChapter = chapter;
+        mVerse = verse;
         mFilename = filename;
+    }
+
+    public int getChapter() {
+        return mChapter;
+    }
+
+    public int getVerse() {
+        return mVerse;
     }
 
 }

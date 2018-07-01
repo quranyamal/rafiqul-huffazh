@@ -1,62 +1,30 @@
 package org.tangaya.quranasrclient.data.source;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.tangaya.quranasrclient.data.Recording;
-import org.tangaya.quranasrclient.data.Transcription;
-import org.tangaya.quranasrclient.service.Transcriber;
+import org.tangaya.quranasrclient.service.TranscriberOld;
 
-public class TranscriptionsRepository implements TranscriptionsDataSource {
+public class TranscriptionsRepository {
+
+    TranscriberOld transcriberOld = new TranscriberOld();
 
     private TranscriptionsDataSource mTranscriptionsDataSource;
 
     public TranscriptionsRepository() {
-        initTranscriptionDataSource();
+        mTranscriptionsDataSource = TranscriptionsDataSource.getInstance();
     }
 
-    void initTranscriptionDataSource() {
-            mTranscriptionsDataSource = new TranscriptionsDataSource() {
-                        @Override
-                        public void getTranscription(@NonNull GetTranscriptionCallback callback) {
-                            // todo
-                        }
+    public void requestTranscription(Recording recording) {
 
-                        @Override
-                        public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
-                            // todo
-                        }
-
-                        @Override
-                        public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
-                            Transcriber transcriber = new Transcriber();
-
-                        }
-                    };
-        }
-
-    @Override
-    public void getTranscription(@NonNull GetTranscriptionCallback callback) {
-        // exec transcription service here
-        Transcription mockTranscription = new Transcription("mock", "mock transcription");
-        callback.onTranscriptionLoaded(mockTranscription);
+            Log.d("MurojaahViewModel", "recognizing...");
+            String audioFilePath = "/storage/emulated/0/DCIM/100-1.wav";
+            transcriberOld.startRecognize(audioFilePath);
     }
 
-    @Override
-    public void getTranscription(@NonNull String transcription_id, @NonNull GetTranscriptionCallback callback) {
-        Transcription cachedTranscription = getTranscriptionWithId(transcription_id);
+    public String getTranscription(int chapter, int verse) {
+
+        return "transkripsi";
     }
 
-    @Override
-    public void performRecognition(@NonNull Recording recording, @NonNull PerformRecognitionCallback callback) {
-        mTranscriptionsDataSource.performRecognition(recording, callback);
-
-        callback.onRecognitionCompleted();
-
-    }
-
-    @Nullable
-    private Transcription getTranscriptionWithId(@NonNull String id) {
-        return new Transcription("tr"+id, "from getTranscriptionWithId");
-    }
 }
