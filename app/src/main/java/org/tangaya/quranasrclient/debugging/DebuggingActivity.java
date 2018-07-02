@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.imtihan;
+package org.tangaya.quranasrclient.debugging;
 
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +17,7 @@ import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.File;
 
-public class ImtihanActivity extends AppCompatActivity {
+public class DebuggingActivity extends AppCompatActivity {
 
     private Button btnControl, btnClear, btnRecognize;
     private TextView textDisplay;

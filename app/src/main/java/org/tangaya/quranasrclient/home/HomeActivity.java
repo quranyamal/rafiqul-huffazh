@@ -5,24 +5,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import org.tangaya.quranasrclient.imtihan.ImtihanActivity;
+import org.tangaya.quranasrclient.about.AboutActivity;
+import org.tangaya.quranasrclient.debugging.DebuggingActivity;
 import org.tangaya.quranasrclient.murojaah.SurahSelectionActivity;
-import org.tangaya.quranasrclient.util.AudioRecordTest;
-import org.tangaya.quranasrclient.murojaah.MurojaahActivity;
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.config.ServerConfigActivity;
+import org.tangaya.quranasrclient.setting.ServerSettingActivity;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeNavigator {
 
     String defaultHost = "192.168.0.217";
-    String defailtPort = "8888";
+    String defaultPort = "8888";
+
+    private HomeViewModel mHomeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        setDecorView();
+
+        //mHomeViewModel = DataBindingUtil.setContentView(this, R.layout.activity_home);
+
+        //HomeActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
+
+        //checkServerConnection();
+
+    }
+
+    private void setDecorView() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE
@@ -32,28 +44,30 @@ public class HomeActivity extends AppCompatActivity {
                         // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-        //checkServerConnection();
-
     }
 
-    public void gotoMorojaah(View view) {
+    // todo: fix pattern
+    @Override
+    public void gotoMurojaah(View view) {
         Intent intent = new Intent(this, SurahSelectionActivity.class);
         startActivity(intent);
     }
 
-    public void gotoImtihan(View view) {
-        Intent intent = new Intent(this, ImtihanActivity.class);
+    @Override
+    public void gotoServerSetting(View view) {
+        Intent intent = new Intent(this, ServerSettingActivity.class);
         startActivity(intent);
     }
 
-    public void gotoRecordTest(View view) {
-        Intent intent = new Intent(this, AudioRecordTest.class);
+    @Override
+    public void gotoAbout(View view) {
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
-    public void gotoServerConfig(View view) {
-        Intent intent = new Intent(this, ServerConfigActivity.class);
+    @Override
+    public void gotoDebugging(View view) {
+        Intent intent = new Intent(this, DebuggingActivity.class);
         startActivity(intent);
     }
 }

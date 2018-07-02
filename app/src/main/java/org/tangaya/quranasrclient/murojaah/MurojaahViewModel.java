@@ -31,6 +31,7 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableField<Integer> hintVisibility = new ObservableField<>();
     public final ObservableField<String> instructionText = new ObservableField<>();
 
+    // todo: change to observable boolean
     public final ObservableField<Integer> isRecording = new ObservableField<>();
     public final ObservableField<Integer> isHintRequested = new ObservableField<>();;
 

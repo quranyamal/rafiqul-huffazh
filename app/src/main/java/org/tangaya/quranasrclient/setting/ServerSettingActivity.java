@@ -1,16 +1,13 @@
-package org.tangaya.quranasrclient.config;
+package org.tangaya.quranasrclient.setting;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.neovisionaries.ws.client.WebSocket;
 
 import org.tangaya.quranasrclient.R;
 
-public class ServerConfigActivity extends AppCompatActivity {
+public class ServerSettingActivity extends AppCompatActivity implements ServerSettingNavigator {
 
     String hostname;
     String port;
@@ -19,7 +16,7 @@ public class ServerConfigActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server_config);
+        setContentView(R.layout.activity_server_setting);
     }
 
     public void onClickConnect(View view) {
@@ -39,6 +36,17 @@ public class ServerConfigActivity extends AppCompatActivity {
     }
 
     public void onClickSave(View view) {
+        finish();
+    }
+
+    // todo: fix pattern
+    @Override
+    public void onSettingSaved(View view) {
+        finish();
+    }
+
+    @Override
+    public void onSettingCancelled(View view) {
         finish();
     }
 }

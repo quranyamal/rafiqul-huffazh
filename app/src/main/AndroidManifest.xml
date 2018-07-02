@@ -21,11 +21,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".murojaah.MurojaahActivity" />
-        <activity android:name=".imtihan.ImtihanActivity" />
-        <activity android:name=".config.ServerConfigActivity" />
+        <activity android:name=".debugging.DebuggingActivity" />
+        <activity android:name=".setting.ServerSettingActivity" />
         <activity android:name=".util.AudioRecordTest" />
         <activity android:name=".murojaah.SurahSelectionActivity" />
-        <activity android:name=".eval.EvalActivity"></activity>
+        <activity android:name=".eval.EvalActivity" />
+        <activity android:name=".about.AboutActivity"></activity>
     </application>
 
 </manifest>

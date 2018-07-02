@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".config.ServerConfigActivity"
+    tools:context=".setting.ServerSettingActivity"
     android:padding="20dp">
 
     <EditText
@@ -44,9 +44,18 @@
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Simpan"
+        android:layout_above="@+id/back"
+        android:layout_centerHorizontal="true"
+        android:text="Save"
+        android:onClick="onSettingSaved"/>
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:onClick="onClickSave"/>
+        android:onClick="onSettingCancelled"/>
 
 </RelativeLayout>

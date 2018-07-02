@@ -65,22 +65,5 @@ public class SurahSelectionActivity extends AppCompatActivity {
             surahsList.add(new Surah(i, QuranScriptRepository.getChapter(i).getTitle()));
         }
 
-//        surahsList.add(new Surah(1, "Al-Fatihah"));
-//        surahsList.add(new Surah(2, "Al-Baqarah"));
-//        surahsList.add(new Surah(3, "Ali Imran"));
-//        surahsList.add(new Surah(4, "An-Nisa"));
-//        surahsList.add(new Surah(5, "Al-Maidah"));
-//        surahsList.add(new Surah(6, "Al-An'am"));
-//        surahsList.add(new Surah(7, "Al-A'raf"));
-//        surahsList.add(new Surah(8, "Al-Anfal"));
-//        surahsList.add(new Surah(9, "At-Taubah"));
-//        surahsList.add(new Surah(10, "Taha"));
-//        surahsList.add(new Surah(10, "Hud"));
-//        surahsList.add(new Surah(10, "Yusuf"));
-//        surahsList.add(new Surah(10, "Ar-Ra'd"));
-//        surahsList.add(new Surah(10, "Ibrahim"));
-//        surahsList.add(new Surah(10, "Ibrahim"));
-//        surahsList.add(new Surah(10, "Ibrahim"));
-//        surahsList.add(new Surah(10, "Ibrahim"));
     }
 }

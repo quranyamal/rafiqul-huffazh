@@ -1,51 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".home.HomeActivity"
-    android:orientation="vertical"
-    android:padding="15dp">
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/textView"
+    <data>
+        <variable
+            name="viewmodel"
+            type="org.tangaya.quranasrclient.home.HomeViewModel" />
+    </data>
+
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:text="Rafiqul Huffazh"
-        android:textSize="32dp"
-        android:paddingTop="30dp"
-        android:textAlignment="center"/>
+        android:layout_height="match_parent"
+        tools:context=".home.HomeActivity"
+        android:orientation="vertical"
+        android:padding="15dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="server terputus"
-        android:layout_marginBottom="30dp"
-        android:layout_gravity="center"
-        android:onClick="gotoServerConfig"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="رَ"
+            android:textSize="72dp"
+            android:layout_gravity="center_horizontal"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="Murojaah"
-        android:onClick="gotoMorojaah"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:text="Rafiqul Huffazh"
+            android:textSize="32dp"
+            android:textAlignment="center"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="Latihan"
-        android:onClick="gotoImtihan"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="server status"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center"
+            android:onClick="gotoServerConfig"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="info"
-        android:layout_margin="5dp"
-        android:textAlignment="center"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Murojaah"
+            android:onClick="gotoMurojaah"/>
 
-</android.support.v7.widget.LinearLayoutCompat>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Server Setting"
+            android:onClick="gotoServerSetting"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Debugging Space"
+            android:onClick="gotoDebugging"/>
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/info_24"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:onClick="gotoAbout"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="about"
+            android:textAlignment="center"
+            android:onClick="gotoAbout"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</layout>
