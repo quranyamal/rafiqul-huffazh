@@ -20,13 +20,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".murojaah.MurojaahActivity" />
+        <activity android:name=".murojaah.main.MurojaahActivity" />
         <activity android:name=".debugging.DebuggingActivity" />
         <activity android:name=".setting.ServerSettingActivity" />
         <activity android:name=".util.AudioRecordTest" />
-        <activity android:name=".murojaah.SurahSelectionActivity" />
-        <activity android:name=".eval.EvalActivity" />
-        <activity android:name=".about.AboutActivity"></activity>
+        <activity android:name=".murojaah.chapterselection.SurahSelectionActivity" />
+        <activity android:name=".murojaah.result.ResultActivity" />
+        <activity android:name=".about.AboutActivity" />
+        <activity android:name=".murojaah.evaldetail.EvalDetailActivity" />
+        <activity android:name=".murojaah.tutorial.TutorialActivity"></activity>
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.murojaah.MurojaahViewModel" />
+            type="org.tangaya.quranasrclient.murojaah.main.MurojaahViewModel" />
     </data>
 
     <android.support.v7.widget.LinearLayoutCompat
@@ -59,13 +59,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewmodel.isRecording==1 ? `recording ...` : ``}"/>
+                    android:text="@{viewmodel.isRecording ? `recording ...` : ``}"/>
 
                 <TextView
                     android:id="@+id/instruction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewmodel.isRecording==1 ? @string/recording_true : @string/recording_false}" />
+                    android:text="@{viewmodel.isRecording ? @string/recording_true : @string/recording_false}" />
 
             </LinearLayout>
 
@@ -85,8 +85,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_toLeftOf="@id/record"
-                android:src="@{viewmodel.isRecording==1 ? @drawable/cancel_black_100 : @drawable/cancel_grey_100}"
-                android:clickable="@{viewmodel.isRecording==1 ? true : false}"
+                android:src="@{viewmodel.isRecording ? @drawable/cancel_black_100 : @drawable/cancel_grey_100}"
+                android:onClick="@{() -> viewmodel.cancelAttempt()}"
+                android:clickable="@{viewmodel.isRecording ? true : false}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/record"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +116,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
-                android:src="@{viewmodel.isRecording==1 ? @drawable/arrow_black_100 : @drawable/mic_black_100}"
+                android:src="@{viewmodel.isRecording ? @drawable/arrow_black_100 : @drawable/mic_black_100}"
+                android:onClick="@{() -> viewmodel.attemptVerse()}"
                 android:layout_margin="25dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
@@ -136,8 +138,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@+id/record"
-                android:src="@{viewmodel.isHintRequested==1 ? @drawable/eye_grey_100 : @drawable/eye_black_100}"
-                android:clickable="@{viewmodel.isHintRequested==1 ? false : true}"
+                android:src="@{viewmodel.isHintRequested ? @drawable/eye_grey_100 : @drawable/eye_black_100}"
+                android:onClick="@{() -> viewmodel.showHint()}"
+                android:clickable="@{viewmodel.isHintRequested ? false : true}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/record"

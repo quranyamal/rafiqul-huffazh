@@ -7,7 +7,7 @@ import android.view.View;
 
 import org.tangaya.quranasrclient.about.AboutActivity;
 import org.tangaya.quranasrclient.debugging.DebuggingActivity;
-import org.tangaya.quranasrclient.murojaah.SurahSelectionActivity;
+import org.tangaya.quranasrclient.murojaah.chapterselection.SurahSelectionActivity;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.setting.ServerSettingActivity;
 

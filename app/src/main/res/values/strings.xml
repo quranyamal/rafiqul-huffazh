@@ -4,4 +4,9 @@
     <string name="recording_false">press record button and recite verse</string>
     <string name="about_description">Rafiqul Huffazh is an mobile application to help Quran memorizer to do muroja\'ah (an activity in memorizing Quran to keep Quran verses in mind)</string>
     <string name="about_contact">Contact developer at mal.qurany@gmail.com</string>
+
+    <string name="CURRENT_CHAPTER_NUM">chapternum</string>
+    <string name="server_ip">0.0.0.0</string>
+    <string name="server_port">-1</string>
+
 </resources>
