@@ -7,10 +7,9 @@ import android.view.View;
 
 import org.tangaya.quranasrclient.about.AboutActivity;
 import org.tangaya.quranasrclient.debugging.DebuggingActivity;
-import org.tangaya.quranasrclient.murojaah.chapterselection.SurahSelectionActivity;
+import org.tangaya.quranasrclient.murojaah.chapterselection.ChapterSelectionActivity;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.setting.ServerSettingActivity;
-
 
 public class HomeActivity extends AppCompatActivity implements HomeNavigator {
 
@@ -49,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements HomeNavigator {
     // todo: fix pattern
     @Override
     public void gotoMurojaah(View view) {
-        Intent intent = new Intent(this, SurahSelectionActivity.class);
+        Intent intent = new Intent(this, ChapterSelectionActivity.class);
         startActivity(intent);
     }
 
