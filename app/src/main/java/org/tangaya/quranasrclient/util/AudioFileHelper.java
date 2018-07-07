@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import timber.log.Timber;
+//import timber.log.Timber;
 
 /**
  * Created by Rahman Adianto on 30-Apr-17.
@@ -43,7 +43,7 @@ public class AudioFileHelper {
             mOuput = new FileOutputStream(mRawFile.getPath());
         }
         catch (FileNotFoundException e) {
-            Timber.e(e.getMessage());
+            //Timber.e(e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class AudioFileHelper {
             mOuput.write(data);
         }
         catch (IOException e) {
-            Timber.e(e.getMessage());
+            //Timber.e(e.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class AudioFileHelper {
             mOuput.close();
         }
         catch (IOException e) {
-            Timber.e(e.getMessage());
+            //Timber.e(e.getMessage());
         }
     }
 
@@ -69,17 +69,17 @@ public class AudioFileHelper {
 
         if (mRawFile.exists()) {
             if (mRawFile.delete()) {
-                Timber.d(String.format("File deleted : %s", mRawFile.getPath()));
+                //Timber.d(String.format("File deleted : %s", mRawFile.getPath()));
             }
             else {
-                Timber.e(String.format("Failed delete file : %s", mRawFile.getPath()));
+                //Timber.e(String.format("Failed delete file : %s", mRawFile.getPath()));
             }
         }
     }
 
     public void rawToWave16Mono() throws IOException {
 
-        Timber.d("Convert raw to wav");
+        //Timber.d("Convert raw to wav");
 
         byte[] rawData = new byte[(int) mRawFile.length()];
         DataInputStream input = null;

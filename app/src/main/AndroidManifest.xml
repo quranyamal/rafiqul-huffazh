@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".murojaah.main.MurojaahActivity" />
-        <activity android:name=".debugging.DebuggingActivity" />
+        <activity android:name=".devspace.DevspaceActivity" />
         <activity android:name=".setting.ServerSettingActivity" />
         <activity android:name=".util.AudioRecordTest" />
         <activity android:name=".murojaah.chapterselection.ChapterSelectionActivity" />

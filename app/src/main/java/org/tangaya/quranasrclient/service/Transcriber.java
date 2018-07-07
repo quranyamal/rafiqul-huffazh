@@ -8,21 +8,21 @@ import org.tangaya.quranasrclient.data.Transcription;
 
 public class Transcriber {
 
-    RecognitionTask recognitionTask;
+    TranscriptionRequest transcriptionRequest;
 
     public Transcriber() {
     }
 
     public Transcription getTranscription(Recording recording) {
         Log.d("Transcriber","getTranscription");
-        recognitionTask = new RecognitionTask();
-        recognitionTask.execute(recording);
+        transcriptionRequest = new TranscriptionRequest();
+        transcriptionRequest.execute(recording);
 
         Log.d("Transcriber","end of getTranscription");
         return null;
     }
 
-    public static class RecognitionTask extends AsyncTask<Recording, String, Boolean> {
+    public static class TranscriptionRequest extends AsyncTask<Recording, String, Boolean> {
 
         interface OnRecognitionCompleted {
             void onRecognitionCompleted();

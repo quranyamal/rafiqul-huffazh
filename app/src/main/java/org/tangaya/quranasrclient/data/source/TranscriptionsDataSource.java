@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class TranscriptionsDataSource {
 
+    Transcriber transcriber = new Transcriber();
+
     public interface PerformRecognitionCallback {
 
         void onRecognitionCompleted();

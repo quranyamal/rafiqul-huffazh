@@ -54,8 +54,8 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Debugging Space"
-            android:onClick="gotoDebugging"/>
+            android:text="Development Space"
+            android:onClick="gotoDevspace"/>
 
         <ImageView
             android:layout_width="16dp"

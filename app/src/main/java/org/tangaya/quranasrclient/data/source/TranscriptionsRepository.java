@@ -3,12 +3,12 @@ package org.tangaya.quranasrclient.data.source;
 import android.util.Log;
 
 import org.tangaya.quranasrclient.data.Recording;
+import org.tangaya.quranasrclient.service.Transcriber;
 import org.tangaya.quranasrclient.service.TranscriberOld;
 
 public class TranscriptionsRepository {
 
     TranscriberOld transcriberOld = new TranscriberOld();
-
     private TranscriptionsDataSource mTranscriptionsDataSource;
 
     public TranscriptionsRepository() {

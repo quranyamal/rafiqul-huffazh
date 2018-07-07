@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import timber.log.Timber;
-
 public class TranscriberOld {
 
     WebSocket ws;
@@ -121,7 +119,6 @@ public class TranscriberOld {
                 }
                 catch (JSONException e) {
                     Log.d("TranscriberOld", "inside catch block");
-                    Timber.e(e.getMessage());
                 }
 
             }

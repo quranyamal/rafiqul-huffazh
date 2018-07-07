@@ -10,5 +10,5 @@ public interface HomeNavigator {
 
     void gotoAbout(View view);
 
-    void gotoDebugging(View view);
+    void gotoDevspace(View view);
 }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import org.tangaya.quranasrclient.about.AboutActivity;
-import org.tangaya.quranasrclient.debugging.DebuggingActivity;
+import org.tangaya.quranasrclient.devspace.DevspaceActivity;
 import org.tangaya.quranasrclient.murojaah.chapterselection.ChapterSelectionActivity;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.setting.ServerSettingActivity;
@@ -65,8 +65,8 @@ public class HomeActivity extends AppCompatActivity implements HomeNavigator {
     }
 
     @Override
-    public void gotoDebugging(View view) {
-        Intent intent = new Intent(this, DebuggingActivity.class);
+    public void gotoDevspace(View view) {
+        Intent intent = new Intent(this, DevspaceActivity.class);
         startActivity(intent);
     }
 }
