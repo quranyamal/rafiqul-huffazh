@@ -48,7 +48,6 @@ public class QuranScriptRepository {
 
             for (int i=1; i<=114; i++) {
                 lineChapter = brChapter.readLine();
-                Log.d("QSR", "lineChapter = " + lineChapter);
                 lineChapterPart = lineChapter.split(",");
                 listOfChapter[i].mTitle = lineChapterPart[2];
             }

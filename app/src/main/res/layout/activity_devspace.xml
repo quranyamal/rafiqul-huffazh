@@ -68,6 +68,27 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            android:src="@{ viewmodel.isRecording ? @drawable/stop_black_100 : @drawable/mic_black_100 }"
+            android:layout_gravity="center"
+            android:onClick="@{() -> viewmodel.onClickRecord()}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="recognize recording"
+            android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test asyc task recognizing"
+            android:onClick="@{() -> viewmodel.asyncTaskRecognizingTest()}"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,8 +97,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:text="@{viewmodel.result, default=`[result]`}"/>
+
 
     </LinearLayout>
 

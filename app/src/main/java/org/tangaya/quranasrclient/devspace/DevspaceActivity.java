@@ -18,10 +18,7 @@ public class DevspaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //mViewModel = ViewModelProviders.of(this).get(DevspaceViewModel.class);
-        //ViewModelFactory factory = ViewModelFactory.getInstance(this.getApplication());
-
-        mViewModel =  new DevspaceViewModel(this.getApplication());
+        mViewModel = new DevspaceViewModel(this.getApplication());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);

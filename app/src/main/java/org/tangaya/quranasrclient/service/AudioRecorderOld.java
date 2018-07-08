@@ -12,7 +12,7 @@ import org.tangaya.quranasrclient.util.AudioFileHelper;
 
 import java.io.IOException;
 
-public class AudioRecorder {
+public class AudioRecorderOld {
 
     private static final int SAMPLE_RATE = 16000;
     private static final int CHANNEL = AudioFormat.CHANNEL_IN_MONO;
@@ -28,7 +28,7 @@ public class AudioRecorder {
 
     AppExecutors mAppExecutors = new AppExecutors();
 
-    public AudioRecorder() {
+    public AudioRecorderOld() {
         isRecording = false;
         bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL, ENCODING);
     }

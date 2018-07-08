@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.murojaah.tutorial.TutorialActivity;
 
@@ -25,8 +26,10 @@ public class ChapterSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter_selection);
 
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("RAFIQUL_HUFFAZH",
-                Context.MODE_PRIVATE);
+//        SharedPreferences sharedPref = getApplication().getSharedPreferences("RAFIQUL_HUFFAZH",
+//                Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
 
         final SharedPreferences.Editor editor = sharedPref.edit();
 

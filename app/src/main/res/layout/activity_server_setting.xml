@@ -1,61 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".setting.ServerSettingActivity"
-    android:padding="20dp">
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditText
-        android:id="@+id/hostname"
+    <data>
+        <variable
+            name="viewmodel"
+            type="org.tangaya.quranasrclient.setting.ServerSettingViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="hostname"
-        android:text="192.168.1.217"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <EditText
-        android:id="@+id/port"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="port"
-        android:text="8888"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/hostname"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Server Setting"
+            android:textSize="24dp"/>
 
-    <Button
-        android:id="@+id/connect_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="connect"
-        android:layout_marginTop="20dp"
-        android:onClick="onClickConnect"
-        android:layout_below="@id/port"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="status: -"
-        android:layout_below="@+id/connect_button"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hostname"/>
 
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/back"
-        android:layout_centerHorizontal="true"
-        android:text="Save"
-        android:onClick="onSettingSaved"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hostname"
+                android:text="@={viewmodel.hostname, default=`192.168.1.217`}"/>
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:onClick="onSettingCancelled"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Port"/>
 
-</RelativeLayout>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="port"
+                android:text="@={viewmodel.port, default=8888}"/>
+
+            <Button
+                android:id="@+id/connect_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Test Connection"
+                android:layout_marginTop="20dp"
+                android:onClick="@{() -> viewmodel.testConnection()}"/>
+
+            <TextView
+                android:id="@+id/connection_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:textAlignment="center"
+                android:text="@{viewmodel.connectionStatus, default=`[connection status]`}"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:onClick="@{() -> viewmodel.saveSetting()}"/>
+
+        <Button
+            android:id="@+id/cancel_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_marginBottom="20dp"
+            android:onClick="@{() -> viewmodel.cancelSetting()}"/>
+
+    </LinearLayout>
+
+</layout>

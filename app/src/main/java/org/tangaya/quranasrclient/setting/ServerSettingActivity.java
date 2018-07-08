@@ -1,52 +1,43 @@
 package org.tangaya.quranasrclient.setting;
 
+import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.databinding.ActivityServerSettingBinding;
 
 public class ServerSettingActivity extends AppCompatActivity implements ServerSettingNavigator {
 
-    String hostname;
-    String port;
-    TextView statusTv;
+    public ServerSettingViewModel mViewModel;
+    private ActivityServerSettingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_server_setting);
-    }
 
-    public void onClickConnect(View view) {
+        mViewModel = new ServerSettingViewModel(this.getApplication());
+        mViewModel.onActivityCreated(this);
 
-        TextView hostnameTv = findViewById(R.id.hostname);
-        TextView portTv = findViewById(R.id.port);
-        statusTv = findViewById(R.id.status);
-
-        hostname = hostnameTv.getText().toString();
-        port = portTv.getText().toString();
-
-        //WebSocket ws;
-
-        //ConnectToWSTask checkServerTask = new ConnectToWSTask(ws, statusTv);
-        //checkServerTask.execute();
-        //Toast.makeText(this,"connecting...", Toast.LENGTH_SHORT).show();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_server_setting);
+        binding.setViewmodel(mViewModel);
     }
 
     public void onClickSave(View view) {
         finish();
     }
 
-    // todo: fix pattern
+
     @Override
-    public void onSettingSaved(View view) {
+    public void onSettingSaved() {
         finish();
     }
 
     @Override
-    public void onSettingCancelled(View view) {
+    public void onSettingCancelled() {
         finish();
     }
 }
