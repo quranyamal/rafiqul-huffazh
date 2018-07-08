@@ -75,7 +75,6 @@ public class MurojaahViewModel extends AndroidViewModel
         Log.d("MVM", "chapterNum = " + chapterNum.get());
         Log.d("MVM", "chapterName = " + chapterName.get());
         Log.d("MVM", "chaper = " + QuranScriptRepository.getChapter(chapter).getTitle());
-
     }
 
     public void showHint() {

@@ -1,14 +1,12 @@
 package org.tangaya.quranasrclient.home;
 
-import android.view.View;
-
 public interface HomeNavigator {
 
-    void gotoMurojaah(View view);
+    void gotoMurojaah();
 
-    void gotoServerSetting(View view);
+    void gotoServerSetting();
 
-    void gotoAbout(View view);
+    void gotoAbout();
 
-    void gotoDevspace(View view);
+    void gotoDevspace();
 }

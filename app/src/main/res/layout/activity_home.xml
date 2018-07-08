@@ -34,28 +34,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="server status"
+            android:text="@{viewmodel.serverStatus}"
             android:layout_marginBottom="30dp"
             android:layout_gravity="center"
-            android:onClick="gotoServerConfig"/>
+            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Murojaah"
-            android:onClick="gotoMurojaah"/>
+            android:onClick="@{() -> viewmodel.gotoMurojaah()}"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Server Setting"
-            android:onClick="gotoServerSetting"/>
+            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Development Space"
-            android:onClick="gotoDevspace"/>
+            android:onClick="@{() -> viewmodel.gotoDevspace()}"/>
 
         <ImageView
             android:layout_width="16dp"
@@ -63,7 +63,7 @@
             android:src="@drawable/info_24"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:onClick="gotoAbout"/>
+            android:onClick="@{() -> viewmodel.gotoAbout()}"/>
 
         <TextView
             android:layout_width="match_parent"
