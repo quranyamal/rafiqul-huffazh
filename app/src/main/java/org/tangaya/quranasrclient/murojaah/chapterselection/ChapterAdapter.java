@@ -29,8 +29,6 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.Chapters
 
         int chapterId = position+1;
         String chapterTitile = QuranScriptRepository.getChapter(chapterId).getTitle();
-        Log.d("onBindViewHolder", chapterId +"."+chapterTitile);
-
         holder.chapterId.setText(chapterId+" ");
         holder.chapterName.setText(chapterTitile);
     }

@@ -5,17 +5,35 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.media.AudioFormat;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
+
+import org.json.JSONObject;
+import org.tangaya.quranasrclient.MyApplication;
+import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.RecognitionResponse;
+import org.tangaya.quranasrclient.data.VerseRecognitionTask;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
+import org.tangaya.quranasrclient.service.WavAudioRecorder;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.PerformRecognitionCallback {
@@ -45,7 +63,20 @@ public class MurojaahViewModel extends AndroidViewModel
     RecordingRepository mRecordingRepository;
     MurojaahNavigator mNavigator;
 
+    AudioPlayer mPlayer = new AudioPlayer();
+    WavAudioRecorder mRecorder = new WavAudioRecorder(MediaRecorder.AudioSource.MIC,
+            16000,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT);
+
     Uri audioFileUri;
+    Attempt attempt;
+    String endpoint;
+    WebSocket webSocket;
+
+    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
+    private String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
+    String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
@@ -65,26 +96,18 @@ public class MurojaahViewModel extends AndroidViewModel
 
         isRecording.set(false);
         isHintRequested.set(false);
+
+        endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
     }
 
     void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
         chapterNum.set(chapter);
-//        QuranScriptRepository.init(getApplication());
         chapterName.set(QuranScriptRepository.getChapter(chapter).getTitle());
-        Log.d("MVM", "chapterNum = " + chapterNum.get());
-        Log.d("MVM", "chapterName = " + chapterName.get());
-        Log.d("MVM", "chaper = " + QuranScriptRepository.getChapter(chapter).getTitle());
     }
 
     public void showHint() {
-        Log.d("cek surat", "surat="+ chapterNum.get());
-        Log.d("cek ayat", "ayat="+ verseNum.get());
-        Log.d("showHint", QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
-
         chapterName.set(QuranScriptRepository.getChapter(chapterNum.get()).getTitle());
-        Log.d("MVM", "chapterName = " + chapterName.get());
-
         ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
@@ -99,17 +122,66 @@ public class MurojaahViewModel extends AndroidViewModel
     }
 
     public void createAttempt() {
-        mRecordingRepository.createRecording(chapterNum.get(), verseNum.get());
+        // todo: fix filename of recording
+        attempt = new Attempt(999, 999, 123);
+
+        mRecorder.setOutputFile(recordingFilepath);
+        mRecorder.prepare();
+        mRecorder.start();
+
         isRecording.set(true);
     }
 
     public void submitAttempt() {
-        mRecordingRepository.saveRecording(new RecordingRepository.Callback() {
+
+        mRecorder.stop();
+        mRecorder.reset();
+
+
+        Log.d("MVM", "creating web socket");
+        try {
+            webSocket = new WebSocketFactory().createSocket(endpoint);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
+
+        webSocket.addListener(new WebSocketAdapter() {
             @Override
-            public void onSaveRecording() {
-                // todo
+            public void onConnected(WebSocket websocket, Map<String, List<String>> header) throws Exception {
+                super.onConnected(websocket, header);
+
+                serverStatus.set("connected");
+                recognitionTask.execute(attempt);
+            }
+
+            @Override
+            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+
+                serverStatus.set("disconnected");
+            }
+
+            @Override
+            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                super.onConnectError(websocket, exception);
+
+                serverStatus.set("connection error");
+            }
+
+            @Override
+            public void onTextMessage(WebSocket webSocket, String text) {
+                RecognitionResponse response = new RecognitionResponse(text);
+                if (response.isTranscriptionFinal()) {
+                    attempt.setResponse(text);
+                    ((MyApplication) getApplication()).getAttempts().add(attempt);
+                }
             }
         });
+
+        serverStatus.set("connecting...");
+        webSocket.connectAsynchronously();
 
         if (isEndOfSurah()) {
             mNavigator.gotoResult();
@@ -121,7 +193,9 @@ public class MurojaahViewModel extends AndroidViewModel
     }
 
     public void cancelAttempt() {
-        // reset recorder todo
+        mRecorder.stop();
+        mRecorder.reset();
+
         isRecording.set(false);
     }
 

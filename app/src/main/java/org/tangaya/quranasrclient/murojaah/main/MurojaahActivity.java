@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
@@ -29,8 +31,7 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
         mMurojaahDataBinding.setLifecycleOwner(this);
 
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("RAFIQUL_HUFFAZH",
-                Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
 
         CHAPTER_NUM = sharedPref.getInt("CURRENT_CHAPTER_NUM", -1) + 1;
         Log.d("MA", "chapter num:"+CHAPTER_NUM);

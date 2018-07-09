@@ -1,4 +1,4 @@
-package org.tangaya.quranasrclient.devspace;
+package org.tangaya.quranasrclient.murojaah.evaldetail;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +27,8 @@ public class AttemptAdapter extends RecyclerView.Adapter<AttemptAdapter.MyViewHo
         }
     }
 
-    public AttemptAdapter(ArrayList<Attempt> atts) {
-        attempts = atts;
+    public AttemptAdapter(ArrayList<Attempt> attempts_) {
+        attempts = attempts_;
     }
 
     @NonNull

@@ -2,6 +2,8 @@ package org.tangaya.quranasrclient.data;
 
 import android.os.Environment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class Attempt {
     String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
 
     // only store response with final transcription status
-    String mResponse;
+    JSONObject mResponse;
 
     String mTranscription;
 
@@ -54,12 +56,19 @@ public class Attempt {
         return quranVerseAudioDir + "/" + mChapter + "-" + mVerse + ".wav";
     }
 
-    public  void setResponse(String response) {
-        mResponse = response;
+    public void setResponse(String response) {
+        try {
+            mResponse = new JSONObject(response);
+            mTranscription = mResponse.getJSONObject("result").getJSONArray("hypotheses")
+                    .getJSONObject(0).getString("transcript");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public String getResponse() {
-        return mResponse;
+    public String getTranscription() {
+        return mTranscription;
     }
 
     public String getVerseScript() {

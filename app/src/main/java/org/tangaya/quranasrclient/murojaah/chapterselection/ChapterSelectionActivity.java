@@ -26,11 +26,7 @@ public class ChapterSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter_selection);
 
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("RAFIQUL_HUFFAZH",
-//                Context.MODE_PRIVATE);
-
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
-
         final SharedPreferences.Editor editor = sharedPref.edit();
 
         mRecyclerView = findViewById(R.id.verses_recycler_view);
