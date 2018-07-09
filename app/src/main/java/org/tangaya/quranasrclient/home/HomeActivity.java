@@ -30,6 +30,17 @@ public class HomeActivity extends AppCompatActivity implements HomeNavigator {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         binding.setViewmodel(mViewModel);
 
+//        final Observer<String> testObserver = new Observer<String>() {
+//
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                // do something here
+//            }
+//
+//        };
+//
+//        mViewModel.getCobaLiveData().observe(this, testObserver);
+
         setDecorView();
     }
 

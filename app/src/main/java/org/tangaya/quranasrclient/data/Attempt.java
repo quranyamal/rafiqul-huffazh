@@ -2,6 +2,10 @@ package org.tangaya.quranasrclient.data;
 
 import android.os.Environment;
 
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+
+import java.util.ArrayList;
+
 public class Attempt {
 
     public static int STATE_UNPROCESSED = 0;
@@ -12,6 +16,13 @@ public class Attempt {
     String extStorageDir = Environment.getExternalStorageDirectory()+"";
     String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
 
+    // only store response with final transcription status
+    String mResponse;
+
+    String mTranscription;
+
+    String mVerseScript;
+
     private int mChapter, mVerse, mSessionId;
 
     // 0: unprocessed, 1: processing, 2: aborted, 3: finished (recognized)
@@ -21,6 +32,12 @@ public class Attempt {
         mChapter = chapter;
         mVerse = verse;
         mSessionId = sessionId;
+
+        if (chapter==999) {
+            mVerseScript = "rekaman";
+        } else {
+            mVerseScript = QuranScriptRepository.getChapter(mChapter).getVerse(mVerse);
+        }
 
         mStatus = Attempt.STATE_UNPROCESSED;
     }
@@ -35,8 +52,17 @@ public class Attempt {
 
     public String getAudioFilepath() {
         return quranVerseAudioDir + "/" + mChapter + "-" + mVerse + ".wav";
-
-        //return quranVerseAudioDir + "/100-1.wav";
     }
 
+    public  void setResponse(String response) {
+        mResponse = response;
+    }
+
+    public String getResponse() {
+        return mResponse;
+    }
+
+    public String getVerseScript() {
+        return mVerseScript;
+    }
 }

@@ -12,6 +12,13 @@ public class HomeViewModel extends AndroidViewModel {
 
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
+//    private MutableLiveData<String> cobaLiveData;
+//
+//    public MutableLiveData<String> getCobaLiveData() {
+//        return cobaLiveData;
+//    }
+
+
     public HomeViewModel(@NonNull Application application) {
         super(application);
 

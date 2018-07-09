@@ -29,7 +29,8 @@
         <activity android:name=".murojaah.scoreboard.ScoreboardActivity" />
         <activity android:name=".about.AboutActivity" />
         <activity android:name=".murojaah.evaldetail.EvalDetailActivity" />
-        <activity android:name=".murojaah.tutorial.TutorialActivity"></activity>
+        <activity android:name=".murojaah.tutorial.TutorialActivity" />
+        <activity android:name=".devspace.DevspaceDetailActivity"></activity>
     </application>
 
 </manifest>

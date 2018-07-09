@@ -11,10 +11,13 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
+import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +33,32 @@ public class MyApplication extends Application {
 
     private String hostname, port;
 
+    private ArrayList<Attempt> attempts = new ArrayList<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-        QuranScriptRepository.init(this);
 
         sharedPref = getApplicationContext().getSharedPreferences("APPLICATION_PREFERENCES",
                 Context.MODE_PRIVATE);
 
         STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
+
+        connectToServer();
+
+        QuranScriptRepository.init(this);
+    }
+
+    public String getServerHostname() {
+        return sharedPref.getString("SERVER_HOSTNAME", "0.0.0.0");
+    }
+
+    public String getServerPort() {
+        return sharedPref.getString("SERVER_PORT", "0");
+    }
+
+    public void connectToServer() {
+
 
         try {
             serverStatusWebSocket = new WebSocketFactory().createSocket(STATUS_ENDPOINT);
@@ -81,16 +100,8 @@ public class MyApplication extends Application {
         }
     }
 
-    public String getServerHostname() {
-        return sharedPref.getString("SERVER_HOSTNAME", "0.0.0.0");
-    }
-
-    public String getServerPort() {
-        return sharedPref.getString("SERVER_PORT", "0");
-    }
-
-    public void connectToServer() {
-
+    public ArrayList<Attempt> getAttempts() {
+        return attempts;
     }
 
     public SharedPreferences getPreferences() {

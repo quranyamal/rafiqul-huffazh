@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -20,7 +21,9 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.RecognitionResponse;
 import org.tangaya.quranasrclient.data.VerseRecognitionTask;
+import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.File;
@@ -40,12 +43,17 @@ public class DevspaceViewModel extends AndroidViewModel {
     public final ObservableField<String> result= new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
     public final ObservableBoolean isRecording = new ObservableBoolean();
+    public final ObservableInt attemptCount = new ObservableInt();
 
     private String hostname;
     private String port;
 
+    String endpoint;
+
     WavAudioRecorder mRecorder;
-    String recordingFilepath = quranVerseAudioDir + "/devspace.wav";
+    AudioPlayer mPlayer;
+    DevspaceNavigator mNavigator;
+    String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
 
     public DevspaceViewModel(@NonNull Application application) {
         super(application);
@@ -55,13 +63,21 @@ public class DevspaceViewModel extends AndroidViewModel {
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
 
+        mPlayer = new AudioPlayer();
+
         chapter.set(1);
         verse.set(1);
         serverStatus.set("disconnected");
         isRecording.set(false);
+        attemptCount.set(0);
 
         hostname = ((MyApplication) getApplication()).getServerHostname();
         port = ((MyApplication) getApplication()).getServerPort();
+        endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
+    }
+
+    public void onActivityCreated(DevspaceNavigator navigator) {
+        mNavigator = navigator;
     }
 
     public void onClickRecord() {
@@ -83,57 +99,81 @@ public class DevspaceViewModel extends AndroidViewModel {
         }
     }
 
-    public void asyncTaskRecognizingTest() {
-
-        String endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
-
-        try {
-            webSocket = new WebSocketFactory().createSocket(endpoint);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        final Attempt anAttempt = new Attempt(chapter.get(),verse.get(),3);
-        final VerseRecognitionTask recTask = new VerseRecognitionTask(webSocket);
-
-        webSocket.addListener(new WebSocketAdapter() {
-            @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                super.onConnected(websocket, headers);
-
-                recTask.execute(anAttempt);
-                Log.d("DVM", "executing asyncTaskRecognizingTest");
-                serverStatus.set("connected");
-            }
-
-            @Override
-            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                serverStatus.set("disconnected. failed to run async task");
-            }
-        });
-
-        webSocket.connectAsynchronously();
+    public void playRecordedAudio() {
+        mPlayer.play(Uri.parse(recordingFilepath));
+        Log.d("DVM", "playing recording...");
     }
 
     public void recognizeRecording() {
 
         if (new File(recordingFilepath).exists()) {
             Log.d("DVM", "file exists");
+
+            try {
+                //webSocket.recreate();
+                webSocket = new WebSocketFactory().createSocket(endpoint);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            final Attempt attempt = new Attempt(999, 999, 123);
+            final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
+
+            webSocket.addListener(new WebSocketAdapter() {
+                @Override
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                    super.onConnected(websocket, headers);
+
+                    recognitionTask.execute(attempt);
+                    Log.d("DVM", "executing asyncTaskRecognizingTest");
+                    serverStatus.set("connected");
+                }
+
+                @Override
+                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+
+                    serverStatus.set("disconnected");
+                }
+
+                @Override
+                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                    super.onConnectError(websocket, exception);
+
+                    serverStatus.set("connection error");
+                }
+
+                @Override
+                public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                    super.onTextMessage(websocket, text);
+
+                    Log.d("DVM", "onTextMessage: " + text);
+                    RecognitionResponse response = new RecognitionResponse(text);
+
+                    Log.d("DVM", "response status: " + response.getStatus());
+
+                    if (response.isTranscriptionFinal()) {
+                        result.set(text);
+                        attempt.setResponse(text);
+                        ((MyApplication) getApplication()).getAttempts().add(attempt);
+                        Log.d("DVM", "response added to attempt");
+                        Log.d("DVM", "attempt count: " + attemptCount);
+                        attemptCount.set(((MyApplication) getApplication()).getAttempts().size());
+                    }
+                }
+            });
+
+            serverStatus.set("connecting...");
+            webSocket.connectAsynchronously();
+
         } else {
             Log.d("DVM", "file does not exist");
         }
 
-        Log.d("DVM", "ext dir state: " + Environment.getExternalStorageState());
-
-        result.set(Environment.getExternalStorageState());
         Log.d("DVM", "recognizing file:" + recordingFilepath );
     }
 
     public void recognizeByFile() {
-
-        String endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
 
         try {
             //webSocket.recreate();
@@ -168,11 +208,28 @@ public class DevspaceViewModel extends AndroidViewModel {
 
                 serverStatus.set("connection error");
             }
+
+            @Override
+            public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                super.onTextMessage(websocket, text);
+
+                Log.d("DVM", "onTextMessage: " + text);
+                Log.d("DVM", "response added to attempt");
+                RecognitionResponse response = new RecognitionResponse(text);
+
+                Log.d("DVM", "response status: " + response.getStatus());
+
+                if (response.isTranscriptionFinal()) {
+                    attempt.setResponse(text);
+                    ((MyApplication) getApplication()).getAttempts().add(attempt);
+                    Log.d("DVM", "attempt count: " + attemptCount);
+                    attemptCount.set(((MyApplication) getApplication()).getAttempts().size());
+                }
+            }
         });
 
         serverStatus.set("connecting...");
         webSocket.connectAsynchronously();
-
     }
 
     private String getFilePath(int chapter, int verse) {
@@ -236,5 +293,8 @@ public class DevspaceViewModel extends AndroidViewModel {
         }
     }
 
+    public void gotoEvalDetail() {
+        mNavigator.gotoEvalDetail();
+    }
 }
 

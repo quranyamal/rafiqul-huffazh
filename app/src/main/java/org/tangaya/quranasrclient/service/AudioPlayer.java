@@ -10,6 +10,13 @@ public class AudioPlayer extends MediaPlayer {
 
     public AudioPlayer() {
         setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                reset();
+            }
+        });
     }
 
     public void play(Uri fileUri) {
@@ -19,6 +26,7 @@ public class AudioPlayer extends MediaPlayer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         start();
     }
 
