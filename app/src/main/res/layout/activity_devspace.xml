@@ -19,7 +19,7 @@
             android:text="Develepment Space"
             android:textSize="24dp"
             android:textAlignment="center"
-            android:paddingTop="50dp"/>
+            android:paddingTop="30dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -29,50 +29,100 @@
             android:layout_marginBottom="50dp"
             android:onClick="@{() -> viewmodel.connect()}"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test ASR from (existing) file"/>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="100dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chapter: "/>
-
-            <EditText
+            <LinearLayout
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@={viewmodel.chapter + ``}"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Verse: "/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chapter: "/>
 
-            <EditText
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:onClick="@{() -> viewmodel.decrementChapter() }"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="@={viewmodel.chapter + ``}"
+                        android:textAlignment="center"/>
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        android:onClick="@{() -> viewmodel.incrementChapter() }"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@={viewmodel.verse + ``}"/>
+                android:orientation="vertical">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="recognize"
-                android:onClick="@{() -> viewmodel.recognizeByFile()}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verse: "/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:onClick="@{() -> viewmodel.decrementVerse()}"/>
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="@={viewmodel.verse + ``}"
+                        android:textAlignment="center"/>
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        android:onClick="@{() -> viewmodel.incrementVerse()}"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="recognize recording"
-            android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+            android:text="recognize test file"
+            android:onClick="@{() -> viewmodel.recognizeTestFile()}"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,10 +154,15 @@
 
         </LinearLayout>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="recognize recording"
+            android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:text="@{`attempt count: ` + viewmodel.attemptCount, default=`[attempt_count]`}"/>
 
         <TextView

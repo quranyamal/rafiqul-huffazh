@@ -33,10 +33,7 @@ import java.util.Map;
 
 public class DevspaceViewModel extends AndroidViewModel {
 
-    WebSocket webSocket; // todo: set simeout?
-
-    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    private String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
+    WebSocket webSocket;
 
     public final ObservableInt chapter = new ObservableInt();
     public final ObservableInt verse = new ObservableInt();
@@ -53,7 +50,17 @@ public class DevspaceViewModel extends AndroidViewModel {
     WavAudioRecorder mRecorder;
     AudioPlayer mPlayer;
     DevspaceNavigator mNavigator;
-    String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
+
+    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
+    private String audioDir = extStorageDir + "/rafiqul-huffazh";
+
+    private String getTestFilepath(int chapter, int verse) {
+        return audioDir + "/test/"+chapter+"_"+verse+".wav";
+    }
+
+    private String getRecordingFilepath(int chapter, int verse) {
+        return audioDir + "/recording/"+chapter+"_"+verse+".wav";
+    }
 
     public DevspaceViewModel(@NonNull Application application) {
         super(application);
@@ -84,7 +91,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         if (!isRecording.get()) {
 
-            mRecorder.setOutputFile(recordingFilepath);
+            mRecorder.setOutputFile(getRecordingFilepath(chapter.get(), verse.get()));
             mRecorder.prepare();
             mRecorder.start();
 
@@ -100,11 +107,13 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void playRecordedAudio() {
-        mPlayer.play(Uri.parse(recordingFilepath));
+        mPlayer.play(Uri.parse(getRecordingFilepath(chapter.get(), verse.get())));
         Log.d("DVM", "playing recording...");
     }
 
     public void recognizeRecording() {
+
+        String recordingFilepath = getRecordingFilepath(chapter.get(), verse.get());
 
         if (new File(recordingFilepath).exists()) {
             Log.d("DVM", "file exists");
@@ -116,7 +125,8 @@ public class DevspaceViewModel extends AndroidViewModel {
                 e.printStackTrace();
             }
 
-            final Attempt attempt = new Attempt(999, 999, 123);
+            final Attempt attempt = new Attempt(chapter.get(), verse.get(), 123);
+            attempt.setFilepath(recordingFilepath);
             final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
             webSocket.addListener(new WebSocketAdapter() {
@@ -165,6 +175,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
             serverStatus.set("connecting...");
             webSocket.connectAsynchronously();
+            result.set("recognizing " + recordingFilepath);
 
         } else {
             Log.d("DVM", "file does not exist");
@@ -173,7 +184,9 @@ public class DevspaceViewModel extends AndroidViewModel {
         Log.d("DVM", "recognizing file:" + recordingFilepath );
     }
 
-    public void recognizeByFile() {
+    public void recognizeTestFile() {
+
+        String testFilepath = getTestFilepath(chapter.get(), verse.get());
 
         try {
             //webSocket.recreate();
@@ -183,6 +196,8 @@ public class DevspaceViewModel extends AndroidViewModel {
         }
 
         final Attempt attempt = new Attempt(chapter.get(), verse.get(), 123);
+        attempt.setFilepath(testFilepath);
+
         final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
         webSocket.addListener(new WebSocketAdapter() {
@@ -192,7 +207,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
                 recognitionTask.execute(attempt);
                 Log.d("DVM", "executing asyncTaskRecognizingTest");
-                serverStatus.set("connected");
+                serverStatus.set("recognizing...");
             }
 
             @Override
@@ -223,21 +238,15 @@ public class DevspaceViewModel extends AndroidViewModel {
                     attempt.setResponse(text);
                     ((MyApplication) getApplication()).getAttempts().add(attempt);
                     Log.d("DVM", "attempt count: " + attemptCount);
+                    result.set(text);
                     attemptCount.set(((MyApplication) getApplication()).getAttempts().size());
                 }
             }
         });
 
         serverStatus.set("connecting...");
+        result.set("recognizing " + testFilepath);
         webSocket.connectAsynchronously();
-    }
-
-    private String getFilePath(int chapter, int verse) {
-        return quranVerseAudioDir + "/" + chapter + "-" + verse + ".wav";
-    }
-
-    private boolean isConnected() {
-        return serverStatus.get().toString().equals("connected");
     }
 
     public void connect() {
@@ -296,5 +305,28 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void gotoEvalDetail() {
         mNavigator.gotoEvalDetail();
     }
+
+    public void incrementVerse() {
+        verse.set(verse.get()+1);
+    }
+
+    public void decrementVerse() {
+        if (verse.get()>1) {
+            verse.set(verse.get()-1);
+        }
+    }
+
+    public void incrementChapter() {
+        Log.d("DVM", "increment chapter clicked");
+        chapter.set(chapter.get()+1);
+    }
+
+    public void decrementChapter() {
+        Log.d("DVM", "decrement chapter clicked");
+        if (chapter.get()>1) {
+            chapter.set(chapter.get()-1);
+        }
+    }
+
 }
 

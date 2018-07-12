@@ -19,7 +19,6 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
-import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.RecognitionResponse;
@@ -50,7 +49,6 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableField<Integer> hintVisibility = new ObservableField<>();
     public final ObservableField<String> instructionText = new ObservableField<>();
 
-    // todo: change to observable boolean
     public final ObservableBoolean isRecording = new ObservableBoolean();
     public final ObservableBoolean isHintRequested = new ObservableBoolean();
 
@@ -74,9 +72,11 @@ public class MurojaahViewModel extends AndroidViewModel
     String endpoint;
     WebSocket webSocket;
 
-    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    private String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
-    String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
+    private String storageDir = Environment.getExternalStorageDirectory()+"";
+    //private String quranVerseAudioDir = storageDir + "/rafiqul-huffazh";
+    //String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
+
+    String recordingFilepath;
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
@@ -108,7 +108,7 @@ public class MurojaahViewModel extends AndroidViewModel
 
     public void showHint() {
         chapterName.set(QuranScriptRepository.getChapter(chapterNum.get()).getTitle());
-        ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerse(verseNum.get()));
+        ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerseScript(verseNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
     }
@@ -121,9 +121,16 @@ public class MurojaahViewModel extends AndroidViewModel
         }
     }
 
-    public void createAttempt() {
-        // todo: fix filename of recording
-        attempt = new Attempt(999, 999, 123);
+    void createAttempt() {
+        // todo: fix filename of recording. save file to cache directory
+
+        //recordingFilepath = "/storage/extSdCard/rafiqul-huffazh/recording"+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
+        //recordingFilepath = quranVerseAudioDir+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
+
+        recordingFilepath = storageDir + "/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
+
+        attempt = new Attempt(chapterNum.get(), verseNum.get(), 123);
+        attempt.setFilepath(recordingFilepath);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -132,11 +139,10 @@ public class MurojaahViewModel extends AndroidViewModel
         isRecording.set(true);
     }
 
-    public void submitAttempt() {
+    void submitAttempt() {
 
         mRecorder.stop();
         mRecorder.reset();
-
 
         Log.d("MVM", "creating web socket");
         try {
@@ -203,11 +209,11 @@ public class MurojaahViewModel extends AndroidViewModel
         audioPlayer.play(audioFileUri);
     }
 
-    public boolean isEndOfSurah() {
+    private boolean isEndOfSurah() {
         return !QuranScriptRepository.getChapter(chapterNum.get()).isValidVerseNum(verseNum.get()+1);
     }
 
-    public void incrementAyah() {
+    private void incrementAyah() {
         verseNum.set(verseNum.get()+1);
         hintVisibility.set(View.INVISIBLE);
         isHintRequested.set(false);
@@ -221,6 +227,15 @@ public class MurojaahViewModel extends AndroidViewModel
     @Override
     public void onRecognitionError() {
 
+    }
+
+    private boolean isExternalStorageWritable() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            Log.d("State", "Yes, it is writable");
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

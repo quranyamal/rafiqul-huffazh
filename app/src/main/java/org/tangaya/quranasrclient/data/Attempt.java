@@ -5,8 +5,9 @@ import android.os.Environment;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.diff_match_patch;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Attempt {
 
@@ -16,7 +17,7 @@ public class Attempt {
     public static int STATE_FINISHED = 3;
 
     String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    String quranVerseAudioDir = extStorageDir + "/quran-verse-audio";
+    String quranVerseAudioDir = extStorageDir + "/rafiqul-huffazh";
 
     // only store response with final transcription status
     JSONObject mResponse;
@@ -25,20 +26,34 @@ public class Attempt {
 
     String mVerseScript;
 
+    String mVerseQScript;
+
+    String mFilepath;
+
+    String verseNum;
+
+    LinkedList<diff_match_patch.Diff> mDiff;
+
     private int mChapter, mVerse, mSessionId;
 
     // 0: unprocessed, 1: processing, 2: aborted, 3: finished (recognized)
     private int mStatus;
+
+    // todo: refactor to mvvm
+    private diff_match_patch dmp = new diff_match_patch();
 
     public Attempt(int chapter, int verse, int sessionId) {
         mChapter = chapter;
         mVerse = verse;
         mSessionId = sessionId;
 
+        verseNum = "Verse " + verse;
+
         if (chapter==999) {
             mVerseScript = "rekaman";
         } else {
-            mVerseScript = QuranScriptRepository.getChapter(mChapter).getVerse(mVerse);
+            mVerseScript = QuranScriptRepository.getChapter(mChapter).getVerseScript(mVerse);
+            mVerseQScript = QuranScriptRepository.getChapter(mChapter).getVerseQScript(mVerse);
         }
 
         mStatus = Attempt.STATE_UNPROCESSED;
@@ -52,8 +67,14 @@ public class Attempt {
         mStatus = status;
     }
 
+    public void setFilepath(String filepath) {
+        mFilepath = filepath;
+    }
+
     public String getAudioFilepath() {
-        return quranVerseAudioDir + "/" + mChapter + "-" + mVerse + ".wav";
+        //return quranVerseAudioDir + "/" + mChapter + "-" + mVerse + ".wav";
+
+        return mFilepath;
     }
 
     public void setResponse(String response) {
@@ -61,6 +82,11 @@ public class Attempt {
             mResponse = new JSONObject(response);
             mTranscription = mResponse.getJSONObject("result").getJSONArray("hypotheses")
                     .getJSONObject(0).getString("transcript");
+
+            // remove last character (.)
+            mTranscription = mTranscription.substring(0, mTranscription.length()-1);
+
+            mDiff = dmp.diff_main(mVerseQScript, mTranscription);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,5 +99,21 @@ public class Attempt {
 
     public String getVerseScript() {
         return mVerseScript;
+    }
+
+    public String getVerseQScript() {
+        return mVerseQScript;
+    }
+
+    public String getDiffStr() {
+        return mDiff.toString();
+    }
+
+    public String getVerseNum() {
+        return verseNum;
+    }
+
+    public boolean isEqual() {
+        return mTranscription.equals(mVerseQScript);
     }
 }

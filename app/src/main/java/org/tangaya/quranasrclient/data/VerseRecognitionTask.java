@@ -1,22 +1,15 @@
 package org.tangaya.quranasrclient.data;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
-
-import org.tangaya.quranasrclient.MyApplication;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 
 public class VerseRecognitionTask extends AsyncTask<Attempt, Void, Void>{
@@ -42,18 +35,12 @@ public class VerseRecognitionTask extends AsyncTask<Attempt, Void, Void>{
             BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
             buf.read(bytes, 0, bytes.length);
             buf.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        Log.d("TranscriberOld", "before sendBinary");
-        Log.d("TranscriberOld", "binary size: " + bytes.length);
-
-        //if (!isConnected());
+        Log.d("VerseRecognitionTask", "sending binary. size: " + bytes.length);
         webSocket.sendBinary(bytes);
 
         return null;

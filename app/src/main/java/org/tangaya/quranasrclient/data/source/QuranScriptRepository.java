@@ -14,7 +14,7 @@ public class QuranScriptRepository {
     private QuranScriptRepository() {}
 
     private static Context mContext;
-    private static BufferedReader brChapter, brVerse;
+    private static BufferedReader brChapter, brVerse, brQScript;
     private static Chapter[] listOfChapter;
 
     public static void init(Context context) {
@@ -26,6 +26,8 @@ public class QuranScriptRepository {
                     assetManager.open("quran_surahs_name.csv")));
             brVerse = new BufferedReader(new InputStreamReader(
                     assetManager.open("quran-uthmani.txt")));
+            brQScript = new BufferedReader(new InputStreamReader(
+                    assetManager.open("qscript.txt")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +37,7 @@ public class QuranScriptRepository {
     private static void initData() {
         System.out.println("loading data ...");
 
-        String lineChapter, lineVerse;
+        String lineChapter, lineVerse, lineQScript;
         String[] lineChapterPart, lineVersePart;
 
         listOfChapter = new Chapter[115];
@@ -56,10 +58,13 @@ public class QuranScriptRepository {
                 lineVerse = brVerse.readLine();
                 lineVersePart = lineVerse.split("\\|");
 
+                lineQScript = brQScript.readLine();
+
                 int surahNum = Integer.parseInt(lineVersePart[0]);
                 String verseStr = lineVersePart[2];
 
                 listOfChapter[surahNum].addVerse(verseStr);
+                listOfChapter[surahNum].addQScript(lineQScript);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,15 +81,18 @@ public class QuranScriptRepository {
         private String mTitle;
 
         private ArrayList<String> listOfVerse;
+        private ArrayList<String> listOfQScript;
 
         private Chapter() {
             listOfVerse = new ArrayList();
+            listOfQScript = new ArrayList<>();
         }
 
         public Chapter(int id, String title) {
             mId = id;
             mTitle = title;
             listOfVerse = new ArrayList<>();
+            listOfQScript = new ArrayList<>();
         }
 
         public int getId() {
@@ -99,8 +107,16 @@ public class QuranScriptRepository {
             listOfVerse.add(str);
         }
 
-        public String getVerse(int i) {
+        void addQScript(String str) {
+            listOfQScript.add(str);
+        }
+
+        public String getVerseScript(int i) {
             return listOfVerse.get(i-1).toString();
+        }
+
+        public String getVerseQScript(int i) {
+            return listOfQScript.get(i-1).toString();
         }
 
         public boolean isValidVerseNum(int num) {
