@@ -43,8 +43,8 @@ public class AttemptAdapter extends RecyclerView.Adapter<AttemptAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Attempt attempt = attempts.get(position);
-        holder.rec.setText(attempt.getTranscription());
-        holder.ref.setText(attempt.getVerseScript());
+        holder.rec.setText(attempt.getTranscription().get());
+        holder.ref.setText(attempt.getVerseScript().get());
     }
 
     @Override

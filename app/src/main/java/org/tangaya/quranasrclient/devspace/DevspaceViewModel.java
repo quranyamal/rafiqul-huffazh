@@ -200,6 +200,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
+        // todo: create listener class
         webSocket.addListener(new WebSocketAdapter() {
             @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {

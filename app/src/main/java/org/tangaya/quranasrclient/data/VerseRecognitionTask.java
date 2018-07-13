@@ -26,7 +26,7 @@ public class VerseRecognitionTask extends AsyncTask<Attempt, Void, Void>{
 
         attempts[0].setStatus(Attempt.STATE_PROCESSING);
 
-        File file = new File(attempts[0].getAudioFilepath());
+        File file = new File(attempts[0].getAudioFilepath().get());
         int size = (int) file.length();
         byte[] bytes = new byte[size];
 

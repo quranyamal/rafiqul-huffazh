@@ -1,73 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp">
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data class = "EvalItemBinding">
+        <variable
+            name="viewmodel"
+            type="org.tangaya.quranasrclient.devspace.DevspaceDetailViewModel" />
+    </data>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/verse_num_evaluation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.verseNumber}"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/speaker_24"/>
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/verse_num_evaluation"
+                android:id="@+id/verse_ref_evaluation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Verse X. Correct"/>
+                android:text="@{viewmodel.refereceTranscript}"/>
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/speaker_24"/>
+            <TextView
+                android:id="@+id/verse_rec_evaluation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.recognizedTranscript}"/>
+
+            <TextView
+                android:id="@+id/verse_diff_evaluation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.diff}"/>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/verse_ref_evaluation"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="REF: waXXamsi waMuHAhA"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/verse_rec_evaluation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="REC: waXXamsi waMuHAhA"/>
+            <TextView
+                android:id="@+id/eval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.evalStr}"
+                android:textAlignment="center"/>
 
-        <TextView
-            android:id="@+id/verse_diff_evaluation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[diff]"/>
+            <ImageView
+                android:id="@+id/evaluation_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/eval"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Correct"
-            android:textAlignment="center"/>
-
-        <ImageView
-            android:id="@+id/evaluation_icon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/check_100"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</layout>

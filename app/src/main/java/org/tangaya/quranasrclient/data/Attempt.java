@@ -1,5 +1,8 @@
 package org.tangaya.quranasrclient.data;
 
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.os.Environment;
 
 import org.json.JSONException;
@@ -20,100 +23,126 @@ public class Attempt {
     String quranVerseAudioDir = extStorageDir + "/rafiqul-huffazh";
 
     // only store response with final transcription status
-    JSONObject mResponse;
+    //JSONObject mResponse;
+    private ObservableField<JSONObject> mResponse = new ObservableField<>();
 
-    String mTranscription;
+    //String mTranscription;
+    private ObservableField<String> mTranscription = new ObservableField<>();
 
-    String mVerseScript;
+    //String mVerseScript;
+    private ObservableField<String> mVerseScript = new ObservableField<>();;
 
-    String mVerseQScript;
+    //String mVerseQScript;
+    private ObservableField<String> mVerseQScript = new ObservableField<>();
 
-    String mFilepath;
+    //String mFilepath;
+    private ObservableField<String> mFilepath = new ObservableField<>();
 
-    String verseNum;
+    //String verseNum;
+    private ObservableField<String> verseNum = new ObservableField<>();
 
-    LinkedList<diff_match_patch.Diff> mDiff;
+    //LinkedList<diff_match_patch.Diff> mDiff;
+    private ObservableField<LinkedList<diff_match_patch.Diff>> mDiff = new ObservableField<>();
 
-    private int mChapter, mVerse, mSessionId;
+    private ObservableBoolean isCorrect = new ObservableBoolean();
+
+    // Correct | Insertion | Deletion | Combination
+    private ObservableField<String> evalStr = new ObservableField<>();
+
+    //private int mChapter, mVerse, mSessionId;
+    private ObservableInt mChapter = new ObservableInt();
+    private ObservableInt mVerse = new ObservableInt();
+    private ObservableInt mSessionId = new ObservableInt();
+
 
     // 0: unprocessed, 1: processing, 2: aborted, 3: finished (recognized)
-    private int mStatus;
+    //private int mStatus;
+    private ObservableInt mStatus = new ObservableInt();
 
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
     public Attempt(int chapter, int verse, int sessionId) {
-        mChapter = chapter;
-        mVerse = verse;
-        mSessionId = sessionId;
+        mChapter.set(chapter);
+        mVerse.set(verse);
+        mSessionId.set(sessionId);
 
-        verseNum = "Verse " + verse;
+        verseNum.set("Verse " + verse);
 
-        if (chapter==999) {
-            mVerseScript = "rekaman";
-        } else {
-            mVerseScript = QuranScriptRepository.getChapter(mChapter).getVerseScript(mVerse);
-            mVerseQScript = QuranScriptRepository.getChapter(mChapter).getVerseQScript(mVerse);
-        }
+        mVerseScript.set(QuranScriptRepository.getChapter(mChapter.get()).getVerseScript(mVerse.get()));
+        mVerseQScript.set(QuranScriptRepository.getChapter(mChapter.get()).getVerseQScript(mVerse.get()));
 
-        mStatus = Attempt.STATE_UNPROCESSED;
+        isCorrect.set(false);
+
+        mStatus.set(Attempt.STATE_UNPROCESSED);
     }
 
-    public int getStatus() {
+    public ObservableInt getStatus() {
         return mStatus;
     }
 
     public void setStatus(int status) {
-        mStatus = status;
+        mStatus.set(status);
     }
 
     public void setFilepath(String filepath) {
-        mFilepath = filepath;
+        mFilepath.set(filepath);
     }
 
-    public String getAudioFilepath() {
-        //return quranVerseAudioDir + "/" + mChapter + "-" + mVerse + ".wav";
-
+    public ObservableField<String> getAudioFilepath() {
         return mFilepath;
     }
 
     public void setResponse(String response) {
         try {
-            mResponse = new JSONObject(response);
-            mTranscription = mResponse.getJSONObject("result").getJSONArray("hypotheses")
-                    .getJSONObject(0).getString("transcript");
+            mResponse.set(new JSONObject(response));
+            mTranscription.set(mResponse.get().getJSONObject("result").getJSONArray("hypotheses")
+                    .getJSONObject(0).getString("transcript"));
 
             // remove last character (.)
-            mTranscription = mTranscription.substring(0, mTranscription.length()-1);
+            mTranscription.set(mTranscription.get().substring(0, mTranscription.get().length()-1));
 
-            mDiff = dmp.diff_main(mVerseQScript, mTranscription);
+            mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()));
+
+            if (mTranscription.get().equals(mVerseQScript.get())) {
+                evalStr.set("Correct");
+                isCorrect.set(true);
+            } else {
+                evalStr.set("Wrong");   // todo: improve
+                isCorrect.set(false);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    public String getTranscription() {
+    public ObservableField<String> getTranscription() {
         return mTranscription;
     }
 
-    public String getVerseScript() {
+    public ObservableField<String> getVerseScript() {
         return mVerseScript;
     }
 
-    public String getVerseQScript() {
+    public ObservableField<String> getVerseQScript() {
         return mVerseQScript;
     }
 
-    public String getDiffStr() {
-        return mDiff.toString();
+    public ObservableField<LinkedList<diff_match_patch.Diff>> getDiffStr() {
+        return mDiff;
     }
 
-    public String getVerseNum() {
+    public ObservableField<String> getVerseNum() {
         return verseNum;
     }
 
-    public boolean isEqual() {
-        return mTranscription.equals(mVerseQScript);
+    public ObservableBoolean isCorrect() {
+        return isCorrect;
+    }
+
+    public ObservableField<String> getEvalStr() {
+        return evalStr;
     }
 }
