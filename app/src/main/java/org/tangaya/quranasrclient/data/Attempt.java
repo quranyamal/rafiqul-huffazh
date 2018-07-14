@@ -1,5 +1,6 @@
 package org.tangaya.quranasrclient.data;
 
+import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -12,7 +13,7 @@ import org.tangaya.quranasrclient.util.diff_match_patch;
 
 import java.util.LinkedList;
 
-public class Attempt {
+public class Attempt extends BaseObservable {
 
     public static int STATE_UNPROCESSED = 0;
     public static int STATE_PROCESSING = 1;
@@ -75,6 +76,8 @@ public class Attempt {
         isCorrect.set(false);
 
         mStatus.set(Attempt.STATE_UNPROCESSED);
+
+        notifyChange();
     }
 
     public ObservableInt getStatus() {
@@ -116,6 +119,7 @@ public class Attempt {
             e.printStackTrace();
         }
 
+        notifyChange();
     }
 
     public ObservableField<String> getTranscription() {

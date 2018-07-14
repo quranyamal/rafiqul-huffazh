@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="org.tangaya.quranasrclient.murojaah.evaldetail.EvalDetailActivity"
-    android:orientation="vertical"
-    android:padding="15dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Evalation Detail"
-        android:textSize="32dp"/>
+    <data>
+        <variable
+            name="viewmodel"
+            type="org.tangaya.quranasrclient.murojaah.evaldetail.EvalDetailViewModel"/>
+    </data>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chapter Al-Fatihah"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/evaluation_recycler"
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="30dp">
+        android:layout_height="match_parent"
+        tools:context="org.tangaya.quranasrclient.murojaah.evaldetail.EvalDetailActivity"
+        android:orientation="vertical"
+        android:padding="15dp">
 
-    </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Evalation Detail"
+            android:textSize="32dp"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ `Chapter ` + viewmodel.currentChapter}"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/evaluation_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="30dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+</layout>

@@ -111,4 +111,8 @@ public class MyApplication extends Application {
     public String getSpeechEndpoint() {
         return "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/speech";
     }
+
+    public int getCurrentChapterNum() {
+        return getPreferences().getInt("CURRENT_CHAPTER_NUM", -1) + 1;
+    }
 }

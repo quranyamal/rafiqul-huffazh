@@ -151,6 +151,7 @@ public class DevspaceViewModel extends AndroidViewModel {
                     super.onConnectError(websocket, exception);
 
                     serverStatus.set("connection error");
+                    result.set("can not connect to ASR server");
                 }
 
                 @Override
@@ -179,6 +180,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         } else {
             Log.d("DVM", "file does not exist");
+            result.set("file does not exist");
         }
 
         Log.d("DVM", "recognizing file:" + recordingFilepath );
