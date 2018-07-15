@@ -163,7 +163,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{`attempt count: ` + viewmodel.attemptCount, default=`[attempt_count]`}"/>
+            android:text="@{`evaluation count: ` + viewmodel.attemptCount, default=`[attempt_count]`}"/>
 
         <TextView
             android:layout_width="match_parent"

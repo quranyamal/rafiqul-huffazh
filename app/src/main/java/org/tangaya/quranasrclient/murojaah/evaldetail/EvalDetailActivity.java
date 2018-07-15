@@ -1,16 +1,20 @@
 package org.tangaya.quranasrclient.murojaah.evaldetail;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
-import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.databinding.ActivityEvalDetailBinding;
+
+import java.util.ArrayList;
 
 public class EvalDetailActivity extends AppCompatActivity {
 
@@ -20,20 +24,24 @@ public class EvalDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_eval_detail);
 
+        setContentView(R.layout.activity_devspace_detail);
 
-        mViewModel = new EvalDetailViewModel(getApplication());
-
-        AttemptAdapter mAdapter = new AttemptAdapter(((MyApplication) getApplication()).getAttempts());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_eval_detail);
-        mBinding.setViewmodel(mViewModel);
-
-        RecyclerView recyclerView = findViewById(R.id.evaluation_recycler);
-        recyclerView.setLayoutManager(mLayoutManager);
+        final RecyclerView recyclerView = findViewById(R.id.devspace_detail_recycler);
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+
+        //Evaluation attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
+
+        mViewModel = new EvalDetailViewModel(getApplication(), new Evaluation(1,1,1));
+        mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<EvalDetailViewModel>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<EvalDetailViewModel> devspaceDetailViewModels) {
+
+                EvalAdapter mAdapter = new EvalAdapter(EvalDetailActivity.this, devspaceDetailViewModels);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(mAdapter);
+            }
+        });
     }
 }

@@ -20,7 +20,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionResponse;
 import org.tangaya.quranasrclient.data.VerseRecognitionTask;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
@@ -68,15 +68,16 @@ public class MurojaahViewModel extends AndroidViewModel
             AudioFormat.ENCODING_PCM_16BIT);
 
     Uri audioFileUri;
-    Attempt attempt;
+    Evaluation evaluation;
     String endpoint;
     WebSocket webSocket;
 
-    private String storageDir = Environment.getExternalStorageDirectory()+"";
-    //private String quranVerseAudioDir = storageDir + "/rafiqul-huffazh";
-    //String recordingFilepath = quranVerseAudioDir + "/999-999.wav";
+    //private String storageDir = Environment.getExternalStorageDirectory()+"";
 
-    String recordingFilepath;
+    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
+    private String audioDir = extStorageDir + "/rafiqul-huffazh";
+
+    String recordingFilepath, testFilePath;
 
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
@@ -86,13 +87,11 @@ public class MurojaahViewModel extends AndroidViewModel
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
         mRecordingRepository = recordingRepository;
-        serverStatus.set("tidak diketahui");
         verseNum.set(1);
 
-        //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/testwaveee.wav");
-
         audioPlayer = new AudioPlayer();
-        audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
+        //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
+        audioFileUri = Uri.parse(audioDir);
 
         isRecording.set(false);
         isHintRequested.set(false);
@@ -127,10 +126,11 @@ public class MurojaahViewModel extends AndroidViewModel
         //recordingFilepath = "/storage/extSdCard/rafiqul-huffazh/recording"+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
         //recordingFilepath = quranVerseAudioDir+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
 
-        recordingFilepath = storageDir + "/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
+        recordingFilepath = audioDir + "/recording/"+chapterNum.get()+"_"+verseNum.get()+".wav";
+        testFilePath = audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
 
-        attempt = new Attempt(chapterNum.get(), verseNum.get(), 123);
-        attempt.setFilepath(recordingFilepath);
+        evaluation = new Evaluation(chapterNum.get(), verseNum.get(), 123);
+        evaluation.setFilepath(testFilePath);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -139,27 +139,31 @@ public class MurojaahViewModel extends AndroidViewModel
         isRecording.set(true);
     }
 
-    void submitAttempt() {
+    public void evaluateAttempt(Evaluation evaluation_) {
 
-        mRecorder.stop();
-        mRecorder.reset();
+        String audioFilepath = this.evaluation.getAudioFilepath().get();
 
-        Log.d("MVM", "creating web socket");
         try {
+            //webSocket.recreate();
             webSocket = new WebSocketFactory().createSocket(endpoint);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        final Evaluation evaluation = evaluation_;
+        evaluation.setFilepath(audioFilepath);
+
         final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
+        // todo: create listener class
         webSocket.addListener(new WebSocketAdapter() {
             @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> header) throws Exception {
-                super.onConnected(websocket, header);
+            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                super.onConnected(websocket, headers);
 
-                serverStatus.set("connected");
-                recognitionTask.execute(attempt);
+                recognitionTask.execute(evaluation);
+                Log.d("DVM", "executing asyncTaskRecognizingTest");
+                serverStatus.set("recognizing...");
             }
 
             @Override
@@ -177,17 +181,77 @@ public class MurojaahViewModel extends AndroidViewModel
             }
 
             @Override
-            public void onTextMessage(WebSocket webSocket, String text) {
+            public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                super.onTextMessage(websocket, text);
+
+                Log.d("DVM", "onTextMessage: " + text);
+                Log.d("DVM", "response added to evaluation");
                 RecognitionResponse response = new RecognitionResponse(text);
+
+                Log.d("DVM", "response status: " + response.getStatus());
+
                 if (response.isTranscriptionFinal()) {
-                    attempt.setResponse(text);
-                    ((MyApplication) getApplication()).getAttempts().add(attempt);
+                    evaluation.setResponse(text);
+                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
                 }
             }
         });
 
         serverStatus.set("connecting...");
         webSocket.connectAsynchronously();
+    }
+
+    void submitAttempt() {
+
+        mRecorder.stop();
+        mRecorder.reset();
+
+        Log.d("MVM", "creating web socket");
+        try {
+            webSocket = new WebSocketFactory().createSocket(endpoint);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        evaluateAttempt(evaluation);
+
+//        final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
+//
+//        webSocket.addListener(new WebSocketAdapter() {
+//            @Override
+//            public void onConnected(WebSocket websocket, Map<String, List<String>> header) throws Exception {
+//                super.onConnected(websocket, header);
+//
+//                serverStatus.set("recognizing");
+//                recognitionTask.execute(evaluation);
+//            }
+//
+//            @Override
+//            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+//                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+//
+//                serverStatus.set("disconnected");
+//            }
+//
+//            @Override
+//            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+//                super.onConnectError(websocket, exception);
+//
+//                serverStatus.set("connection error");
+//            }
+//
+//            @Override
+//            public void onTextMessage(WebSocket webSocket, String text) {
+//                RecognitionResponse response = new RecognitionResponse(text);
+//                if (response.isTranscriptionFinal()) {
+//                    evaluation.setResponse(text);
+//                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
+//                }
+//            }
+//        });
+//
+//        serverStatus.set("connecting...");
+//        webSocket.connectAsynchronously();
 
         if (isEndOfSurah()) {
             mNavigator.gotoResult();

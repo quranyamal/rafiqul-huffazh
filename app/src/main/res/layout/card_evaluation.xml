@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data class = "EvalCardBinding">
+        <variable
+            name="viewmodel"
+            type="org.tangaya.quranasrclient.murojaah.evaldetail.EvalDetailViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/verse_num_evaluation__card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.verseNumber, default=`[verseNum]`}"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/speaker_24"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/verse_ref_evaluation__card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.refereceTranscript, default=`[referece]`}"/>
+
+            <TextView
+                android:id="@+id/verse_rec_evaluation__card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.recognizedTranscript, default=`[recognized]`}"/>
+
+            <TextView
+                android:id="@+id/verse_diff_evaluation__card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.diff, default=`[diff]`}"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp">
+
+            <ImageView
+                android:id="@+id/evaluation_icon__card"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
+
+            <TextView
+                android:id="@+id/eval__card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewmodel.evalStr, default=`[evalStr]`}"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

@@ -1,6 +1,7 @@
 package org.tangaya.quranasrclient;
 
 import android.app.Application;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -11,12 +12,10 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
-import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,9 @@ public class MyApplication extends Application {
 
     private String hostname, port;
 
-    private ArrayList<Attempt> attempts = new ArrayList<>();
+    private ArrayList<Evaluation> evaluations = new ArrayList<>();
+
+    private MutableLiveData<ArrayList<Evaluation>> evalsLiveData = new MutableLiveData<>();
 
     @Override
     public void onCreate() {
@@ -100,8 +101,12 @@ public class MyApplication extends Application {
         }
     }
 
-    public ArrayList<Attempt> getAttempts() {
-        return attempts;
+    public ArrayList<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+
+    public MutableLiveData<ArrayList<Evaluation>> getEvalsLiveData() {
+        return evalsLiveData;
     }
 
     public SharedPreferences getPreferences() {

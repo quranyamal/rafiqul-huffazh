@@ -3,13 +3,12 @@ package org.tangaya.quranasrclient.devspace;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.res.Resources;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.Evaluation;
 
 import java.util.ArrayList;
 
@@ -28,29 +27,26 @@ public class DevspaceDetailViewModel extends AndroidViewModel {
 
     private ArrayList<DevspaceDetailViewModel> arrayList;
 
-    // todo: change to ArrayList<Attempt> ? add lifecycle owner
-    public DevspaceDetailViewModel(@NonNull Application application, Attempt attempt) {
+    // todo: change to ArrayList<Evaluation> ? add lifecycle owner
+    public DevspaceDetailViewModel(@NonNull Application application, Evaluation evaluation) {
         super(application);
 
-        verseNumber.set(attempt.getVerseNum().get());
-        recognizedTranscript.set(attempt.getTranscription().get());
-        refereceTranscript.set(attempt.getVerseQScript().get());
-        //diff.set(attempt.getDiffStr().get().toString());
-        evalStr.set(attempt.getEvalStr().get());
-        isCorrect.set(attempt.isCorrect().get());
+        verseNumber.set(evaluation.getVerseNum().get());
+        recognizedTranscript.set(evaluation.getTranscription().get());
+        refereceTranscript.set(evaluation.getVerseQScript().get());
+        //diff.set(evaluation.getDiffStr().get().toString());
+        evalStr.set(evaluation.getEvalStr().get());
+        isCorrect.set(evaluation.isCorrect().get());
     }
 
     public MutableLiveData<ArrayList<DevspaceDetailViewModel>> getArrayListMutableLiveData() {
 
         arrayList = new ArrayList<>();
-        //Attempt attempt = new Attempt(1,1,123);
 
-        ArrayList<Attempt> attempts = ((MyApplication) getApplication()).getAttempts();
+        ArrayList<Evaluation> evaluations = ((MyApplication) getApplication()).getEvaluations();
 
-        //Attempt attempt = attemts.get(0);
-
-        for (int i=0; i<attempts.size(); i++) {
-            DevspaceDetailViewModel mViewModel = new DevspaceDetailViewModel(getApplication(), attempts.get(i));
+        for (int i = 0; i< evaluations.size(); i++) {
+            DevspaceDetailViewModel mViewModel = new DevspaceDetailViewModel(getApplication(), evaluations.get(i));
             arrayList.add(mViewModel);
         }
 

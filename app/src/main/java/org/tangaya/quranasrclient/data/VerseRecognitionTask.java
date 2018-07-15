@@ -8,11 +8,10 @@ import com.neovisionaries.ws.client.WebSocket;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class VerseRecognitionTask extends AsyncTask<Attempt, Void, Void>{
+public class VerseRecognitionTask extends AsyncTask<Evaluation, Void, Void>{
 
     WebSocket webSocket;
     String endpoint;
@@ -22,15 +21,15 @@ public class VerseRecognitionTask extends AsyncTask<Attempt, Void, Void>{
     }
 
     @Override
-    protected Void doInBackground(Attempt... attempts) {
+    protected Void doInBackground(Evaluation... evaluations) {
 
-        attempts[0].setStatus(Attempt.STATE_PROCESSING);
+        evaluations[0].setStatus(Evaluation.STATE_PROCESSING);
 
-        File file = new File(attempts[0].getAudioFilepath().get());
+        File file = new File(evaluations[0].getAudioFilepath().get());
         int size = (int) file.length();
         byte[] bytes = new byte[size];
 
-        Log.d("DVM", "Recognizing (asynctask)" + attempts[0].getAudioFilepath());
+        Log.d("DVM", "Recognizing (asynctask)" + evaluations[0].getAudioFilepath());
         try {
             BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
             buf.read(bytes, 0, bytes.length);

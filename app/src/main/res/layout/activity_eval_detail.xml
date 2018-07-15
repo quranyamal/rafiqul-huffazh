@@ -8,30 +8,31 @@
     </data>
 
     <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.tangaya.quranasrclient.murojaah.evaldetail.EvalDetailActivity"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:paddingTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Evalation Detail"
-            android:textSize="32dp"/>
+            android:textSize="32dp"
+            android:layout_marginLeft="15dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{ `Chapter ` + viewmodel.currentChapter}"/>
+            android:text="Chapter Al-Fatihah"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"/>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/evaluation_recycler"
+            android:id="@+id/devspace_detail_recycler"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="30dp">
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:paddingHorizontal="10dp">
 
         </android.support.v7.widget.RecyclerView>
 

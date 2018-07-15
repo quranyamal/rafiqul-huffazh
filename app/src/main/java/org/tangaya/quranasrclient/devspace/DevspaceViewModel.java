@@ -20,7 +20,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionResponse;
 import org.tangaya.quranasrclient.data.VerseRecognitionTask;
 import org.tangaya.quranasrclient.service.AudioPlayer;
@@ -125,8 +125,8 @@ public class DevspaceViewModel extends AndroidViewModel {
                 e.printStackTrace();
             }
 
-            final Attempt attempt = new Attempt(chapter.get(), verse.get(), 123);
-            attempt.setFilepath(recordingFilepath);
+            final Evaluation evaluation = new Evaluation(chapter.get(), verse.get(), 123);
+            evaluation.setFilepath(recordingFilepath);
             final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
             webSocket.addListener(new WebSocketAdapter() {
@@ -134,7 +134,7 @@ public class DevspaceViewModel extends AndroidViewModel {
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     super.onConnected(websocket, headers);
 
-                    recognitionTask.execute(attempt);
+                    recognitionTask.execute(evaluation);
                     Log.d("DVM", "executing asyncTaskRecognizingTest");
                     serverStatus.set("connected");
                 }
@@ -165,11 +165,11 @@ public class DevspaceViewModel extends AndroidViewModel {
 
                     if (response.isTranscriptionFinal()) {
                         result.set(text);
-                        attempt.setResponse(text);
-                        ((MyApplication) getApplication()).getAttempts().add(attempt);
-                        Log.d("DVM", "response added to attempt");
-                        Log.d("DVM", "attempt count: " + attemptCount);
-                        attemptCount.set(((MyApplication) getApplication()).getAttempts().size());
+                        evaluation.setResponse(text);
+                        ((MyApplication) getApplication()).getEvaluations().add(evaluation);
+                        Log.d("DVM", "response added to evaluation");
+                        Log.d("DVM", "evaluation count: " + attemptCount);
+                        attemptCount.set(((MyApplication) getApplication()).getEvaluations().size());
                     }
                 }
             });
@@ -197,8 +197,8 @@ public class DevspaceViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
 
-        final Attempt attempt = new Attempt(chapter.get(), verse.get(), 123);
-        attempt.setFilepath(testFilepath);
+        final Evaluation evaluation = new Evaluation(chapter.get(), verse.get(), 123);
+        evaluation.setFilepath(testFilepath);
 
         final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
@@ -208,7 +208,7 @@ public class DevspaceViewModel extends AndroidViewModel {
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 super.onConnected(websocket, headers);
 
-                recognitionTask.execute(attempt);
+                recognitionTask.execute(evaluation);
                 Log.d("DVM", "executing asyncTaskRecognizingTest");
                 serverStatus.set("recognizing...");
             }
@@ -232,17 +232,17 @@ public class DevspaceViewModel extends AndroidViewModel {
                 super.onTextMessage(websocket, text);
 
                 Log.d("DVM", "onTextMessage: " + text);
-                Log.d("DVM", "response added to attempt");
+                Log.d("DVM", "response added to evaluation");
                 RecognitionResponse response = new RecognitionResponse(text);
 
                 Log.d("DVM", "response status: " + response.getStatus());
 
                 if (response.isTranscriptionFinal()) {
-                    attempt.setResponse(text);
-                    ((MyApplication) getApplication()).getAttempts().add(attempt);
-                    Log.d("DVM", "attempt count: " + attemptCount);
+                    evaluation.setResponse(text);
+                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
+                    Log.d("DVM", "evaluation count: " + attemptCount);
                     result.set(text);
-                    attemptCount.set(((MyApplication) getApplication()).getAttempts().size());
+                    attemptCount.set(((MyApplication) getApplication()).getEvaluations().size());
                 }
             }
         });
