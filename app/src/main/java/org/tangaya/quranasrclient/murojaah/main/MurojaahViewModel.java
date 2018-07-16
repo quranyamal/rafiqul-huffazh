@@ -130,7 +130,7 @@ public class MurojaahViewModel extends AndroidViewModel
         testFilePath = audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
 
         evaluation = new Evaluation(chapterNum.get(), verseNum.get(), 123);
-        evaluation.setFilepath(testFilePath);
+        evaluation.setFilepath(recordingFilepath);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();

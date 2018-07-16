@@ -39,7 +39,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
         verseNumber.set(evaluation.getVerseNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());
         refereceTranscript.set(evaluation.getVerseQScript().get());
-        //diff.set(evaluation.getDiffStr().get().toString());
+        diff.set(evaluation.getDiffStr().get().toString());
         evalStr.set(evaluation.getEvalStr().get());
         isCorrect.set(evaluation.isCorrect().get());
 
