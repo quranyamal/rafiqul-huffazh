@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Environment;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +44,11 @@ public class Evaluation extends BaseObservable {
     private ObservableField<String> verseNum = new ObservableField<>();
 
     //LinkedList<diff_match_patch.Diff> mDiff;
-    private ObservableField<LinkedList<diff_match_patch.Diff>> mDiff = new ObservableField<>();
+    //private ObservableField<LinkedList<diff_match_patch.Diff>> mDiff = new ObservableField<>();
+
+    private ObservableField<String> mDiff = new ObservableField<>();
+
+    private ObservableInt levScore = new ObservableInt();
 
     private ObservableBoolean isCorrect = new ObservableBoolean();
 
@@ -97,6 +102,8 @@ public class Evaluation extends BaseObservable {
     }
 
     public void setResponse(String response) {
+        Log.d("Evaluation", "Setting response");
+
         try {
             mResponse.set(new JSONObject(response));
             mTranscription.set(mResponse.get().getJSONObject("result").getJSONArray("hypotheses")
@@ -105,7 +112,13 @@ public class Evaluation extends BaseObservable {
             // remove last character (.)
             mTranscription.set(mTranscription.get().substring(0, mTranscription.get().length()-1));
 
-            mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()));
+            Log.d("Evaluation", "Setting mDiff");
+            mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
+
+            levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
+
+            Log.d("Evaluation", "mDiff: " + mDiff.get());
+            Log.d("Evaluation", "lev score: " + levScore.get());
 
             if (mTranscription.get().equals(mVerseQScript.get())) {
                 evalStr.set("Correct");
@@ -134,7 +147,7 @@ public class Evaluation extends BaseObservable {
         return mVerseQScript;
     }
 
-    public ObservableField<LinkedList<diff_match_patch.Diff>> getDiffStr() {
+    public ObservableField<String> getDiff() {
         return mDiff;
     }
 
@@ -148,5 +161,9 @@ public class Evaluation extends BaseObservable {
 
     public ObservableField<String> getEvalStr() {
         return evalStr;
+    }
+
+    public ObservableInt getLevScore() {
+        return levScore;
     }
 }

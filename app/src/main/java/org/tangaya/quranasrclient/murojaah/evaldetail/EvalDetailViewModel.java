@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.MyApplication;
@@ -23,6 +24,8 @@ public class EvalDetailViewModel extends AndroidViewModel {
     public final ObservableField<String> refereceTranscript = new ObservableField<>();
     public final ObservableField<String> diff = new ObservableField<>();
     public final ObservableField<String> evalStr = new ObservableField<>();
+
+    public final ObservableInt levScore = new ObservableInt();
     public final ObservableBoolean isCorrect = new ObservableBoolean();
 
 
@@ -39,10 +42,10 @@ public class EvalDetailViewModel extends AndroidViewModel {
         verseNumber.set(evaluation.getVerseNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());
         refereceTranscript.set(evaluation.getVerseQScript().get());
-        diff.set(evaluation.getDiffStr().get().toString());
+        diff.set(evaluation.getDiff().get());
         evalStr.set(evaluation.getEvalStr().get());
         isCorrect.set(evaluation.isCorrect().get());
-
+        levScore.set(evaluation.getLevScore().get());
     }
 
     public MutableLiveData<ArrayList<EvalDetailViewModel>> getArrayListMutableLiveData() {

@@ -55,6 +55,12 @@
                 android:layout_height="wrap_content"
                 android:text="@{viewmodel.diff}"/>
 
+            <TextView
+                android:id="@+id/levenshtein_score_dev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{`lev score: `+ viewmodel.levScore}"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -62,18 +68,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/evaluation_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
+
             <TextView
                 android:id="@+id/eval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewmodel.evalStr}"
                 android:textAlignment="center"/>
-
-            <ImageView
-                android:id="@+id/evaluation_icon"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
 
         </LinearLayout>
 
