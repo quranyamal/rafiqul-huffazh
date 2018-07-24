@@ -78,7 +78,7 @@ public class ServerSettingViewModel extends AndroidViewModel {
 
             ws.connectAsynchronously();
             connectionStatus.set("connecting...");
-            Log.d("SSVM", "connecting..");
+            Log.d("SSVM", "connecting to " + endpoint);
 
         } catch (IOException e) {
             e.printStackTrace();

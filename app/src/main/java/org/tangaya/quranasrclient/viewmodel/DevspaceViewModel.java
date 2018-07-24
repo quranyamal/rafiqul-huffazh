@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.Observer;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -10,6 +11,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
@@ -24,6 +26,7 @@ import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionResponse;
 import org.tangaya.quranasrclient.data.VerseRecognitionTask;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
+import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
@@ -35,10 +38,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.TooManyListenersException;
+
+import timber.log.Timber;
 
 public class DevspaceViewModel extends AndroidViewModel {
 
     WebSocket webSocket;
+
+    ASRServerStatusListener statusListener;
 
     public final ObservableInt chapter = new ObservableInt();
     public final ObservableInt verse = new ObservableInt();
@@ -88,6 +96,13 @@ public class DevspaceViewModel extends AndroidViewModel {
         hostname = ((MyApplication) getApplication()).getServerHostname();
         port = ((MyApplication) getApplication()).getServerPort();
         endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
+
+        statusListener = new ASRServerStatusListener(hostname, port);
+
+    }
+
+    public ASRServerStatusListener getStatusListener() {
+        return statusListener;
     }
 
     public void onActivityCreated(DevspaceNavigator navigator) {
@@ -137,7 +152,7 @@ public class DevspaceViewModel extends AndroidViewModel {
             final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
 
             recognitionTaskQueue.add(recognitionTask);
-            
+
 
             webSocket.addListener(new WebSocketAdapter() {
                 @Override
