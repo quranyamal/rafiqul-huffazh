@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.murojaah.main.MurojaahViewModel" />
+            type="org.tangaya.quranasrclient.viewmodel.MurojaahViewModel" />
     </data>
 
     <android.support.v7.widget.LinearLayoutCompat

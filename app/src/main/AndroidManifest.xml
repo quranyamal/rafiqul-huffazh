@@ -15,23 +15,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".home.HomeActivity">
+        <activity android:name=".view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".murojaah.main.MurojaahActivity" />
-        <activity android:name=".devspace.DevspaceActivity" />
-        <activity android:name=".setting.ServerSettingActivity" />
+        <activity android:name=".view.MurojaahActivity" />
+        <activity android:name=".view.DevspaceActivity" />
+        <activity android:name=".view.ServerSettingActivity" />
         <activity android:name=".util.AudioRecordTest" />
-        <activity android:name=".murojaah.chapterselection.ChapterSelectionActivity" />
-        <activity android:name=".murojaah.scoreboard.ScoreboardActivity" />
-        <activity android:name=".about.AboutActivity" />
-        <activity android:name=".murojaah.evaldetail.EvalDetailActivity" />
-        <activity android:name=".murojaah.tutorial.TutorialActivity" />
-        <activity android:name=".devspace.DevspaceDetailActivity"></activity>
+        <activity android:name=".view.ChapterSelectionActivity" />
+        <activity android:name=".view.ScoreboardActivity" />
+        <activity android:name=".view.AboutActivity" />
+        <activity android:name=".view.EvalDetailActivity" />
+        <activity android:name=".view.TutorialActivity" />
+        <activity android:name=".view.DevspaceDetailActivity"></activity>
     </application>
 
 </manifest>

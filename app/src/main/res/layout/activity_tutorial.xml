@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.murojaah.tutorial.TutorialViewModel" />
+            type="org.tangaya.quranasrclient.viewmodel.TutorialViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.tangaya.quranasrclient.murojaah.tutorial.TutorialActivity"
+        tools:context="org.tangaya.quranasrclient.view.TutorialActivity"
         android:padding="15dp">
 
         <RelativeLayout

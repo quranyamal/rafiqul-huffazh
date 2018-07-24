@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.setting.ServerSettingViewModel" />
+            type="org.tangaya.quranasrclient.viewmodel.ServerSettingViewModel" />
     </data>
 
     <LinearLayout

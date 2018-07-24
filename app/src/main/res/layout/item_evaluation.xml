@@ -4,7 +4,7 @@
     <data class = "EvalItemBinding">
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.devspace.DevspaceDetailViewModel" />
+            type="org.tangaya.quranasrclient.viewmodel.DevspaceDetailViewModel" />
     </data>
 
     <LinearLayout

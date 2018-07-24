@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.home.HomeViewModel" />
+            type="org.tangaya.quranasrclient.viewmodel.HomeViewModel" />
     </data>
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".home.HomeActivity"
+        tools:context=".view.HomeActivity"
         android:orientation="vertical"
         android:padding="15dp">
 
