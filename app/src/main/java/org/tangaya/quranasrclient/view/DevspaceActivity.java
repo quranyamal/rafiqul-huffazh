@@ -6,7 +6,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.databinding.ActivityDevspaceBinding;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.viewmodel.DevspaceViewModel;
@@ -31,8 +34,12 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
             @Override
-            public void onChanged(@Nullable Integer integer) {
-                Timber.d("num worker has been changed ==> " + integer);
+            public void onChanged(@Nullable Integer numAvailWorkers) {
+                Timber.d("num worker has been changed ==> " + numAvailWorkers);
+                mViewModel.numAvailableWorkers.set(numAvailWorkers);
+                if (numAvailWorkers>0) {
+                    mViewModel.dequeueRecognitionTasks();
+                }
             }
         };
 
@@ -40,6 +47,8 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);
+
+        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getSpeechEndpoint();
      }
 
     @Override

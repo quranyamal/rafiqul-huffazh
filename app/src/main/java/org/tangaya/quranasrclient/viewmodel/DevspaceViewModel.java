@@ -2,6 +2,7 @@ package org.tangaya.quranasrclient.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -22,9 +23,8 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Evaluation;
-import org.tangaya.quranasrclient.data.RecognitionResponse;
-import org.tangaya.quranasrclient.data.VerseRecognitionTask;
+import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
@@ -32,13 +32,10 @@ import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.TooManyListenersException;
 
 import timber.log.Timber;
 
@@ -55,6 +52,20 @@ public class DevspaceViewModel extends AndroidViewModel {
     public final ObservableBoolean isRecording = new ObservableBoolean();
     public final ObservableInt attemptCount = new ObservableInt();
 
+    public final ObservableInt numAvailableWorkers = new ObservableInt();
+
+    final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
+
+        @Override
+        public void onChanged(@Nullable Integer numAvailWorkers) {
+            Timber.d("num worker has been changed ==> " + numAvailWorkers);
+            if (numAvailWorkers>0) {
+                dequeueRecognitionTasks();
+            }
+        }
+    };
+
+
     private String hostname;
     private String port;
 
@@ -67,15 +78,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     private String extStorageDir = Environment.getExternalStorageDirectory()+"";
     private String audioDir = extStorageDir + "/rafiqul-huffazh";
 
-    private Queue<VerseRecognitionTask> recognitionTaskQueue = new LinkedList<>();
-
-    private String getTestFilepath(int chapter, int verse) {
-        return audioDir + "/test/"+chapter+"_"+verse+".wav";
-    }
-
-    private String getRecordingFilepath(int chapter, int verse) {
-        return audioDir + "/recording/"+chapter+"_"+verse+".wav";
-    }
+    private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
 
     public DevspaceViewModel(@NonNull Application application) {
         super(application);
@@ -98,7 +101,27 @@ public class DevspaceViewModel extends AndroidViewModel {
         endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
 
         statusListener = new ASRServerStatusListener(hostname, port);
+    }
 
+    public void dequeueRecognitionTasks() {
+        if (numAvailableWorkers.get()>0) {
+            if (recognitionTaskQueue.size()>0) {
+                RecognitionTask recognitionTask = recognitionTaskQueue.poll();
+                recognitionTask.execute();
+            } else {
+                Timber.d("Recognition task queue empty");
+            }
+        } else {
+            Timber.d("no worker available");
+        }
+    }
+
+    private String getRecordingFilepath(int chapter, int verse) {
+        return audioDir + "/recording/"+chapter+"_"+verse+".wav";
+    }
+
+    private String getTestFilepath(int chapter, int verse) {
+        return audioDir + "/test/"+chapter+"_"+verse+".wav";
     }
 
     public ASRServerStatusListener getStatusListener() {
@@ -133,207 +156,32 @@ public class DevspaceViewModel extends AndroidViewModel {
         Log.d("DVM", "playing recording...");
     }
 
+    // add to recognizing queue
     public void recognizeRecording() {
+        Timber.d("recognizeRecording()");
 
         String recordingFilepath = getRecordingFilepath(chapter.get(), verse.get());
 
-        if (new File(recordingFilepath).exists()) {
-            Log.d("DVM", "file exists");
-
-            try {
-                //webSocket.recreate();
-                webSocket = new WebSocketFactory().createSocket(endpoint);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            final Evaluation evaluation = new Evaluation(chapter.get(), verse.get(), 123);
-            evaluation.setFilepath(recordingFilepath);
-            final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
-
-            recognitionTaskQueue.add(recognitionTask);
-
-
-            webSocket.addListener(new WebSocketAdapter() {
-                @Override
-                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                    super.onConnected(websocket, headers);
-
-                    recognitionTask.execute(evaluation);
-                    Log.d("DVM", "executing asyncTaskRecognizingTest");
-                    serverStatus.set("connected");
-                }
-
-                @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                    serverStatus.set("disconnected");
-                }
-
-                @Override
-                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                    super.onConnectError(websocket, exception);
-
-                    serverStatus.set("connection error");
-                    result.set("can not connect to ASR server");
-                }
-
-                @Override
-                public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    super.onTextMessage(websocket, text);
-
-                    Log.d("DVM", "onTextMessage: " + text);
-                    RecognitionResponse response = new RecognitionResponse(text);
-
-                    Log.d("DVM", "response status: " + response.getStatus());
-
-                    if (response.isTranscriptionFinal()) {
-                        result.set(text);
-                        evaluation.setResponse(text);
-                        ((MyApplication) getApplication()).getEvaluations().add(evaluation);
-                        Log.d("DVM", "response added to evaluation");
-                        Log.d("DVM", "evaluation count: " + attemptCount);
-                        attemptCount.set(((MyApplication) getApplication()).getEvaluations().size());
-                    }
-                }
-            });
-
-            serverStatus.set("connecting...");
-            webSocket.connectAsynchronously();
-            result.set("recognizing " + recordingFilepath);
-
-        } else {
-            Log.d("DVM", "file does not exist");
-            result.set("file does not exist");
-        }
-
-        Log.d("DVM", "recognizing file:" + recordingFilepath );
+        Attempt attempt = new Attempt(chapter.get(), verse.get(), Attempt.SOURCE_FROM_RECORDING);
+        RecognitionTask recognitionTask = new RecognitionTask(attempt);
+        recognitionTaskQueue.add(recognitionTask);
+        dequeueRecognitionTasks();
+        serverStatus.set("recognizing...");
     }
 
     public void recognizeTestFile() {
+        Timber.d("recognizeTestFile()");
 
-        String testFilepath = getTestFilepath(chapter.get(), verse.get());
-
-        try {
-            //webSocket.recreate();
-            webSocket = new WebSocketFactory().createSocket(endpoint);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        final Evaluation evaluation = new Evaluation(chapter.get(), verse.get(), 123);
-        evaluation.setFilepath(testFilepath);
-
-        final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
-
-        // todo: create listener class
-        webSocket.addListener(new WebSocketAdapter() {
-            @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                super.onConnected(websocket, headers);
-
-                recognitionTask.execute(evaluation);
-                Log.d("DVM", "executing asyncTaskRecognizingTest");
-                serverStatus.set("recognizing...");
-            }
-
-            @Override
-            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                serverStatus.set("disconnected");
-            }
-
-            @Override
-            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                super.onConnectError(websocket, exception);
-
-                serverStatus.set("connection error");
-            }
-
-            @Override
-            public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                super.onTextMessage(websocket, text);
-
-                Log.d("DVM", "onTextMessage: " + text);
-                Log.d("DVM", "response added to evaluation");
-                RecognitionResponse response = new RecognitionResponse(text);
-
-                Log.d("DVM", "response status: " + response.getStatus());
-
-                if (response.isTranscriptionFinal()) {
-                    evaluation.setResponse(text);
-                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
-                    Log.d("DVM", "evaluation count: " + attemptCount);
-                    result.set(text);
-                    attemptCount.set(((MyApplication) getApplication()).getEvaluations().size());
-                }
-            }
-        });
-
-        serverStatus.set("connecting...");
-        result.set("recognizing " + testFilepath);
-        webSocket.connectAsynchronously();
+        Attempt attempt = new Attempt(chapter.get(), verse.get(), Attempt.SOURCE_FROM_TEST_FILE);
+        RecognitionTask recognitionTask = new RecognitionTask(attempt);
+        recognitionTaskQueue.add(recognitionTask);
+        dequeueRecognitionTasks();
+        serverStatus.set("recognizing...");
     }
 
     public void playTestFile() {
         mPlayer.play(Uri.parse(getTestFilepath(chapter.get(), verse.get())));
         Log.d("DVM", "playing test file...");
-    }
-
-
-    public void connect() {
-
-        String endpoint = "ws://"+hostname+":"+port+"/client/ws/speech";
-
-        serverStatus.set("connecting ...");
-        try {
-            webSocket = new WebSocketFactory().createSocket(endpoint);
-
-            webSocket.addListener(new WebSocketAdapter() {
-                @Override
-                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                    super.onConnected(websocket, headers);
-
-                    serverStatus.set("connected");
-                }
-
-                @Override
-                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                    super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                    serverStatus.set("disconnected");
-                }
-
-                @Override
-                public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                    super.onConnectError(websocket, exception);
-
-                    serverStatus.set("error");
-                }
-
-                @Override
-                public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    super.onTextMessage(websocket, text);
-
-                    Log.d("DVM", "onTextMessage. message: " + text);
-
-                    JSONObject json = new JSONObject(text);
-
-                    Log.d("DVM", "json: " + json);
-
-                    Log.d("DVM", "transcript: " + json.getJSONObject("result").getJSONArray("hypotheses")
-                                .getJSONObject(0));
-
-                    result.set(text);
-                }
-            });
-
-            webSocket.connectAsynchronously();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void gotoEvalDetail() {

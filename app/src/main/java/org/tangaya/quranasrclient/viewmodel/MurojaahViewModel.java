@@ -20,9 +20,10 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.tangaya.quranasrclient.MyApplication;
+import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionResponse;
-import org.tangaya.quranasrclient.data.VerseRecognitionTask;
+import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.navigator.MurojaahNavigator;
 import org.tangaya.quranasrclient.service.AudioPlayer;
@@ -73,7 +74,7 @@ public class MurojaahViewModel extends AndroidViewModel
     String endpoint;
     WebSocket webSocket;
 
-    //private String storageDir = Environment.getExternalStorageDirectory()+"";
+    private String storageDir = Environment.getExternalStorageDirectory()+"";
 
     private String extStorageDir = Environment.getExternalStorageDirectory()+"";
     private String audioDir = extStorageDir + "/rafiqul-huffazh";
@@ -91,7 +92,7 @@ public class MurojaahViewModel extends AndroidViewModel
         verseNum.set(1);
 
         audioPlayer = new AudioPlayer();
-        //audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
+        audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
         audioFileUri = Uri.parse(audioDir);
 
         isRecording.set(false);
@@ -124,14 +125,14 @@ public class MurojaahViewModel extends AndroidViewModel
     void createAttempt() {
         // todo: fix filename of recording. save file to cache directory
 
-        //recordingFilepath = "/storage/extSdCard/rafiqul-huffazh/recording"+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
-        //recordingFilepath = quranVerseAudioDir+"/rec-"+chapterNum.get()+"-"+verseNum.get()+".wav";
 
         recordingFilepath = audioDir + "/recording/"+chapterNum.get()+"_"+verseNum.get()+".wav";
         testFilePath = audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
 
         evaluation = new Evaluation(chapterNum.get(), verseNum.get(), 123);
         evaluation.setFilepath(recordingFilepath);
+
+        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_RECORDING);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -140,67 +141,67 @@ public class MurojaahViewModel extends AndroidViewModel
         isRecording.set(true);
     }
 
-    public void evaluateAttempt(Evaluation evaluation_) {
-
-        String audioFilepath = this.evaluation.getAudioFilepath().get();
-
-        try {
-            //webSocket.recreate();
-            webSocket = new WebSocketFactory().createSocket(endpoint);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        final Evaluation evaluation = evaluation_;
-        evaluation.setFilepath(audioFilepath);
-
-        final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
-
-        // todo: create listener class
-        webSocket.addListener(new WebSocketAdapter() {
-            @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                super.onConnected(websocket, headers);
-
-                recognitionTask.execute(evaluation);
-                Log.d("DVM", "executing asyncTaskRecognizingTest");
-                serverStatus.set("recognizing...");
-            }
-
-            @Override
-            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-
-                serverStatus.set("disconnected");
-            }
-
-            @Override
-            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                super.onConnectError(websocket, exception);
-
-                serverStatus.set("connection error");
-            }
-
-            @Override
-            public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                super.onTextMessage(websocket, text);
-
-                Log.d("DVM", "onTextMessage: " + text);
-                Log.d("DVM", "response added to evaluation");
-                RecognitionResponse response = new RecognitionResponse(text);
-
-                Log.d("DVM", "response status: " + response.getStatus());
-
-                if (response.isTranscriptionFinal()) {
-                    evaluation.setResponse(text);
-                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
-                }
-            }
-        });
-
-        serverStatus.set("connecting...");
-        webSocket.connectAsynchronously();
-    }
+//    public void evaluateAttempt(Evaluation evaluation_) {
+//
+//        String audioFilepath = this.evaluation.getAudioFilepath().get();
+//
+//        try {
+//            //webSocket.recreate();
+//            webSocket = new WebSocketFactory().createSocket(endpoint);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        final Evaluation evaluation = evaluation_;
+//        evaluation.setFilepath(audioFilepath);
+//
+//        final RecognitionTask recognitionTask = new RecognitionTask(webSocket);
+//
+//        // todo: create listener class
+//        webSocket.addListener(new WebSocketAdapter() {
+//            @Override
+//            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+//                super.onConnected(websocket, headers);
+//
+//                //recognitionTask.execute(evaluation);
+//                Log.d("DVM", "executing asyncTaskRecognizingTest");
+//                serverStatus.set("recognizing...");
+//            }
+//
+//            @Override
+//            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+//                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+//
+//                serverStatus.set("disconnected");
+//            }
+//
+//            @Override
+//            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+//                super.onConnectError(websocket, exception);
+//
+//                serverStatus.set("connection error");
+//            }
+//
+//            @Override
+//            public void onTextMessage(WebSocket websocket, String text) throws Exception {
+//                super.onTextMessage(websocket, text);
+//
+//                Log.d("DVM", "onTextMessage: " + text);
+//                Log.d("DVM", "response added to evaluation");
+//                RecognitionResponse response = new RecognitionResponse(text);
+//
+//                Log.d("DVM", "response status: " + response.getStatus());
+//
+//                if (response.isTranscriptionFinal()) {
+//                    evaluation.setResponse(text);
+//                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
+//                }
+//            }
+//        });
+//
+//        serverStatus.set("connecting...");
+//        webSocket.connectAsynchronously();
+//    }
 
     void submitAttempt() {
 
@@ -214,9 +215,10 @@ public class MurojaahViewModel extends AndroidViewModel
             e.printStackTrace();
         }
 
-        evaluateAttempt(evaluation);
 
-//        final VerseRecognitionTask recognitionTask = new VerseRecognitionTask(webSocket);
+        //evaluateAttempt(evaluation);
+
+//        final RecognitionTask recognitionTask = new RecognitionTask(webSocket);
 //
 //        webSocket.addListener(new WebSocketAdapter() {
 //            @Override
@@ -260,6 +262,8 @@ public class MurojaahViewModel extends AndroidViewModel
             incrementAyah();
             isRecording.set(false);
         }
+
+
 
     }
 
