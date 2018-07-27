@@ -1,14 +1,22 @@
 package org.tangaya.quranasrclient;
 
 import android.app.Application;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleService;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -24,9 +32,13 @@ public class MyApplication extends Application {
 
     private MutableLiveData<ArrayList<Evaluation>> evalsLiveData = new MutableLiveData<>();
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Timber.d("Starting application");
 
         sharedPref = getApplicationContext().getSharedPreferences("APPLICATION_PREFERENCES",
                 Context.MODE_PRIVATE);
@@ -36,6 +48,7 @@ public class MyApplication extends Application {
         //connectToServer();
 
         QuranScriptRepository.init(this);
+        Timber.d("after quran script repo init");
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

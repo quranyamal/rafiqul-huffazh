@@ -24,7 +24,9 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionTask;
+import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
@@ -32,10 +34,12 @@ import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -44,6 +48,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     WebSocket webSocket;
 
     ASRServerStatusListener statusListener;
+
 
     public final ObservableInt chapter = new ObservableInt();
     public final ObservableInt verse = new ObservableInt();
@@ -54,17 +59,11 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
 
-    final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
+    private MutableLiveData<ArrayList<Evaluation>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
 
-        @Override
-        public void onChanged(@Nullable Integer numAvailWorkers) {
-            Timber.d("num worker has been changed ==> " + numAvailWorkers);
-            if (numAvailWorkers>0) {
-                dequeueRecognitionTasks();
-            }
-        }
-    };
-
+    public MutableLiveData<ArrayList<Evaluation>> getEvalsMutableLiveData() {
+        return evalsMutableLiveData;
+    }
 
     private String hostname;
     private String port;

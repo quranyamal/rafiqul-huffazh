@@ -8,6 +8,10 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.tangaya.quranasrclient.data.source.EvaluationRepository;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,20 +76,38 @@ public class RecognitionTask extends WebSocketAdapter {
     public void onTextMessage(WebSocket websocket, String text) throws Exception {
         super.onTextMessage(websocket, text);
 
-        RecognitionResponse response = new RecognitionResponse(text);
-
         Timber.d("onTextMessage(); message: " + text);
+
+        if (isTranscriptionFinal(text)) {
+            Evaluation evaluation = new Evaluation(attempt.getChapterNum(), attempt.getVerseNum(), 123);
+            evaluation.setFilepath(attempt.getAudioFilePath());
+            evaluation.setResponse(text);
+            EvaluationRepository.addToEvalSet(evaluation);
+            Timber.d("eval added to eval set");
+        }
+    }
+
+    private boolean isTranscriptionFinal(String text) {
+        JSONObject json;
+        boolean isFinal = false;
+
+        try {
+            json = new JSONObject(text);
+            if (json.getInt("status")==0) {
+                isFinal = json.getJSONObject("result").getBoolean("final");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Timber.d("isTranscriptionFinal: " + isFinal);
+
+        return isFinal;
     }
 
     private class RecognitionAsyncTask extends AsyncTask<Void, Void, Evaluation> {
 
         @Override
         protected Evaluation doInBackground(Void... voids) {
-
-            Evaluation evaluation = new Evaluation(attempt.getChapterNum(),
-                    attempt.getVerseNum(), 123);
-
-            evaluation.setFilepath(attempt.getAudioFilePath());
 
             File file = new File(attempt.getAudioFilePath());
             int size = (int) file.length();
@@ -104,13 +126,14 @@ public class RecognitionTask extends WebSocketAdapter {
 
             Timber.d( "sending binary. size: " + bytes.length);
             webSocket.sendBinary(bytes);
+            Timber.d( "after send statement");
 
-            return evaluation;
+            return null;
         }
 
         @Override
         protected void onPostExecute(Evaluation eval) {
-            Timber.d("task execution finish");
+            Timber.d("eval added to eval set. task execution finish");
         }
     }
 }

@@ -15,6 +15,8 @@ import org.tangaya.quranasrclient.viewmodel.DevspaceDetailViewModel;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class DevspaceDetailActivity extends AppCompatActivity {
 
     DevspaceDetailViewModel mViewModel;
@@ -30,7 +32,9 @@ public class DevspaceDetailActivity extends AppCompatActivity {
 
         //Evaluation attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
 
-        mViewModel = new DevspaceDetailViewModel(getApplication(), new Evaluation(1,1,1));
+        Timber.d("debug versenum error 1");
+        mViewModel = new DevspaceDetailViewModel(getApplication(), new Evaluation(2,2,1));
+        Timber.d("debug versenum error 2");
         mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<DevspaceDetailViewModel>>() {
             @Override
             public void onChanged(@Nullable ArrayList<DevspaceDetailViewModel> devspaceDetailViewModels) {
@@ -40,6 +44,7 @@ public class DevspaceDetailActivity extends AppCompatActivity {
                 recyclerView.setAdapter(mAdapter);
             }
         });
+        Timber.d("debug versenum error 3");
 
     }
 }

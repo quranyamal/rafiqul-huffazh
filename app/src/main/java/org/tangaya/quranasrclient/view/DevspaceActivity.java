@@ -9,10 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.R;
+import org.tangaya.quranasrclient.data.Evaluation;
 import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.databinding.ActivityDevspaceBinding;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.viewmodel.DevspaceViewModel;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 import timber.log.Timber;
 
@@ -44,6 +48,16 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
         };
 
         mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+
+        final Observer<ArrayList<Evaluation>> evalsObserver = new Observer<ArrayList<Evaluation>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Evaluation> evaluations) {
+                Timber.d("eval set has changed");
+
+            }
+        };
+
+        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);
