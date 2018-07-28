@@ -16,7 +16,6 @@ import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.viewmodel.DevspaceViewModel;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -62,7 +61,7 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);
 
-        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getSpeechEndpoint();
+        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
      }
 
     @Override

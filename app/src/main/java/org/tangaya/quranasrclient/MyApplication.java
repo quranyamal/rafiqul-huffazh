@@ -12,8 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.QScriptToArabic;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -26,12 +28,9 @@ public class MyApplication extends Application {
 
     private SharedPreferences sharedPref;
 
-    private String hostname, port;
-
     private ArrayList<Evaluation> evaluations = new ArrayList<>();
 
     private MutableLiveData<ArrayList<Evaluation>> evalsLiveData = new MutableLiveData<>();
-
 
 
     @Override
@@ -48,6 +47,8 @@ public class MyApplication extends Application {
         //connectToServer();
 
         QuranScriptRepository.init(this);
+        //QScriptToArabic.init(this);
+
         Timber.d("after quran script repo init");
 
         if (BuildConfig.DEBUG) {
@@ -118,7 +119,7 @@ public class MyApplication extends Application {
         return sharedPref;
     }
 
-    public String getSpeechEndpoint() {
+    public String getRecognitionEndpoint() {
         return "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/speech";
     }
 

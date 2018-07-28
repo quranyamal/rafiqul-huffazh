@@ -51,9 +51,7 @@ public class DevspaceDetailViewModel extends AndroidViewModel {
 
         arrayList = new ArrayList<>();
 
-        Timber.d("getting evals");
         ArrayList<Evaluation> evaluations = EvaluationRepository.getEvals();
-        Timber.d("getting evals size: " + evaluations.size());
 
         for (int i = 0; i< evaluations.size(); i++) {
             DevspaceDetailViewModel mViewModel = new DevspaceDetailViewModel(getApplication(), evaluations.get(i));

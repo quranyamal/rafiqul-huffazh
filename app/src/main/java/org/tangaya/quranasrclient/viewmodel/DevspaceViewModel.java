@@ -3,7 +3,6 @@ package org.tangaya.quranasrclient.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -12,16 +11,10 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
-import com.neovisionaries.ws.client.WebSocketFrame;
 
-import org.json.JSONObject;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.Evaluation;
@@ -32,14 +25,8 @@ import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -97,7 +84,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         hostname = ((MyApplication) getApplication()).getServerHostname();
         port = ((MyApplication) getApplication()).getServerPort();
-        endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
+        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
 
         statusListener = new ASRServerStatusListener(hostname, port);
     }
@@ -158,8 +145,6 @@ public class DevspaceViewModel extends AndroidViewModel {
     // add to recognizing queue
     public void recognizeRecording() {
         Timber.d("recognizeRecording()");
-
-        String recordingFilepath = getRecordingFilepath(chapter.get(), verse.get());
 
         Attempt attempt = new Attempt(chapter.get(), verse.get(), Attempt.SOURCE_FROM_RECORDING);
         RecognitionTask recognitionTask = new RecognitionTask(attempt);

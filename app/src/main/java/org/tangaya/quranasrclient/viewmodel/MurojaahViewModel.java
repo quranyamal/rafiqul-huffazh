@@ -2,9 +2,11 @@ package org.tangaya.quranasrclient.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -14,18 +16,16 @@ import android.util.Log;
 import android.view.View;
 
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
-import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.Evaluation;
-import org.tangaya.quranasrclient.data.RecognitionResponse;
 import org.tangaya.quranasrclient.data.RecognitionTask;
+import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.navigator.MurojaahNavigator;
+import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
@@ -33,8 +33,10 @@ import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import timber.log.Timber;
 
 public class MurojaahViewModel extends AndroidViewModel
         implements TranscriptionsDataSource.PerformRecognitionCallback {
@@ -81,6 +83,18 @@ public class MurojaahViewModel extends AndroidViewModel
 
     String recordingFilepath, testFilePath;
 
+    private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
+
+    public final ObservableInt numAvailableWorkers = new ObservableInt();
+
+    ASRServerStatusListener statusListener;
+
+    private MutableLiveData<ArrayList<Evaluation>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+
+    public MutableLiveData<ArrayList<Evaluation>> getEvalsMutableLiveData() {
+        return evalsMutableLiveData;
+    }
+
     public MurojaahViewModel(@NonNull Application context,
                              @NonNull TranscriptionsRepository transcriptionsRepository,
                              @NonNull RecordingRepository recordingRepository) {
@@ -98,7 +112,13 @@ public class MurojaahViewModel extends AndroidViewModel
         isRecording.set(false);
         isHintRequested.set(false);
 
-        endpoint = ((MyApplication) getApplication()).getSpeechEndpoint();
+        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
+
+        String hostname = ((MyApplication) getApplication()).getServerHostname();
+        String port = ((MyApplication) getApplication()).getServerPort();
+        statusListener = new ASRServerStatusListener(hostname, port);
+
+        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
     }
 
     public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
@@ -132,7 +152,7 @@ public class MurojaahViewModel extends AndroidViewModel
         evaluation = new Evaluation(chapterNum.get(), verseNum.get(), 123);
         evaluation.setFilepath(recordingFilepath);
 
-        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_RECORDING);
+        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_TEST_FILE);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -140,68 +160,6 @@ public class MurojaahViewModel extends AndroidViewModel
 
         isRecording.set(true);
     }
-
-//    public void evaluateAttempt(Evaluation evaluation_) {
-//
-//        String audioFilepath = this.evaluation.getAudioFilepath().get();
-//
-//        try {
-//            //webSocket.recreate();
-//            webSocket = new WebSocketFactory().createSocket(endpoint);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        final Evaluation evaluation = evaluation_;
-//        evaluation.setFilepath(audioFilepath);
-//
-//        final RecognitionTask recognitionTask = new RecognitionTask(webSocket);
-//
-//        // todo: create listener class
-//        webSocket.addListener(new WebSocketAdapter() {
-//            @Override
-//            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-//                super.onConnected(websocket, headers);
-//
-//                //recognitionTask.execute(evaluation);
-//                Log.d("DVM", "executing asyncTaskRecognizingTest");
-//                serverStatus.set("recognizing...");
-//            }
-//
-//            @Override
-//            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-//                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-//
-//                serverStatus.set("disconnected");
-//            }
-//
-//            @Override
-//            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-//                super.onConnectError(websocket, exception);
-//
-//                serverStatus.set("connection error");
-//            }
-//
-//            @Override
-//            public void onTextMessage(WebSocket websocket, String text) throws Exception {
-//                super.onTextMessage(websocket, text);
-//
-//                Log.d("DVM", "onTextMessage: " + text);
-//                Log.d("DVM", "response added to evaluation");
-//                RecognitionResponse response = new RecognitionResponse(text);
-//
-//                Log.d("DVM", "response status: " + response.getStatus());
-//
-//                if (response.isTranscriptionFinal()) {
-//                    evaluation.setResponse(text);
-//                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
-//                }
-//            }
-//        });
-//
-//        serverStatus.set("connecting...");
-//        webSocket.connectAsynchronously();
-//    }
 
     void submitAttempt() {
 
@@ -215,46 +173,16 @@ public class MurojaahViewModel extends AndroidViewModel
             e.printStackTrace();
         }
 
+        Timber.d("submitAttempt() 1");
 
-        //evaluateAttempt(evaluation);
-
-//        final RecognitionTask recognitionTask = new RecognitionTask(webSocket);
-//
-//        webSocket.addListener(new WebSocketAdapter() {
-//            @Override
-//            public void onConnected(WebSocket websocket, Map<String, List<String>> header) throws Exception {
-//                super.onConnected(websocket, header);
-//
-//                serverStatus.set("recognizing");
-//                recognitionTask.execute(evaluation);
-//            }
-//
-//            @Override
-//            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-//                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-//
-//                serverStatus.set("disconnected");
-//            }
-//
-//            @Override
-//            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-//                super.onConnectError(websocket, exception);
-//
-//                serverStatus.set("connection error");
-//            }
-//
-//            @Override
-//            public void onTextMessage(WebSocket webSocket, String text) {
-//                RecognitionResponse response = new RecognitionResponse(text);
-//                if (response.isTranscriptionFinal()) {
-//                    evaluation.setResponse(text);
-//                    ((MyApplication) getApplication()).getEvaluations().add(evaluation);
-//                }
-//            }
-//        });
-//
-//        serverStatus.set("connecting...");
-//        webSocket.connectAsynchronously();
+        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_TEST_FILE);
+        Timber.d("submitAttempt() 2. chapterNum.get()="+chapterNum.get()+"verseNum.get()");
+        Timber.d("file path:" + attempt.getAudioFilePath());
+        RecognitionTask recognitionTask = new RecognitionTask(attempt);
+        Timber.d("submitAttempt() 3");
+        recognitionTaskQueue.add(recognitionTask);
+        dequeueRecognitionTasks();
+        Timber.d("submitAttempt() 4");
 
         if (isEndOfSurah()) {
             mNavigator.gotoResult();
@@ -262,8 +190,7 @@ public class MurojaahViewModel extends AndroidViewModel
             incrementAyah();
             isRecording.set(false);
         }
-
-
+        Timber.d("submitAttempt() 5");
 
     }
 
@@ -272,6 +199,19 @@ public class MurojaahViewModel extends AndroidViewModel
         mRecorder.reset();
 
         isRecording.set(false);
+    }
+
+    public void dequeueRecognitionTasks() {
+        if (numAvailableWorkers.get()>0) {
+            if (recognitionTaskQueue.size()>0) {
+                RecognitionTask recognitionTask = recognitionTaskQueue.poll();
+                recognitionTask.execute();
+            } else {
+                Timber.d("Recognition task queue empty");
+            }
+        } else {
+            Timber.d("no worker available");
+        }
     }
 
     public void playAttemptRecording() {
@@ -305,6 +245,10 @@ public class MurojaahViewModel extends AndroidViewModel
         } else {
             return false;
         }
+    }
+
+    public ASRServerStatusListener getStatusListener() {
+        return statusListener;
     }
 
 }

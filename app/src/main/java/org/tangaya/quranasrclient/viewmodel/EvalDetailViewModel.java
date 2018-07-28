@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.util.ArrayList;
@@ -52,7 +53,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
         arrayList = new ArrayList<>();
 
-        ArrayList<Evaluation> evaluations = ((MyApplication) getApplication()).getEvaluations();
+        //ArrayList<Evaluation> evaluations = ((MyApplication) getApplication()).getEvaluations();
+
+        ArrayList<Evaluation> evaluations = EvaluationRepository.getEvals();
 
         for (int i = 0; i< evaluations.size(); i++) {
             EvalDetailViewModel mViewModel = new EvalDetailViewModel(getApplication(), evaluations.get(i));

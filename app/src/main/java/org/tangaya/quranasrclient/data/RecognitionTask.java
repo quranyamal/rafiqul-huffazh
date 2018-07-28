@@ -35,14 +35,19 @@ public class RecognitionTask extends WebSocketAdapter {
     public RecognitionTask(Attempt attempt) {
         this.attempt = attempt;
 
+        Timber.d("1");
+
         try {
             webSocket = new WebSocketFactory().createSocket(ENDPOINT);
+        Timber.d("2");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Timber.d("3");
 
         webSocket.addListener(this);
         recognitionAsyncTask = new RecognitionAsyncTask();
+        Timber.d("4");
     }
 
     public void execute() {
