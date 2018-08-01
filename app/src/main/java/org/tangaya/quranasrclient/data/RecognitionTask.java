@@ -11,6 +11,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
+import org.tangaya.quranasrclient.util.QScriptToArabic;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -28,26 +29,20 @@ public class RecognitionTask extends WebSocketAdapter {
 
     private WebSocket webSocket;
     private Attempt attempt;
-    private Evaluation eval;
+    private EvaluationOld eval;
 
     private RecognitionAsyncTask recognitionAsyncTask;
 
     public RecognitionTask(Attempt attempt) {
         this.attempt = attempt;
 
-        Timber.d("1");
-
         try {
             webSocket = new WebSocketFactory().createSocket(ENDPOINT);
-        Timber.d("2");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Timber.d("3");
-
         webSocket.addListener(this);
         recognitionAsyncTask = new RecognitionAsyncTask();
-        Timber.d("4");
     }
 
     public void execute() {
@@ -84,12 +79,23 @@ public class RecognitionTask extends WebSocketAdapter {
         Timber.d("onTextMessage(); message: " + text);
 
         if (isTranscriptionFinal(text)) {
-            Evaluation evaluation = new Evaluation(attempt.getChapterNum(), attempt.getVerseNum(), 123);
+            EvaluationOld evaluation = new EvaluationOld(attempt.getChapterNum(), attempt.getVerseNum(), 123);
             evaluation.setFilepath(attempt.getAudioFilePath());
             evaluation.setResponse(text);
             EvaluationRepository.addToEvalSet(evaluation);
             Timber.d("eval added to eval set");
         }
+
+        String transcription = new JSONObject(text).getJSONObject("result").getJSONArray("hypotheses")
+                .getJSONObject(0).getString("transcript");
+
+        transcription = transcription.substring(0, transcription.length()-1);
+
+        Timber.d("received transcription: " + transcription);
+
+        String[] words = transcription.split("");
+
+        Timber.d(QScriptToArabic.getArabic(transcription));
     }
 
     private boolean isTranscriptionFinal(String text) {
@@ -109,10 +115,10 @@ public class RecognitionTask extends WebSocketAdapter {
         return isFinal;
     }
 
-    private class RecognitionAsyncTask extends AsyncTask<Void, Void, Evaluation> {
+    private class RecognitionAsyncTask extends AsyncTask<Void, Void, EvaluationOld> {
 
         @Override
-        protected Evaluation doInBackground(Void... voids) {
+        protected EvaluationOld doInBackground(Void... voids) {
 
             File file = new File(attempt.getAudioFilePath());
             int size = (int) file.length();
@@ -137,7 +143,7 @@ public class RecognitionTask extends WebSocketAdapter {
         }
 
         @Override
-        protected void onPostExecute(Evaluation eval) {
+        protected void onPostExecute(EvaluationOld eval) {
             Timber.d("eval added to eval set. task execution finish");
         }
     }

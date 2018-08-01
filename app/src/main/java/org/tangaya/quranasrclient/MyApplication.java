@@ -1,24 +1,15 @@
 package org.tangaya.quranasrclient;
 
 import android.app.Application;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleService;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import org.tangaya.quranasrclient.data.Evaluation;
-import org.tangaya.quranasrclient.data.RecognitionTask;
-import org.tangaya.quranasrclient.data.source.EvaluationRepository;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.util.QScriptToArabic;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -28,9 +19,9 @@ public class MyApplication extends Application {
 
     private SharedPreferences sharedPref;
 
-    private ArrayList<Evaluation> evaluations = new ArrayList<>();
+    private ArrayList<EvaluationOld> evaluations = new ArrayList<>();
 
-    private MutableLiveData<ArrayList<Evaluation>> evalsLiveData = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<EvaluationOld>> evalsLiveData = new MutableLiveData<>();
 
 
     @Override
@@ -45,8 +36,8 @@ public class MyApplication extends Application {
         STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
 
         //connectToServer();
-
-        QuranScriptRepository.init(this);
+        QuranScriptRepository.init(getApplicationContext());
+        QScriptToArabic.init(getApplicationContext());
         //QScriptToArabic.init(this);
 
         Timber.d("after quran script repo init");
@@ -107,11 +98,11 @@ public class MyApplication extends Application {
 //        }
 //    }
 
-    public ArrayList<Evaluation> getEvaluations() {
+    public ArrayList<EvaluationOld> getEvaluations() {
         return evaluations;
     }
 
-    public MutableLiveData<ArrayList<Evaluation>> getEvalsLiveData() {
+    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsLiveData() {
         return evalsLiveData;
     }
 

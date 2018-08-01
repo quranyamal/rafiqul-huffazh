@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.adapter.AttemptAdapter;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.viewmodel.DevspaceDetailViewModel;
 
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ public class DevspaceDetailActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //Evaluation attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
+        //EvaluationOld attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
 
         Timber.d("debug versenum error 1");
-        mViewModel = new DevspaceDetailViewModel(getApplication(), new Evaluation(2,2,1));
+        mViewModel = new DevspaceDetailViewModel(getApplication(), new EvaluationOld(2,2,1));
         Timber.d("debug versenum error 2");
         mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<DevspaceDetailViewModel>>() {
             @Override

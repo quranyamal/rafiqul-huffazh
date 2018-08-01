@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -27,7 +28,7 @@
                     android:id="@+id/verse_num_evaluation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewmodel.verseNumber}"/>
+                    android:text="@{viewmodel.verseNumber, default=`verse 1`}"/>
 
                 <ImageView
                     android:layout_width="16dp"
@@ -41,19 +42,13 @@
                 android:id="@+id/verse_ref_evaluation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.refereceTranscript}"/>
+                android:text="@{`ref: `+viewmodel.refereceArabicScript, default=`rec: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
             <TextView
                 android:id="@+id/verse_rec_evaluation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.recognizedTranscript}"/>
-
-            <TextView
-                android:id="@+id/verse_diff_evaluation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewmodel.diff}"/>
+                android:text="@{`rec: `+viewmodel.recognizedArabicTranscript, default=`rec: اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
             <TextView
                 android:id="@+id/levenshtein_score_dev"
@@ -71,14 +66,15 @@
             <ImageView
                 android:id="@+id/evaluation_icon"
                 android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64, default=@drawable/cross_red_64}"/>
 
             <TextView
                 android:id="@+id/eval"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.evalStr}"
+                android:text="@{viewmodel.evalStr, default=`missing element`}"
                 android:textAlignment="center"/>
 
         </LinearLayout>

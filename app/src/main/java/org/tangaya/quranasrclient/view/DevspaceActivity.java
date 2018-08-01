@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.data.Evaluation;
-import org.tangaya.quranasrclient.data.RecognitionTask;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.databinding.ActivityDevspaceBinding;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
 import org.tangaya.quranasrclient.viewmodel.DevspaceViewModel;
@@ -48,9 +46,9 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
 
         mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
 
-        final Observer<ArrayList<Evaluation>> evalsObserver = new Observer<ArrayList<Evaluation>>() {
+        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<Evaluation> evaluations) {
+            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
                 Timber.d("eval set has changed");
 
             }
@@ -60,8 +58,6 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);
-
-        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
      }
 
     @Override

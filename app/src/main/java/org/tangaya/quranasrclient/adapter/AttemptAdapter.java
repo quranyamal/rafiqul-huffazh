@@ -25,7 +25,7 @@ public class AttemptAdapter extends RecyclerView.Adapter<AttemptAdapter.MyViewHo
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView verseNum, rec, ref, diff, eval, levScore;
+        public TextView verseNum, rec, ref, eval, levScore;
         ImageView evaluationIcon;
 
         private EvalItemBinding mBinding;
@@ -38,7 +38,6 @@ public class AttemptAdapter extends RecyclerView.Adapter<AttemptAdapter.MyViewHo
             verseNum = itemView.findViewById(R.id.verse_num_evaluation);
             rec = itemView.findViewById(R.id.verse_rec_evaluation);
             ref = itemView.findViewById(R.id.verse_ref_evaluation);
-            diff = itemView.findViewById(R.id.verse_diff_evaluation);
             evaluationIcon = itemView.findViewById(R.id.evaluation_icon);
             eval = itemView.findViewById(R.id.eval);
             levScore = itemView.findViewById(R.id.levenshtein_score_dev);

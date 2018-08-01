@@ -9,7 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import org.tangaya.quranasrclient.R;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.databinding.ActivityEvalDetailBinding;
 import org.tangaya.quranasrclient.adapter.EvalAdapter;
 import org.tangaya.quranasrclient.viewmodel.EvalDetailViewModel;
@@ -31,9 +31,9 @@ public class EvalDetailActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //Evaluation attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
+        //EvaluationOld attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
 
-        mViewModel = new EvalDetailViewModel(getApplication(), new Evaluation(1,1,1));
+        mViewModel = new EvalDetailViewModel(getApplication(), new EvaluationOld(1,1,1));
         mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<EvalDetailViewModel>>() {
             @Override
             public void onChanged(@Nullable ArrayList<EvalDetailViewModel> devspaceDetailViewModels) {

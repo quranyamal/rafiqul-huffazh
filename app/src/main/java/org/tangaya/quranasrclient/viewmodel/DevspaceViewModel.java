@@ -17,7 +17,7 @@ import com.neovisionaries.ws.client.WebSocket;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
@@ -46,9 +46,9 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
 
-    private MutableLiveData<ArrayList<Evaluation>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
 
-    public MutableLiveData<ArrayList<Evaluation>> getEvalsMutableLiveData() {
+    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
     }
 
@@ -87,6 +87,7 @@ public class DevspaceViewModel extends AndroidViewModel {
         endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
 
         statusListener = new ASRServerStatusListener(hostname, port);
+        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
     }
 
     public void dequeueRecognitionTasks() {

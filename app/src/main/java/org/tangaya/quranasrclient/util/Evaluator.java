@@ -1,40 +1,65 @@
 package org.tangaya.quranasrclient.util;
 
-import java.util.ArrayList;
+import android.util.Pair;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
-public class Evaluator {
+import timber.log.Timber;
 
-    diff_match_patch dmp = new diff_match_patch();
-    LinkedList<diff_match_patch.Diff> diff;
+public class Evaluator extends diff_match_patch {
 
     int levDif;
 
-    public Evaluator(String reference, String recognized) {
-        diff = dmp.diff_main(reference, recognized);
-        levDif = dmp.diff_levenshtein(diff);
+    public Evaluator() {}
+
+    boolean isExistDiffWithText(LinkedList<Diff> diffs, String text) {
+        for (Diff diff : diffs) {
+            if (diff.text.equals(text)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void evaluate() {
+    public String getDiffType(String reference, String recognized) {
+        assert !reference.equals(recognized);   // should never equal
 
-    }
-    public int getScore() {
-        return 0;
+        LinkedList<Diff> diffs = diff_main(reference, recognized);
+
+        System.out.println("getDiffType. diffs = " + diffs);
+
+        Set<Operation> oprSet = new HashSet<>();
+
+        for (Diff diff : diffs) {
+            oprSet.add(diff.operation);
+        }
+
+        oprSet.remove(Operation.EQUAL);
+
+        if (oprSet.size()>1) {
+            return "missing and addition";
+        } else if (oprSet.contains(Operation.INSERT)) {
+            return "addition of element";
+        } else {
+            return "missing element";
+        }
     }
 
-    public void printDiff() {
-        System.out.println(diff.toString());
-        System.out.println("levDiff = " + levDif);
+    public float getScore(String reference, String recognized){
+        LinkedList<Diff> diff = diff_main(reference, recognized);
+        float score = 1- ((float) diff_levenshtein(diff)/reference.length());
+        Timber.d("score:" + score);
+        return score;
     }
 
     public static void main(String[] args) {
-        Evaluator eval = new Evaluator("ABC", "CBA");
-        eval.printDiff();
+        Evaluator eval = new Evaluator();
 
-        diff_match_patch dmp = new diff_match_patch();
-        LinkedList<diff_match_patch.Diff> diffs = dmp.diff_main("ABCED", "ABCDE");
-        System.out.println(diffs);
-        System.out.println(dmp.diff_levenshtein(diffs));
+        System.out.println(eval.getDiffType("ABCD EFGH IJKL MNO", "IJKL EFGH ABCD"));
     }
 
 }

@@ -3,6 +3,7 @@ package org.tangaya.quranasrclient.data;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableFloat;
 import android.databinding.ObservableInt;
 import android.os.Environment;
 import android.util.Log;
@@ -10,11 +11,11 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.Evaluator;
+import org.tangaya.quranasrclient.util.QScriptToArabic;
 import org.tangaya.quranasrclient.util.diff_match_patch;
 
-import java.util.LinkedList;
-
-public class Evaluation extends BaseObservable {
+public class EvaluationOld extends BaseObservable {
 
     public static int STATE_UNPROCESSED = 0;
     public static int STATE_PROCESSING = 1;
@@ -30,6 +31,8 @@ public class Evaluation extends BaseObservable {
 
     //String mTranscription;
     private ObservableField<String> mTranscription = new ObservableField<>();
+
+    private ObservableField<String> mArabicTranscription = new ObservableField<>();
 
     //String mVerseScript;
     private ObservableField<String> mVerseScript = new ObservableField<>();;
@@ -48,7 +51,7 @@ public class Evaluation extends BaseObservable {
 
     private ObservableField<String> mDiff = new ObservableField<>();
 
-    private ObservableInt levScore = new ObservableInt();
+    private ObservableField<String> levScore = new ObservableField<>();
 
     private ObservableBoolean isCorrect = new ObservableBoolean();
 
@@ -68,7 +71,7 @@ public class Evaluation extends BaseObservable {
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
-    public Evaluation(int chapter, int verse, int sessionId) {
+    public EvaluationOld(int chapter, int verse, int sessionId) {
         mChapter.set(chapter);
         mVerse.set(verse);
         mSessionId.set(sessionId);
@@ -80,7 +83,7 @@ public class Evaluation extends BaseObservable {
 
         isCorrect.set(false);
 
-        mStatus.set(Evaluation.STATE_UNPROCESSED);
+        mStatus.set(EvaluationOld.STATE_UNPROCESSED);
 
         notifyChange();
     }
@@ -102,7 +105,7 @@ public class Evaluation extends BaseObservable {
     }
 
     public void setResponse(String response) {
-        Log.d("Evaluation", "Setting response");
+        Log.d("EvaluationOld", "Setting response");
 
         try {
             mResponse.set(new JSONObject(response));
@@ -112,19 +115,27 @@ public class Evaluation extends BaseObservable {
             // remove last character (.)
             mTranscription.set(mTranscription.get().substring(0, mTranscription.get().length()-1));
 
-            Log.d("Evaluation", "Setting mDiff");
+            mArabicTranscription.set(QScriptToArabic.getArabic(mTranscription.get()));
+
+            Log.d("EvaluationOld", "Setting mDiff");
             mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
 
-            levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
+            //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
 
-            Log.d("Evaluation", "mDiff: " + mDiff.get());
-            Log.d("Evaluation", "lev score: " + levScore.get());
+            float score = new Evaluator().getScore(mVerseQScript.get(), mTranscription.get());
+            levScore.set(String.format("%.3f", score));
+
+            Log.d("EvaluationOld", "mDiff: " + mDiff.get());
+            Log.d("EvaluationOld", "lev score: " + levScore.get());
 
             if (mTranscription.get().equals(mVerseQScript.get())) {
                 evalStr.set("Correct");
+                levScore.set("1");
                 isCorrect.set(true);
             } else {
-                evalStr.set("Wrong");   // todo: improve
+                //evalStr.set("Wrong");   // todo: improve
+
+                evalStr.set(new Evaluator().getDiffType(mVerseQScript.get(), mTranscription.get()));
                 isCorrect.set(false);
             }
 
@@ -137,6 +148,10 @@ public class Evaluation extends BaseObservable {
 
     public ObservableField<String> getTranscription() {
         return mTranscription;
+    }
+
+    public ObservableField<String> getArabicTranscription() {
+        return mArabicTranscription;
     }
 
     public ObservableField<String> getVerseScript() {
@@ -163,7 +178,16 @@ public class Evaluation extends BaseObservable {
         return evalStr;
     }
 
-    public ObservableInt getLevScore() {
+    public ObservableField<String> getLevScore() {
         return levScore;
+    }
+
+    public class EvaluationResult {
+
+        int levScore;
+        String strResult;
+
+        public EvaluationResult() {}
+
     }
 }

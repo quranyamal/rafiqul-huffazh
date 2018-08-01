@@ -2,7 +2,6 @@ package org.tangaya.quranasrclient.data.source;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;

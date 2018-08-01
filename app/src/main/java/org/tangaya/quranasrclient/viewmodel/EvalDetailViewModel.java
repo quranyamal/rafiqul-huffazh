@@ -5,11 +5,12 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.databinding.ObservableFloat;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
 import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
@@ -26,7 +27,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
     public final ObservableField<String> diff = new ObservableField<>();
     public final ObservableField<String> evalStr = new ObservableField<>();
 
-    public final ObservableInt levScore = new ObservableInt();
+    public final ObservableField<String> levScore = new ObservableField<>();
     public final ObservableBoolean isCorrect = new ObservableBoolean();
 
 
@@ -34,7 +35,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
     private ArrayList<EvalDetailViewModel> arrayList;
 
-    public EvalDetailViewModel(@NonNull Application application, Evaluation evaluation) {
+    public EvalDetailViewModel(@NonNull Application application, EvaluationOld evaluation) {
         super(application);
 
         int currentChapterNum = ((MyApplication) getApplication()).getCurrentChapterNum();
@@ -53,9 +54,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
         arrayList = new ArrayList<>();
 
-        //ArrayList<Evaluation> evaluations = ((MyApplication) getApplication()).getEvaluations();
+        //ArrayList<EvaluationOld> evaluations = ((MyApplication) getApplication()).getEvaluations();
 
-        ArrayList<Evaluation> evaluations = EvaluationRepository.getEvals();
+        ArrayList<EvaluationOld> evaluations = EvaluationRepository.getEvals();
 
         for (int i = 0; i< evaluations.size(); i++) {
             EvalDetailViewModel mViewModel = new EvalDetailViewModel(getApplication(), evaluations.get(i));

@@ -2,7 +2,7 @@ package org.tangaya.quranasrclient.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
 
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 
 import java.util.ArrayList;
 
@@ -10,9 +10,9 @@ import timber.log.Timber;
 
 public class EvaluationRepository {
 
-    private static ArrayList<Evaluation> evals;
+    private static ArrayList<EvaluationOld> evals;
 
-    private static MutableLiveData<ArrayList<Evaluation>> evalsLiveData;
+    private static MutableLiveData<ArrayList<EvaluationOld>> evalsLiveData;
 
     static {
         evalsLiveData = new MutableLiveData<>();
@@ -21,15 +21,15 @@ public class EvaluationRepository {
         evalsLiveData.setValue(evals);
     }
 
-    public static MutableLiveData<ArrayList<Evaluation>> getEvalsLiveData() {
+    public static MutableLiveData<ArrayList<EvaluationOld>> getEvalsLiveData() {
         return evalsLiveData;
     }
 
-    public static ArrayList<Evaluation> getEvals() {
+    public static ArrayList<EvaluationOld> getEvals() {
         return evals;
     }
 
-    public static void addToEvalSet(Evaluation eval) {
+    public static void addToEvalSet(EvaluationOld eval) {
         Timber.d("addToEvalSet 1");
         evals.add(eval);
         Timber.d("addToEvalSet 2");

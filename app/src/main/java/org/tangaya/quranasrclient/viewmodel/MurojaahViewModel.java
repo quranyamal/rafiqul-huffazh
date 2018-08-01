@@ -20,16 +20,16 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.navigator.MurojaahNavigator;
 import org.tangaya.quranasrclient.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.service.AudioPlayer;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 import org.tangaya.quranasrclient.service.WavAudioRecorder;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class MurojaahViewModel extends AndroidViewModel
             AudioFormat.ENCODING_PCM_16BIT);
 
     Uri audioFileUri;
-    Evaluation evaluation;
+    EvaluationOld evaluation;
     String endpoint;
     WebSocket webSocket;
 
@@ -89,9 +89,9 @@ public class MurojaahViewModel extends AndroidViewModel
 
     ASRServerStatusListener statusListener;
 
-    private MutableLiveData<ArrayList<Evaluation>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
 
-    public MutableLiveData<ArrayList<Evaluation>> getEvalsMutableLiveData() {
+    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
     }
 
@@ -149,7 +149,7 @@ public class MurojaahViewModel extends AndroidViewModel
         recordingFilepath = audioDir + "/recording/"+chapterNum.get()+"_"+verseNum.get()+".wav";
         testFilePath = audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
 
-        evaluation = new Evaluation(chapterNum.get(), verseNum.get(), 123);
+        evaluation = new EvaluationOld(chapterNum.get(), verseNum.get(), 123);
         evaluation.setFilepath(recordingFilepath);
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_TEST_FILE);

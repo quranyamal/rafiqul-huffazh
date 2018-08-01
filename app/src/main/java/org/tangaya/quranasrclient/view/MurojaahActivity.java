@@ -12,7 +12,7 @@ import android.util.Log;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.ViewModelFactory;
-import org.tangaya.quranasrclient.data.Evaluation;
+import org.tangaya.quranasrclient.data.EvaluationOld;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
@@ -61,9 +61,9 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
 
         mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
 
-        final Observer<ArrayList<Evaluation>> evalsObserver = new Observer<ArrayList<Evaluation>>() {
+        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<Evaluation> evaluations) {
+            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
                 Timber.d("eval set has changed");
 
             }
