@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class = "EvalCardBinding">
         <variable
@@ -7,83 +8,90 @@
             type="org.tangaya.quranasrclient.viewmodel.EvalDetailViewModel" />
     </data>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="4dp"
+        android:elevation="8dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/verse_num_evaluation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewmodel.verseNumber, default=`verse 1`}"/>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/speaker_24"/>
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/verse_num_evaluation__card"
+                    android:id="@+id/verse_ref_evaluation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewmodel.verseNumber, default=`[verseNum]`}"/>
+                    android:text="@{`reference: `+viewmodel.refereceArabicScript, default=`rec: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginLeft="8dp"
-                    android:src="@drawable/speaker_24"/>
+                <TextView
+                    android:id="@+id/verse_rec_evaluation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`recognized: `+viewmodel.recognizedArabicTranscript, default=`rec: اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
+
+                <TextView
+                    android:id="@+id/levenshtein_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`point: `+ viewmodel.levScore}"
+                    android:paddingBottom="5dp"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/verse_ref_evaluation__card"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewmodel.refereceTranscript, default=`[referece]`}"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/verse_rec_evaluation__card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewmodel.recognizedTranscript, default=`[recognized]`}"/>
+                <ImageView
+                    android:id="@+id/evaluation_icon"
+                    android:layout_width="70dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64, default=@drawable/cross_red_64}"/>
 
-            <TextView
-                android:id="@+id/verse_diff_evaluation__card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewmodel.diff, default=`[diff]`}"/>
+                <TextView
+                    android:id="@+id/eval"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewmodel.evalStr, default=`missing element`}"
+                    android:textAlignment="center"
+                    android:paddingBottom="5dp"/>
 
-            <TextView
-                android:id="@+id/levenshtein_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{`` + viewmodel.levScore, default=`[score]`}"/>
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
-
-            <ImageView
-                android:id="@+id/evaluation_icon__card"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64}"/>
-
-            <TextView
-                android:id="@+id/eval__card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewmodel.evalStr, default=`[evalStr]`}"
-                android:textAlignment="center"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </layout>

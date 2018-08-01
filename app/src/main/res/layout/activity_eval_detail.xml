@@ -7,34 +7,46 @@
             type="org.tangaya.quranasrclient.viewmodel.EvalDetailViewModel"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/eval_detail_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Evalation Detail"
-            android:textSize="32dp"
-            android:layout_marginLeft="15dp"/>
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:paddingHorizontal="10dp"
+            android:background="#333"
+            android:elevation="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chapter Al-Fatihah"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="15dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score Detail"
+                android:textStyle="bold"
+                android:textColor="#eee"
+                android:textSize="32dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chapter Al-Fatihah"
+                android:textColor="#ddd"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/devspace_detail_recycler"
+            android:layout_below="@id/eval_detail_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
             android:paddingHorizontal="10dp">
 
         </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

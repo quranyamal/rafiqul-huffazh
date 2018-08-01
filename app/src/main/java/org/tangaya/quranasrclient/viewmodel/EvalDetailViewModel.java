@@ -23,7 +23,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
     public final ObservableField<String> verseNumber = new ObservableField<>();
     public final ObservableField<String> recognizedTranscript = new ObservableField<>();
+    public final ObservableField<String> recognizedArabicTranscript = new ObservableField<>();
     public final ObservableField<String> refereceTranscript = new ObservableField<>();
+    public final ObservableField<String> refereceArabicScript = new ObservableField<>();
     public final ObservableField<String> diff = new ObservableField<>();
     public final ObservableField<String> evalStr = new ObservableField<>();
 
@@ -43,7 +45,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
         verseNumber.set(evaluation.getVerseNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());
+        recognizedArabicTranscript.set(evaluation.getArabicTranscription().get());
         refereceTranscript.set(evaluation.getVerseQScript().get());
+        refereceArabicScript.set(evaluation.getVerseScript().get());
         diff.set(evaluation.getDiff().get());
         evalStr.set(evaluation.getEvalStr().get());
         isCorrect.set(evaluation.isCorrect().get());

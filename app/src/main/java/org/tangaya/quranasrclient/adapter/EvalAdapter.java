@@ -25,7 +25,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView verseNum, rec, ref, diff, eval, levScore;
+        public TextView verseNum, rec, ref, eval, levScore;
         ImageView evaluationIcon;
 
         private EvalCardBinding mBinding;
@@ -35,12 +35,11 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
 
             mBinding = binding;
 
-            verseNum = itemView.findViewById(R.id.verse_num_evaluation__card);
-            rec = itemView.findViewById(R.id.verse_rec_evaluation__card);
-            ref = itemView.findViewById(R.id.verse_ref_evaluation__card);
-            diff = itemView.findViewById(R.id.verse_diff_evaluation__card);
-            evaluationIcon = itemView.findViewById(R.id.evaluation_icon__card);
-            eval = itemView.findViewById(R.id.eval__card);
+            verseNum = itemView.findViewById(R.id.verse_num_evaluation);
+            rec = itemView.findViewById(R.id.verse_rec_evaluation);
+            ref = itemView.findViewById(R.id.verse_ref_evaluation);
+            evaluationIcon = itemView.findViewById(R.id.evaluation_icon);
+            eval = itemView.findViewById(R.id.eval);
             levScore = itemView.findViewById(R.id.levenshtein_score);
         }
 

@@ -62,7 +62,7 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
 
     @Override
     public void gotoEvalDetail() {
-        Intent intent = new Intent(this, DevspaceDetailActivity.class);
+        Intent intent = new Intent(this, EvalDetailActivity.class);
         startActivity(intent);
     }
 

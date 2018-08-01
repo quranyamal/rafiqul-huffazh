@@ -31,7 +31,6 @@
         <activity android:name=".view.AboutActivity" />
         <activity android:name=".view.EvalDetailActivity" />
         <activity android:name=".view.TutorialActivity" />
-        <activity android:name=".view.DevspaceDetailActivity"></activity>
     </application>
 
 </manifest>

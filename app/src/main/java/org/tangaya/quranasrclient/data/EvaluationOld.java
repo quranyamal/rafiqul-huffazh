@@ -123,7 +123,7 @@ public class EvaluationOld extends BaseObservable {
             //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
 
             float score = new Evaluator().getScore(mVerseQScript.get(), mTranscription.get());
-            levScore.set(String.format("%.3f", score));
+            levScore.set(String.format("%.2f", score));
 
             Log.d("EvaluationOld", "mDiff: " + mDiff.get());
             Log.d("EvaluationOld", "lev score: " + levScore.get());

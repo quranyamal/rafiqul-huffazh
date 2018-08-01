@@ -25,7 +25,7 @@ public class EvalDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_devspace_detail);
+        setContentView(R.layout.activity_eval_detail);
 
         final RecyclerView recyclerView = findViewById(R.id.devspace_detail_recycler);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
