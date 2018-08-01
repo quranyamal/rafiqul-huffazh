@@ -147,7 +147,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void recognizeRecording() {
         Timber.d("recognizeRecording()");
 
-        Attempt attempt = new Attempt(chapter.get(), verse.get(), Attempt.SOURCE_FROM_RECORDING);
+        Attempt attempt = new Attempt(chapter.get(), verse.get());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         recognitionTaskQueue.add(recognitionTask);
         dequeueRecognitionTasks();
@@ -157,7 +157,17 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void recognizeTestFile() {
         Timber.d("recognizeTestFile()");
 
-        Attempt attempt = new Attempt(chapter.get(), verse.get(), Attempt.SOURCE_FROM_TEST_FILE);
+        Attempt attempt = new Attempt(chapter.get(), verse.get());
+        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        RecognitionTask recognitionTask = new RecognitionTask(attempt);
+        recognitionTaskQueue.add(recognitionTask);
+        dequeueRecognitionTasks();
+        serverStatus.set("recognizing...");
+    }
+
+    public void fakeRecognition() {
+        Attempt attempt = new Attempt(chapter.get(), verse.get());
+        attempt.setMockType(Attempt.MockType.MOCK_RESULT);
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         recognitionTaskQueue.add(recognitionTask);
         dequeueRecognitionTasks();

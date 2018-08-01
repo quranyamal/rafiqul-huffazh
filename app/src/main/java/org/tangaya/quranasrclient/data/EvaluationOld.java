@@ -15,12 +15,9 @@ import org.tangaya.quranasrclient.util.Evaluator;
 import org.tangaya.quranasrclient.util.QScriptToArabic;
 import org.tangaya.quranasrclient.util.diff_match_patch;
 
-public class EvaluationOld extends BaseObservable {
+import timber.log.Timber;
 
-    public static int STATE_UNPROCESSED = 0;
-    public static int STATE_PROCESSING = 1;
-    public static int STATE_ABORTED = 2;
-    public static int STATE_FINISHED = 3;
+public class EvaluationOld extends BaseObservable {
 
     String extStorageDir = Environment.getExternalStorageDirectory()+"";
     String quranVerseAudioDir = extStorageDir + "/rafiqul-huffazh";
@@ -72,9 +69,24 @@ public class EvaluationOld extends BaseObservable {
     private diff_match_patch dmp = new diff_match_patch();
 
     public EvaluationOld(int chapter, int verse, int sessionId) {
+
+    }
+
+    Attempt attempt;
+    String transcription, reference, strResult;
+    int chapter, verse;
+
+    Evaluator evaluator = new Evaluator();
+
+    public EvaluationOld(Attempt attempt, String transcription) {
+        this.attempt = attempt;
+        this.transcription = transcription;
+
+        chapter = attempt.getChapterNum();
+        verse = attempt.getVerseNum();
+
         mChapter.set(chapter);
         mVerse.set(verse);
-        mSessionId.set(sessionId);
 
         verseNum.set("Verse " + verse);
 
@@ -83,7 +95,42 @@ public class EvaluationOld extends BaseObservable {
 
         isCorrect.set(false);
 
-        mStatus.set(EvaluationOld.STATE_UNPROCESSED);
+        notifyChange();
+
+        reference = QuranScriptRepository.getChapter(chapter).getVerseScript(verse);
+        isCorrect.set(transcription.equals(reference));
+
+        if (isCorrect.get()) {
+            strResult = "Correct";
+        } else {
+            strResult = evaluator.getDiffType(reference, transcription);
+        }
+
+        ////
+        mTranscription.set(transcription);
+        mVerseScript.set(QuranScriptRepository.getChapter(chapter).getVerseScript(verse));
+
+        mVerseQScript.set(QuranScriptRepository.getChapter(chapter).getVerseQScript(verse));
+
+        mArabicTranscription.set(QScriptToArabic.getArabic(transcription));
+
+        mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
+
+        //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
+
+        float score = new Evaluator().getScore(mVerseQScript.get(), mTranscription.get());
+        levScore.set(String.format("%.2f", score));
+
+        if (mTranscription.get().equals(mVerseQScript.get())) {
+            evalStr.set("Correct");
+            levScore.set("1");
+            isCorrect.set(true);
+        } else {
+            //evalStr.set("Wrong");   // todo: improve
+
+            evalStr.set(new Evaluator().getDiffType(mVerseQScript.get(), mTranscription.get()));
+            isCorrect.set(false);
+        }
 
         notifyChange();
     }
@@ -98,52 +145,6 @@ public class EvaluationOld extends BaseObservable {
 
     public void setFilepath(String filepath) {
         mFilepath.set(filepath);
-    }
-
-    public ObservableField<String> getAudioFilepath() {
-        return mFilepath;
-    }
-
-    public void setResponse(String response) {
-        Log.d("EvaluationOld", "Setting response");
-
-        try {
-            mResponse.set(new JSONObject(response));
-            mTranscription.set(mResponse.get().getJSONObject("result").getJSONArray("hypotheses")
-                    .getJSONObject(0).getString("transcript"));
-
-            // remove last character (.)
-            mTranscription.set(mTranscription.get().substring(0, mTranscription.get().length()-1));
-
-            mArabicTranscription.set(QScriptToArabic.getArabic(mTranscription.get()));
-
-            Log.d("EvaluationOld", "Setting mDiff");
-            mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
-
-            //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
-
-            float score = new Evaluator().getScore(mVerseQScript.get(), mTranscription.get());
-            levScore.set(String.format("%.2f", score));
-
-            Log.d("EvaluationOld", "mDiff: " + mDiff.get());
-            Log.d("EvaluationOld", "lev score: " + levScore.get());
-
-            if (mTranscription.get().equals(mVerseQScript.get())) {
-                evalStr.set("Correct");
-                levScore.set("1");
-                isCorrect.set(true);
-            } else {
-                //evalStr.set("Wrong");   // todo: improve
-
-                evalStr.set(new Evaluator().getDiffType(mVerseQScript.get(), mTranscription.get()));
-                isCorrect.set(false);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        notifyChange();
     }
 
     public ObservableField<String> getTranscription() {
@@ -180,14 +181,5 @@ public class EvaluationOld extends BaseObservable {
 
     public ObservableField<String> getLevScore() {
         return levScore;
-    }
-
-    public class EvaluationResult {
-
-        int levScore;
-        String strResult;
-
-        public EvaluationResult() {}
-
     }
 }

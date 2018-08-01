@@ -51,7 +51,7 @@
                     android:id="@+id/verse_ref_evaluation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{`reference: `+viewmodel.refereceArabicScript, default=`rec: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
+                    android:text="@{`reference : `+viewmodel.refereceArabicScript, default=`rec: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
                 <TextView
                     android:id="@+id/verse_rec_evaluation"

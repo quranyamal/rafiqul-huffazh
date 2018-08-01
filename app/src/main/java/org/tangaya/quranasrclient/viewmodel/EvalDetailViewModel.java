@@ -50,6 +50,8 @@ public class EvalDetailViewModel extends AndroidViewModel {
         refereceArabicScript.set(evaluation.getVerseScript().get());
         diff.set(evaluation.getDiff().get());
         evalStr.set(evaluation.getEvalStr().get());
+
+        // switch check color to green
         isCorrect.set(evaluation.isCorrect().get());
         levScore.set(evaluation.getLevScore().get());
     }

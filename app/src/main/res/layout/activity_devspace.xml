@@ -157,31 +157,30 @@
                 android:onClick="@{() -> viewmodel.playRecordedAudio()}"
                 android:src="@drawable/play_black_100" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="@{() -> viewmodel.recognizeRecording()}"
-                android:src="@drawable/arrow_black_100" />
-
         </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="recognize recording"
-            android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="recognize recording"
+                android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="fake recognition"
+                android:onClick="@{() -> viewmodel.fakeRecognition()}"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{`evaluation count: ` + viewmodel.attemptCount, default=`[attempt_count]`}"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:text="transcription result:"/>
 
         <TextView
             android:layout_width="match_parent"

@@ -11,6 +11,8 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.source.EvaluationRepository;
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.Evaluator;
 import org.tangaya.quranasrclient.util.QScriptToArabic;
 
 import java.io.BufferedInputStream;
@@ -31,6 +33,8 @@ public class RecognitionTask extends WebSocketAdapter {
     private Attempt attempt;
     private EvaluationOld eval;
 
+    private String transcription;
+
     private RecognitionAsyncTask recognitionAsyncTask;
 
     public RecognitionTask(Attempt attempt) {
@@ -46,7 +50,14 @@ public class RecognitionTask extends WebSocketAdapter {
     }
 
     public void execute() {
-        webSocket.connectAsynchronously();
+        if (attempt.getMockType()== Attempt.MockType.MOCK_RESULT) {
+            transcription = QuranScriptRepository.getChapter(attempt.getChapterNum()).getVerseQScript(attempt.getVerseNum());
+            EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
+
+            EvaluationRepository.addToEvalSet(evaluation);
+        } else {
+            webSocket.connectAsynchronously();
+        }
     }
 
     @Override
@@ -78,20 +89,17 @@ public class RecognitionTask extends WebSocketAdapter {
 
         Timber.d("onTextMessage(); message: " + text);
 
+        transcription = new JSONObject(text).getJSONObject("result").getJSONArray("hypotheses")
+                .getJSONObject(0).getString("transcript");
+
+        Timber.d("received transcription: " + transcription);
+
         if (isTranscriptionFinal(text)) {
-            EvaluationOld evaluation = new EvaluationOld(attempt.getChapterNum(), attempt.getVerseNum(), 123);
-            evaluation.setFilepath(attempt.getAudioFilePath());
-            evaluation.setResponse(text);
+            transcription = transcription.substring(0, transcription.length()-1);
+            EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
             EvaluationRepository.addToEvalSet(evaluation);
             Timber.d("eval added to eval set");
         }
-
-        String transcription = new JSONObject(text).getJSONObject("result").getJSONArray("hypotheses")
-                .getJSONObject(0).getString("transcript");
-
-        transcription = transcription.substring(0, transcription.length()-1);
-
-        Timber.d("received transcription: " + transcription);
 
         String[] words = transcription.split("");
 

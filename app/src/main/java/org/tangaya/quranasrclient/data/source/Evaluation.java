@@ -3,6 +3,8 @@ package org.tangaya.quranasrclient.data.source;
 import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.util.Evaluator;
 
+import java.sql.SQLOutput;
+
 public class Evaluation {
 
     private Evaluator evaluator;
@@ -30,5 +32,11 @@ public class Evaluation {
         } else {
             strResult = evaluator.getDiffType(reference, transcription);
         }
+
     }
+
+    public static void main(String[] args) {
+
+    }
+
 }

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class QuranScriptRepository {
 
     private QuranScriptRepository() {}
@@ -61,6 +63,12 @@ public class QuranScriptRepository {
 
                 int surahNum = Integer.parseInt(lineVersePart[0]);
                 String verseStr = lineVersePart[2];
+
+
+                if (listOfChapter[surahNum].listOfVerse.size()==0) {
+                    // first verse of every chapter
+                    verseStr = verseStr.substring(37, verseStr.length());
+                }
 
                 listOfChapter[surahNum].addVerse(verseStr);
                 listOfChapter[surahNum].addQScript(lineQScript);

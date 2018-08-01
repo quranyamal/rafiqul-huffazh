@@ -41,11 +41,11 @@ public class Evaluator extends diff_match_patch {
         oprSet.remove(Operation.EQUAL);
 
         if (oprSet.size()>1) {
-            return "missing + addition";
+            return "insertion + deletion";
         } else if (oprSet.contains(Operation.INSERT)) {
-            return "addition of element";
+            return "insertion";
         } else {
-            return "missing element";
+            return "deletion";
         }
     }
 

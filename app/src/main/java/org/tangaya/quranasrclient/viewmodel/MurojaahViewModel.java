@@ -152,7 +152,8 @@ public class MurojaahViewModel extends AndroidViewModel
         evaluation = new EvaluationOld(chapterNum.get(), verseNum.get(), 123);
         evaluation.setFilepath(recordingFilepath);
 
-        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_TEST_FILE);
+        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
+        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -175,7 +176,9 @@ public class MurojaahViewModel extends AndroidViewModel
 
         Timber.d("submitAttempt() 1");
 
-        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get(), Attempt.SOURCE_FROM_TEST_FILE);
+        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
+        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+
         Timber.d("submitAttempt() 2. chapterNum.get()="+chapterNum.get()+"verseNum.get()");
         Timber.d("file path:" + attempt.getAudioFilePath());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
