@@ -119,6 +119,7 @@ public class MurojaahViewModel extends AndroidViewModel
         statusListener = new ASRServerStatusListener(hostname, port);
 
         RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
+        EvaluationRepository.clearEvalData();
     }
 
     public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
@@ -205,16 +206,14 @@ public class MurojaahViewModel extends AndroidViewModel
     }
 
     public void dequeueRecognitionTasks() {
-        if (numAvailableWorkers.get()>0) {
-            if (recognitionTaskQueue.size()>0) {
-                RecognitionTask recognitionTask = recognitionTaskQueue.poll();
-                recognitionTask.execute();
-            } else {
-                Timber.d("Recognition task queue empty");
-            }
-        } else {
-            Timber.d("no worker available");
-        }
+        assert (numAvailableWorkers.get()>0);
+        assert (getQueueSize()>0);
+        RecognitionTask recognitionTask = recognitionTaskQueue.poll();
+        recognitionTask.execute();
+    }
+
+    public int getQueueSize() {
+        return recognitionTaskQueue.size();
     }
 
     public void playAttemptRecording() {

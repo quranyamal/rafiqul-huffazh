@@ -5,7 +5,9 @@ import android.content.res.AssetManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -32,6 +34,19 @@ public class QuranScriptRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        initData();
+    }
+
+    public static void init(InputStream chapterIs, InputStream verseIs, InputStream qScriptIs) {
+
+        try {
+            brChapter = new BufferedReader(new InputStreamReader(chapterIs, "UTF-8"));
+            brChapter = new BufferedReader(new InputStreamReader(verseIs, "UTF-8"));
+            brChapter = new BufferedReader(new InputStreamReader(qScriptIs, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         initData();
     }
 
@@ -128,6 +143,10 @@ public class QuranScriptRepository {
 
         public boolean isValidVerseNum(int num) {
             return num>0 && num <=listOfVerse.size();
+        }
+
+        public int getNumVerse() {
+            return listOfVerse.size();
         }
     }
 

@@ -1,8 +1,7 @@
 package org.tangaya.quranasrclient.util;
 
-import android.util.Pair;
+import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -21,12 +20,21 @@ public class Evaluator extends diff_match_patch {
                 return true;
             }
         }
-
         return false;
     }
 
-    public String getDiffType(String reference, String recognized) {
-        assert !reference.equals(recognized);   // should never equal
+    public String getDiffType(int chapter, int verse, String recognized) {
+//        assert !reference.equals(recognized);   // should never equal
+
+        String reference = QuranScriptRepository.getChapter(chapter).getVerseScript(verse);
+
+        // todo: case of skipping n verse
+        int numVerse = QuranScriptRepository.getChapter(chapter).getNumVerse();
+        for (int i=0; i<numVerse; i++) {
+            String nextIQScript = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
+            if (reference.equals(nextIQScript));
+            return "skipping " + i + "verse" + (i>1? "s":"");
+        }
 
         LinkedList<Diff> diffs = diff_main(reference, recognized);
 
@@ -49,6 +57,11 @@ public class Evaluator extends diff_match_patch {
         }
     }
 
+    public int getLevenshtein(String reference, String recognized) {
+        LinkedList<Diff> diff = diff_main(reference, recognized);
+        return diff_levenshtein(diff);
+    }
+
     public float getScore(String reference, String recognized){
         LinkedList<Diff> diff = diff_main(reference, recognized);
         float score = 1- ((float) diff_levenshtein(diff)/reference.length());
@@ -59,7 +72,7 @@ public class Evaluator extends diff_match_patch {
     public static void main(String[] args) {
         Evaluator eval = new Evaluator();
 
-        System.out.println(eval.getDiffType("ABCD EFGH IJKL MNO", "IJKL EFGH ABCD"));
+        System.out.println(eval.getDiffType(1,1, "mAliki yWmid dIn"));
     }
 
 }

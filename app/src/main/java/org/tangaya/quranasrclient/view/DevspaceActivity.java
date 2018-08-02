@@ -66,4 +66,10 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
         startActivity(intent);
     }
 
+    @Override
+    public void gotoScoreboard() {
+        Intent intent = new Intent(this, ScoreboardActivity.class);
+        startActivity(intent);
+    }
+
 }

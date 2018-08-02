@@ -13,6 +13,7 @@ import android.util.Log;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.EvaluationOld;
+import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
@@ -47,14 +48,23 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         mMurojaahDataBinding.setViewmodel(mViewModel);
         mViewModel.onActivityCreated(this, CHAPTER_NUM);
 
+        Timber.d("queue size ==> " + mViewModel.getQueueSize());
+
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
             @Override
             public void onChanged(@Nullable Integer numAvailWorkers) {
                 Timber.d("num worker has been changed ==> " + numAvailWorkers);
+                Timber.d("queue size ==> " + mViewModel.getQueueSize());
                 mViewModel.numAvailableWorkers.set(numAvailWorkers);
                 if (numAvailWorkers>0) {
-                    mViewModel.dequeueRecognitionTasks();
+                    if (mViewModel.getQueueSize()>0) {
+                        mViewModel.dequeueRecognitionTasks();
+                    } else {
+                        Timber.d("recognition task queue empty. do nothing");
+                    }
+                } else {
+                    Timber.d("no worker available. do nothing");
                 }
             }
         };
@@ -65,7 +75,6 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
             @Override
             public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
                 Timber.d("eval set has changed");
-
             }
         };
 

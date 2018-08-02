@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.databinding.ObservableFloat;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
@@ -29,7 +28,11 @@ public class EvalDetailViewModel extends AndroidViewModel {
     public final ObservableField<String> diff = new ObservableField<>();
     public final ObservableField<String> evalStr = new ObservableField<>();
 
-    public final ObservableField<String> levScore = new ObservableField<>();
+    public final ObservableField<String> point = new ObservableField<>();
+    public final ObservableInt maxPoint = new ObservableInt();
+    public final ObservableInt earnedPoint = new ObservableInt();
+
+
     public final ObservableBoolean isCorrect = new ObservableBoolean();
 
 
@@ -53,7 +56,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
         // switch check color to green
         isCorrect.set(evaluation.isCorrect().get());
-        levScore.set(evaluation.getLevScore().get());
+        point.set(evaluation.getScoreStr().get());
+        maxPoint.set(evaluation.getMaxpoints().get());
+        earnedPoint.set(evaluation.getEarnedPoints().get());
     }
 
     public MutableLiveData<ArrayList<EvalDetailViewModel>> getArrayListMutableLiveData() {

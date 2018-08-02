@@ -30,7 +30,7 @@ public class Evaluation {
         if (isCorrect) {
             strResult = "Correct";
         } else {
-            strResult = evaluator.getDiffType(reference, transcription);
+            strResult = "todo";
         }
 
     }

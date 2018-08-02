@@ -183,6 +183,10 @@ public class DevspaceViewModel extends AndroidViewModel {
         mNavigator.gotoEvalDetail();
     }
 
+    public void gotoScoreboard() {
+        mNavigator.gotoScoreboard();
+    }
+
     public void incrementVerse() {
         verse.set(verse.get()+1);
     }

@@ -37,4 +37,8 @@ public class EvaluationRepository {
         Timber.d("addToEvalSet 3");
     }
 
+    public static void clearEvalData() {
+        evalsLiveData.getValue().clear();
+    }
+
 }

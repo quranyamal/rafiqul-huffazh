@@ -63,7 +63,7 @@
                     android:id="@+id/levenshtein_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{`point: `+ viewmodel.levScore}"
+                    android:text="@{`points: `+ viewmodel.earnedPoint + `/` +viewmodel.maxPoint, default=`points: 12/12`}"
                     android:paddingBottom="5dp"/>
 
             </LinearLayout>
