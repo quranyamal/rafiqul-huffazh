@@ -1,5 +1,6 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.navigator.TutorialNavigator;
 import org.tangaya.quranasrclient.viewmodel.TutorialViewModel;
 
-public class TutorialActivity extends AppCompatActivity implements TutorialNavigator {
+public class TutorialActivity extends Activity implements TutorialNavigator {
 
     TutorialViewModel mViewModel;
 
@@ -20,6 +21,8 @@ public class TutorialActivity extends AppCompatActivity implements TutorialNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
+
+        setTitle("Tutorial");
 
         //mViewModel = ViewModelProviders.of(this).get(TutorialViewModel.class);
         mViewModel = new TutorialViewModel(this.getApplication());

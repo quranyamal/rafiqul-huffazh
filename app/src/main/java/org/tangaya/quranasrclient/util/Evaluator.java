@@ -26,16 +26,17 @@ public class Evaluator extends diff_match_patch {
     public String getDiffType(int chapter, int verse, String recognized) {
 //        assert !reference.equals(recognized);   // should never equal
 
-        String reference = QuranScriptRepository.getChapter(chapter).getVerseScript(verse);
+        String reference = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
 
         // todo: case of skipping n verse
-        int numVerse = QuranScriptRepository.getChapter(chapter).getNumVerse();
-        for (int i=0; i<numVerse; i++) {
-            String nextIQScript = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
-            if (reference.equals(nextIQScript));
-            return "skipping " + i + "verse" + (i>1? "s":"");
-        }
+//        int numVerse = QuranScriptRepository.getChapter(chapter).getNumVerse();
+//        for (int i=0; i<numVerse; i++) {
+//            String nextIQScript = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
+//            if (reference.equals(nextIQScript));
+//            return "skipping " + i + "verse" + (i>1? "s":"");
+//        }
 
+        System.out.println("diff_main("+reference+","+recognized+")");
         LinkedList<Diff> diffs = diff_main(reference, recognized);
 
         System.out.println("getDiffType. diffs = " + diffs);

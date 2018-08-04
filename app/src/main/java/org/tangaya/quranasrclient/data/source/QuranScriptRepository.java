@@ -70,15 +70,25 @@ public class QuranScriptRepository {
                 listOfChapter[i].mTitle = lineChapterPart[2];
             }
 
-            for (int i=0; i<6236; i++) {
+            // parse Al-Fathihah verse 1 (without trimming basmalah
+            lineVerse = brVerse.readLine();
+            lineVersePart = lineVerse.split("\\|");
+            lineQScript = brQScript.readLine();
+
+            int surahNum = Integer.parseInt(lineVersePart[0]);
+            String verseStr = lineVersePart[2];
+
+            listOfChapter[surahNum].addVerse(verseStr);
+            listOfChapter[surahNum].addQScript(lineQScript);
+
+            for (int i=1; i<6236; i++) {
                 lineVerse = brVerse.readLine();
                 lineVersePart = lineVerse.split("\\|");
 
                 lineQScript = brQScript.readLine();
 
-                int surahNum = Integer.parseInt(lineVersePart[0]);
-                String verseStr = lineVersePart[2];
-
+                surahNum = Integer.parseInt(lineVersePart[0]);
+                verseStr = lineVersePart[2];
 
                 if (listOfChapter[surahNum].listOfVerse.size()==0) {
                     // first verse of every chapter

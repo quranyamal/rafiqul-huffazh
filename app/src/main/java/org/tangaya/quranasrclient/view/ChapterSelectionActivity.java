@@ -1,9 +1,11 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +17,7 @@ import org.tangaya.quranasrclient.adapter.ChapterAdapter;
 import org.tangaya.quranasrclient.listener.RecyclerTouchListener;
 
 
-public class ChapterSelectionActivity extends AppCompatActivity {
+public class ChapterSelectionActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -25,6 +27,8 @@ public class ChapterSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chapter_selection);
+
+        setTitle("Select Chapter");
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
         final SharedPreferences.Editor editor = sharedPref.edit();

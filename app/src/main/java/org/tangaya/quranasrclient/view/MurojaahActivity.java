@@ -1,9 +1,15 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +19,6 @@ import android.util.Log;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.ViewModelFactory;
 import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.RecognitionTask;
 import org.tangaya.quranasrclient.data.source.RecordingRepository;
 import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
 import org.tangaya.quranasrclient.R;
@@ -25,28 +30,38 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class MurojaahActivity extends AppCompatActivity implements MurojaahNavigator {
+public class MurojaahActivity extends Activity implements LifecycleOwner, MurojaahNavigator {
 
     private int CHAPTER_NUM;
 
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
+    private LifecycleRegistry mLifecycleRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mLifecycleRegistry = new LifecycleRegistry(this);
+        mLifecycleRegistry.markState(Lifecycle.State.CREATED);
+
         mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
         mMurojaahDataBinding.setLifecycleOwner(this);
+
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
 
         CHAPTER_NUM = sharedPref.getInt("CURRENT_CHAPTER_NUM", -1) + 1;
         Log.d("MA", "chapter num:"+CHAPTER_NUM);
 
-        mViewModel = obtainViewModel(this);
+        if (mViewModel==null) {
+            Timber.d("obtaining viewmodel");
+            mViewModel = obtainViewModel(this);
+
+            mViewModel.onActivityCreated(this, CHAPTER_NUM);
+        }
+
         mMurojaahDataBinding.setViewmodel(mViewModel);
-        mViewModel.onActivityCreated(this, CHAPTER_NUM);
 
         Timber.d("queue size ==> " + mViewModel.getQueueSize());
 
@@ -79,10 +94,15 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         };
 
         mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
-
     }
 
-    public static MurojaahViewModel obtainViewModel(FragmentActivity activity) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLifecycleRegistry.markState(Lifecycle.State.STARTED);
+    }
+
+    public static MurojaahViewModel obtainViewModel(Activity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
 
         TranscriptionsRepository transcriptionRepo = new TranscriptionsRepository();
@@ -99,4 +119,9 @@ public class MurojaahActivity extends AppCompatActivity implements MurojaahNavig
         startActivity(intent);
     }
 
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycleRegistry;
+    }
 }

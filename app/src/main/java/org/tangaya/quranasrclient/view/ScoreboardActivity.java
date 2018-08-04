@@ -1,11 +1,15 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import org.tangaya.quranasrclient.MyApplication;
@@ -19,10 +23,11 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class ScoreboardActivity extends AppCompatActivity implements ScoreboardNavigator {
+public class ScoreboardActivity extends Activity implements LifecycleOwner, ScoreboardNavigator {
 
-    ScoreboardViewModel mViewModel;
-    ActivityScoreboardBinding mBinding;
+    private ScoreboardViewModel mViewModel;
+    private ActivityScoreboardBinding mBinding;
+    private LifecycleRegistry mLifecycleRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,9 @@ public class ScoreboardActivity extends AppCompatActivity implements ScoreboardN
 
         mViewModel = new ScoreboardViewModel(getApplication());
         mViewModel.onActivityCreated(this);
+
+        mLifecycleRegistry = new LifecycleRegistry(this);
+        mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_scoreboard);
         mBinding.setViewmodel(mViewModel);
@@ -49,7 +57,7 @@ public class ScoreboardActivity extends AppCompatActivity implements ScoreboardN
 
     @Override
     public void showDetail() {
-        Intent intent = new Intent(this, EvalDetailActivity.class);
+        Intent intent = new Intent(this, ScoreDetailActivity.class);
         startActivity(intent);
     }
 
@@ -90,5 +98,11 @@ public class ScoreboardActivity extends AppCompatActivity implements ScoreboardN
     @Override
     public void exit() {
         finish();
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycleRegistry;
     }
 }

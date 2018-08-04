@@ -15,9 +15,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
-import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketFactory;
-
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.Attempt;
 import org.tangaya.quranasrclient.data.EvaluationOld;
@@ -46,7 +43,7 @@ public class MurojaahViewModel extends AndroidViewModel
 
     public final ObservableField<Integer> chapterNum = new ObservableField<>();
     public final ObservableField<String> chapterName = new ObservableField<>();
-    public final ObservableField<Integer> verseNum = new ObservableField<>();
+    public final ObservableField<Integer> verseNum = new ObservableField<>(1);
     public final ObservableField<Integer> attemptState= new ObservableField<>();
 
     public final ObservableField<String> hintText = new ObservableField<>();
@@ -74,7 +71,6 @@ public class MurojaahViewModel extends AndroidViewModel
     Uri audioFileUri;
     EvaluationOld evaluation;
     String endpoint;
-    WebSocket webSocket;
 
     private String storageDir = Environment.getExternalStorageDirectory()+"";
 
@@ -103,7 +99,6 @@ public class MurojaahViewModel extends AndroidViewModel
         mContext = context;
         mTranscriptionsRepository = transcriptionsRepository;
         mRecordingRepository = recordingRepository;
-        verseNum.set(1);
 
         audioPlayer = new AudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
@@ -119,13 +114,18 @@ public class MurojaahViewModel extends AndroidViewModel
         statusListener = new ASRServerStatusListener(hostname, port);
 
         RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
-        EvaluationRepository.clearEvalData();
+
+        Timber.d("MurojaahViewModel constructor");
     }
 
     public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
         chapterNum.set(chapter);
         chapterName.set(QuranScriptRepository.getChapter(chapter).getTitle());
+        EvaluationRepository.clearEvalData();
+        //verseNum.set(1);
+
+        Timber.d("onActivityCreated");
     }
 
     public void showHint() {
@@ -168,19 +168,11 @@ public class MurojaahViewModel extends AndroidViewModel
         mRecorder.stop();
         mRecorder.reset();
 
-        Log.d("MVM", "creating web socket");
-        try {
-            webSocket = new WebSocketFactory().createSocket(endpoint);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         Timber.d("submitAttempt() 1");
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
-        Timber.d("submitAttempt() 2. chapterNum.get()="+chapterNum.get()+"verseNum.get()");
         Timber.d("file path:" + attempt.getAudioFilePath());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         Timber.d("submitAttempt() 3");

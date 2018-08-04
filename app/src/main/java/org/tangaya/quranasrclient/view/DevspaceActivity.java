@@ -1,11 +1,15 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import org.tangaya.quranasrclient.R;
 import org.tangaya.quranasrclient.data.EvaluationOld;
@@ -18,12 +22,13 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 
-public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavigator {
+public class DevspaceActivity extends Activity implements LifecycleOwner, DevspaceNavigator {
 
 //    private Handler mHandler = new Handler();
 
     public DevspaceViewModel mViewModel;
     private ActivityDevspaceBinding binding;
+    private LifecycleRegistry mLifecycleRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,9 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
 
         mViewModel = new DevspaceViewModel(this.getApplication());
         mViewModel.onActivityCreated(this);
+
+        mLifecycleRegistry = new LifecycleRegistry(this);
+        mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
@@ -61,8 +69,14 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
      }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mLifecycleRegistry.markState(Lifecycle.State.STARTED);
+    }
+
+    @Override
     public void gotoEvalDetail() {
-        Intent intent = new Intent(this, EvalDetailActivity.class);
+        Intent intent = new Intent(this, ScoreDetailActivity.class);
         startActivity(intent);
     }
 
@@ -72,4 +86,9 @@ public class DevspaceActivity extends AppCompatActivity  implements DevspaceNavi
         startActivity(intent);
     }
 
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycleRegistry;
+    }
 }

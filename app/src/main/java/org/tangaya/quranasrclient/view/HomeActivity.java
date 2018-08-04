@@ -1,9 +1,10 @@
 package org.tangaya.quranasrclient.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.tangaya.quranasrclient.navigator.HomeNavigator;
@@ -11,7 +12,7 @@ import org.tangaya.quranasrclient.viewmodel.HomeViewModel;
 import org.tangaya.quranasrclient.databinding.ActivityHomeBinding;
 import org.tangaya.quranasrclient.R;
 
-public class HomeActivity extends AppCompatActivity implements HomeNavigator {
+public class HomeActivity extends Activity implements HomeNavigator {
 
     public HomeViewModel mViewModel;
     private ActivityHomeBinding binding;
@@ -37,7 +38,7 @@ public class HomeActivity extends AppCompatActivity implements HomeNavigator {
 //
 //        mViewModel.getCobaLiveData().observe(this, testObserver);
 
-        setDecorView();
+        //setDecorView();
     }
 
     private void setDecorView() {

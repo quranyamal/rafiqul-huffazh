@@ -39,6 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Muroja'ah"
+                        android:textStyle="bold"
                         android:textSize="18dp"/>
 
                     <TextView
@@ -67,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`Verse ` + viewmodel.verseNum, default=`Verse X`}"
+                    android:textStyle="bold"
                     android:textSize="32dp"/>
 
                 <TextView

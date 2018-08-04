@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         tools:context=".view.HomeActivity"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,19 +41,19 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Murojaah"
             android:onClick="@{() -> viewmodel.gotoMurojaah()}"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Server Setting"
             android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Development Space"
             android:onClick="@{() -> viewmodel.gotoDevspace()}"/>
 
