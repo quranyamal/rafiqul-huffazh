@@ -16,16 +16,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Develepment Space"
-            android:textSize="24dp"
-            android:textAlignment="center"
-            android:paddingTop="30dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@{viewmodel.serverStatus, default=`[server status]`}"
             android:textAlignment="center"
+            android:paddingTop="30dp"
             android:layout_marginBottom="50dp"/>
 
         <LinearLayout

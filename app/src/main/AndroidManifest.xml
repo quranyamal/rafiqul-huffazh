@@ -27,9 +27,7 @@
         <activity
             android:name=".view.MurojaahActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen"/>
-        <activity
-            android:name=".view.DevspaceActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
+        <activity android:name=".view.DevspaceActivity"/>
         <activity android:name=".view.ServerSettingActivity"/>
         <activity android:name=".util.AudioRecordTest" />
         <activity android:name=".view.ChapterSelectionActivity"/>

@@ -18,6 +18,7 @@ public class ServerSettingActivity extends Activity implements ServerSettingNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         mViewModel = new ServerSettingViewModel(this.getApplication());
         mViewModel.onActivityCreated(this);
 
@@ -27,7 +28,7 @@ public class ServerSettingActivity extends Activity implements ServerSettingNavi
 //        Toolbar toolbar = findViewById(R.id.my_toolbar);
 //        setSupportActionBar(toolbar);
 
-        //setTitle("Server Setting");
+        setTitle("Server Setting");
     }
 
     @Override

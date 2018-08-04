@@ -34,6 +34,8 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle("Development Space");
+
         mViewModel = new DevspaceViewModel(this.getApplication());
         mViewModel.onActivityCreated(this);
 
