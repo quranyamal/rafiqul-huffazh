@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import timber.log.Timber;
-
 public class MurojaahEvaluatorNew {
 
     public static String CORRECT_MESSAGE = "benar";
@@ -14,7 +12,7 @@ public class MurojaahEvaluatorNew {
     public static String INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART = "penambahan dan elemen hilang";
     public static String INCORRECT_MESSAGE_SKIPPING_ONE_VERSE = "melewatkan satu ayat";
     public static String INCORRECT_MESSAGE_SKIPPING_SOME_VERSES = "melewatkan beberapa ayat ";
-    public static String INCORRECT_MESSAGE_BACKWARD = "mundur ke ayat sebelumnya";
+    public static String INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE = "mundur ke ayat sebelumnya";
 
     private static diff_match_patch dmp = new diff_match_patch();
 
@@ -26,8 +24,24 @@ public class MurojaahEvaluatorNew {
 
         if (recognized.equals(reference)) {
             return CORRECT_MESSAGE;
-        } else if (recognized.equals(QuranScriptFactory.getVerseQScript(chapter, verse+1))) {
-            return INCORRECT_MESSAGE_SKIPPING_ONE_VERSE;
+        } else if (QuranScriptFactory.isValidVerseIndex(chapter, verse+1)) {
+            if (recognized.equals(QuranScriptFactory.getVerseQScript(chapter, verse+1))) {
+                return INCORRECT_MESSAGE_SKIPPING_ONE_VERSE;
+            } else {
+                int verseNum = verse+2;
+                while (QuranScriptFactory.isValidVerseIndex(chapter, verseNum)) {
+                    if (recognized.equals(QuranScriptFactory.getVerseQScript(chapter, verseNum))) {
+                        return INCORRECT_MESSAGE_SKIPPING_SOME_VERSES;
+                    }
+                    verseNum++;
+                }
+            }
+        }
+
+        for (int i=1; i<verse; i++) {
+            if (recognized.equals(QuranScriptFactory.getVerseQScript(chapter, i))) {
+                return INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE;
+            }
         }
 
         LinkedList<diff_match_patch.Diff> diffs = dmp.diff_main(reference, recognized);

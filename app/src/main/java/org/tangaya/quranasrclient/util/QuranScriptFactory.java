@@ -85,6 +85,17 @@ public class QuranScriptFactory {
         System.out.println("data loaded");
     }
 
+    public static boolean isValidVerseIndex(int chapter, int verse) {
+        if (chapter<1 || chapter>114) {
+            return false;
+        } else {
+            if (!getChapter(chapter).isValidVerseNum(verse)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static Chapter getChapter(int i) {
         return listOfChapter[i];
     }
