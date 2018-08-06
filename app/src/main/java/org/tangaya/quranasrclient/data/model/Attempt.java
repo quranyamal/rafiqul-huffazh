@@ -28,14 +28,7 @@ public class Attempt {
         mChapter = chapter;
         mVerse = verse;
 
-//        mSource = source;
-
-//        if(source==Attempt.SOURCE_FROM_RECORDING) {
-            audioFilePath = audioDir + "/recording/"+mChapter+"_"+mVerse+".wav";
-//        } else {
-//            assert (source==Attempt.SOURCE_FROM_TEST_FILE);
-//            audioFilePath = audioDir + "/test/"+mChapter+"_"+mVerse+".wav";
-//        }
+        audioFilePath = audioDir + "/recording/"+mChapter+"_"+mVerse+".wav";
     }
 
     public String getAudioFilePath() {

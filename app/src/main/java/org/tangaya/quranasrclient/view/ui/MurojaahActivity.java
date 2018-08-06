@@ -147,7 +147,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
                     });
                     try {
                         // Sleep for 200 milliseconds.
-                        Thread.sleep(200);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

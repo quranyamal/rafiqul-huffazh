@@ -141,7 +141,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         evaluation.setFilepath(recordingFilepath);
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -158,21 +158,25 @@ public class MurojaahViewModel extends AndroidViewModel {
         Timber.d("submitAttempt() 1");
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         Timber.d("file path:" + attempt.getAudioFilePath());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         Timber.d("submitAttempt() 3");
         recognitionTaskQueue.add(recognitionTask);
+
         dequeueRecognitionTasks();
+
         Timber.d("submitAttempt() 4");
+
+        isRecording.set(false);
 
         if (isEndOfSurah()) {
             mNavigator.gotoResult();
         } else {
             incrementAyah();
-            isRecording.set(false);
         }
+
         Timber.d("submitAttempt() 5");
 
     }
