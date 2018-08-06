@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
 
         //connectToServer();
-        QuranScriptFactory.init(getApplicationContext());
+        QuranScriptFactory.init(getApplicationContext().getAssets());
         QuranScriptConverter.init(getApplicationContext());
         //QuranScriptConverter.init(this);
 

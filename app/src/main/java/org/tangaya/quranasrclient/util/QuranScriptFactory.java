@@ -1,26 +1,20 @@
 package org.tangaya.quranasrclient.util;
 
-import android.content.Context;
 import android.content.res.AssetManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class QuranScriptFactory {
 
     private QuranScriptFactory() {}
 
-    private static Context mContext;
     private static BufferedReader brChapter, brVerse, brQScript;
     private static Chapter[] listOfChapter;
 
-    public static void init(Context context) {
-        mContext = context;
-        AssetManager assetManager = mContext.getAssets();
+    public static void init(AssetManager assetManager) {
 
         try {
             brChapter = new BufferedReader(new InputStreamReader(
@@ -32,23 +26,10 @@ public class QuranScriptFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initData();
+        loadData();
     }
 
-    public static void init(InputStream chapterIs, InputStream verseIs, InputStream qScriptIs) {
-
-        try {
-            brChapter = new BufferedReader(new InputStreamReader(chapterIs, "UTF-8"));
-            brChapter = new BufferedReader(new InputStreamReader(verseIs, "UTF-8"));
-            brChapter = new BufferedReader(new InputStreamReader(qScriptIs, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        initData();
-    }
-
-    private static void initData() {
+    private static void loadData() {
         System.out.println("loading data ...");
 
         String lineChapter, lineVerse, lineQScript;
@@ -60,7 +41,7 @@ public class QuranScriptFactory {
         }
 
         try {
-            lineChapter = brChapter.readLine();
+            lineChapter = brChapter.readLine(); // skipping first line
 
             for (int i=1; i<=114; i++) {
                 lineChapter = brChapter.readLine();
@@ -104,6 +85,10 @@ public class QuranScriptFactory {
 
     public static Chapter getChapter(int i) {
         return listOfChapter[i];
+    }
+
+    public static String getVerseQScript(int chapter, int verse) {
+        return getChapter(chapter).getVerseQScript(verse);
     }
 
     public static class Chapter {
