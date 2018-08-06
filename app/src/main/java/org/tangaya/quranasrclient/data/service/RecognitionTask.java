@@ -13,8 +13,8 @@ import org.json.JSONObject;
 import org.tangaya.quranasrclient.data.model.Attempt;
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
 import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
-import org.tangaya.quranasrclient.util.QScriptToArabic;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
+import org.tangaya.quranasrclient.util.QuranScriptConverter;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -52,7 +52,7 @@ public class RecognitionTask extends WebSocketAdapter {
 
     public void execute() {
         if (attempt.getMockType()== Attempt.MockType.MOCK_RESULT) {
-            transcription = QuranScriptRepository.getChapter(attempt.getChapterNum()).getVerseQScript(attempt.getVerseNum());
+            transcription = QuranScriptFactory.getChapter(attempt.getChapterNum()).getVerseQScript(attempt.getVerseNum());
             EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
 
             EvaluationRepository.addToEvalSet(evaluation);
@@ -104,7 +104,7 @@ public class RecognitionTask extends WebSocketAdapter {
 
         String[] words = transcription.split("");
 
-        Timber.d(QScriptToArabic.getArabic(transcription));
+        Timber.d(QuranScriptConverter.toArabic(transcription));
     }
 
     private boolean isTranscriptionFinal(String text) {

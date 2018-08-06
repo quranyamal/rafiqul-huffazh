@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
 import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.view.navigator.ScoreboardNavigator;
 import org.tangaya.quranasrclient.util.Evaluator;
@@ -41,8 +41,8 @@ public class ScoreboardViewModel extends AndroidViewModel {
         SharedPreferences preferences = ((MyApplication) getApplication()).getPreferences();
         int chapterNum = preferences.getInt("CURRENT_CHAPTER_NUM", -1)+1;
 
-        currentChapter.set(QuranScriptRepository.getChapter(chapterNum).getTitle());
-        nextChapter.set(QuranScriptRepository.getChapter(chapterNum+1).getTitle());
+        currentChapter.set(QuranScriptFactory.getChapter(chapterNum).getTitle());
+        nextChapter.set(QuranScriptFactory.getChapter(chapterNum+1).getTitle());
 
         updateScore();
     }

@@ -12,9 +12,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public class QScriptToArabic {
+public class QuranScriptConverter {
 
-    private QScriptToArabic() {}
+    private QuranScriptConverter() {}
 
     private static BufferedReader brQScript, brArabic;
     private static List<String> qscrptWordList, arabicWordList;
@@ -41,7 +41,7 @@ public class QScriptToArabic {
 //            System.out.println(word);
 //        }
 
-        System.out.println("done init QScriptToArabic");
+        System.out.println("done init QuranScriptConverter");
 
         return 0;
     }
@@ -96,8 +96,8 @@ public class QScriptToArabic {
         return "";
     }
 
-    public static String getArabic(String qscript) {
-        System.out.println("running getArabic");
+    public static String toArabic(String qscript) {
+        System.out.println("running toArabic");
         String[] qscripts = qscript.split(" ");
 
         String arabic = getArabicElmt(qscripts[0], "") + " ";
@@ -125,22 +125,22 @@ public class QScriptToArabic {
 //
 //        init();
 
-        System.out.println(getArabic("bismil lAhir roHmAnir roHIm"));
-        System.out.println(getArabic("ealHamdu lillAhi robbil EAlamIn"));
-        System.out.println(getArabic("earroHmAnir roHIm"));
-        System.out.println(getArabic("mAliki yWmid dIn"));
-        System.out.println(getArabic("eiyyAka naEbudu waeiyyAka nastaEIn"));
-        System.out.println(getArabic("eihdinAS SirOpol mustaqIm"));
-        System.out.println(getArabic("SirOpol lacIna eanEamta EalYhim gVril magMUbi EalYhim walAM MOOOllIn "));
+        System.out.println(toArabic("bismil lAhir roHmAnir roHIm"));
+        System.out.println(toArabic("ealHamdu lillAhi robbil EAlamIn"));
+        System.out.println(toArabic("earroHmAnir roHIm"));
+        System.out.println(toArabic("mAliki yWmid dIn"));
+        System.out.println(toArabic("eiyyAka naEbudu waeiyyAka nastaEIn"));
+        System.out.println(toArabic("eihdinAS SirOpol mustaqIm"));
+        System.out.println(toArabic("SirOpol lacIna eanEamta EalYhim gVril magMUbi EalYhim walAM MOOOllIn "));
 
         System.out.println();
 
-        System.out.println(getArabic("qul eaEUcu birobbin nAs"));
-        System.out.println(getArabic("malikin nAs"));
-        System.out.println(getArabic("eilAhin nAs"));
-        System.out.println(getArabic("miN Xarril waswAsil xonnAs"));
-        System.out.println(getArabic("eallacI yuwaswisu fI SudUrin nAs"));
-        System.out.println(getArabic("minal jinnati wannAs"));
+        System.out.println(toArabic("qul eaEUcu birobbin nAs"));
+        System.out.println(toArabic("malikin nAs"));
+        System.out.println(toArabic("eilAhin nAs"));
+        System.out.println(toArabic("miN Xarril waswAsil xonnAs"));
+        System.out.println(toArabic("eallacI yuwaswisu fI SudUrin nAs"));
+        System.out.println(toArabic("minal jinnati wannAs"));
     }
 
 }

@@ -7,9 +7,9 @@ import android.databinding.ObservableInt;
 import android.os.Environment;
 
 import org.json.JSONObject;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.util.Evaluator;
-import org.tangaya.quranasrclient.util.QScriptToArabic;
+import org.tangaya.quranasrclient.util.QuranScriptConverter;
 import org.tangaya.quranasrclient.util.diff_match_patch;
 
 
@@ -91,14 +91,14 @@ public class EvaluationOld extends BaseObservable {
 
         verseNum.set("Verse " + verse);
 
-        mVerseScript.set(QuranScriptRepository.getChapter(mChapter.get()).getVerseScript(mVerse.get()));
-        mVerseQScript.set(QuranScriptRepository.getChapter(mChapter.get()).getVerseQScript(mVerse.get()));
+        mVerseScript.set(QuranScriptFactory.getChapter(mChapter.get()).getVerseScript(mVerse.get()));
+        mVerseQScript.set(QuranScriptFactory.getChapter(mChapter.get()).getVerseQScript(mVerse.get()));
 
         isCorrect.set(false);
 
         notifyChange();
 
-        reference = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
+        reference = QuranScriptFactory.getChapter(chapter).getVerseQScript(verse);
         isCorrect.set(transcription.equals(reference));
 
         if (isCorrect.get()) {
@@ -109,11 +109,11 @@ public class EvaluationOld extends BaseObservable {
 
         ////
         mTranscription.set(transcription);
-        mVerseScript.set(QuranScriptRepository.getChapter(chapter).getVerseScript(verse));
+        mVerseScript.set(QuranScriptFactory.getChapter(chapter).getVerseScript(verse));
 
-        mVerseQScript.set(QuranScriptRepository.getChapter(chapter).getVerseQScript(verse));
+        mVerseQScript.set(QuranScriptFactory.getChapter(chapter).getVerseQScript(verse));
 
-        mArabicTranscription.set(QScriptToArabic.getArabic(transcription));
+        mArabicTranscription.set(QuranScriptConverter.toArabic(transcription));
 
         mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
 

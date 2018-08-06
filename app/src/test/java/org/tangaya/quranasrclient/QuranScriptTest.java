@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class QuranScriptRepositoryTest {
+public class QuranScriptTest {
 
     @Mock
     Context mMockContext;
@@ -60,7 +60,7 @@ public class QuranScriptRepositoryTest {
         URL quranUrl= getClass().getClassLoader().getResource("quran-uthmani.txt");
         URL quranSurahsUrl = getClass().getClassLoader().getResource("quran_surahs_name.csv");
 
-//        QuranScriptRepository.init(is1, is2, is3);
+//        QuranScriptFactory.init(is1, is2, is3);
 
         URLConnection qscriptUrlConn, quranUrlConn, quranSurahUrlConn;
 
@@ -81,7 +81,7 @@ public class QuranScriptRepositoryTest {
 //            e.printStackTrace();
 //        }
 
-//        System.out.println(QuranScriptRepository.getChapter(1).getVerseQScript(1));
+//        System.out.println(QuranScriptFactory.getChapter(1).getVerseQScript(1));
 
         assertThat(qscriptUrl, notNullValue());
         assertThat(quranUrl, notNullValue());

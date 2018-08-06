@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
 import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
         super(application);
 
         int currentChapterNum = ((MyApplication) getApplication()).getCurrentChapterNum();
-        currentChapter.set(QuranScriptRepository.getChapter(currentChapterNum).getTitle());
+        currentChapter.set(QuranScriptFactory.getChapter(currentChapterNum).getTitle());
 
         verseNumber.set(evaluation.getVerseNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());

@@ -1,7 +1,5 @@
 package org.tangaya.quranasrclient.util;
 
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -26,12 +24,12 @@ public class Evaluator extends diff_match_patch {
     public String getDiffType(int chapter, int verse, String recognized) {
 //        assert !reference.equals(recognized);   // should never equal
 
-        String reference = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
+        String reference = QuranScriptFactory.getChapter(chapter).getVerseQScript(verse);
 
         // todo: case of skipping n verse
-//        int numVerse = QuranScriptRepository.getChapter(chapter).getNumVerse();
+//        int numVerse = QuranScriptFactory.getChapter(chapter).getNumVerse();
 //        for (int i=0; i<numVerse; i++) {
-//            String nextIQScript = QuranScriptRepository.getChapter(chapter).getVerseQScript(verse);
+//            String nextIQScript = QuranScriptFactory.getChapter(chapter).getVerseQScript(verse);
 //            if (reference.equals(nextIQScript));
 //            return "skipping " + i + "verse" + (i>1? "s":"");
 //        }

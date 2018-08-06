@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
-import org.tangaya.quranasrclient.util.QScriptToArabic;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
+import org.tangaya.quranasrclient.util.QuranScriptConverter;
 
 import java.util.ArrayList;
 
@@ -36,9 +36,9 @@ public class MyApplication extends Application {
         STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
 
         //connectToServer();
-        QuranScriptRepository.init(getApplicationContext());
-        QScriptToArabic.init(getApplicationContext());
-        //QScriptToArabic.init(this);
+        QuranScriptFactory.init(getApplicationContext());
+        QuranScriptConverter.init(getApplicationContext());
+        //QuranScriptConverter.init(this);
 
         Timber.d("after quran script repo init");
 

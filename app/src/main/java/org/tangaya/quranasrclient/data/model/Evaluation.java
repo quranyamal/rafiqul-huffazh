@@ -1,6 +1,6 @@
 package org.tangaya.quranasrclient.data.model;
 
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.util.Evaluator;
 
 public class Evaluation {
@@ -22,7 +22,7 @@ public class Evaluation {
         chapter = attempt.getChapterNum();
         verse = attempt.getVerseNum();
 
-        reference = QuranScriptRepository.getChapter(chapter).getVerseScript(verse);
+        reference = QuranScriptFactory.getChapter(chapter).getVerseScript(verse);
         isCorrect = transcription.equals(reference);
 
         if (isCorrect) {

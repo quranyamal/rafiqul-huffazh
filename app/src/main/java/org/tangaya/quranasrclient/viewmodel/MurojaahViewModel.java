@@ -18,12 +18,12 @@ import android.view.View;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.data.model.Attempt;
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.data.service.RecognitionTask;
 import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
 import org.tangaya.quranasrclient.view.navigator.MurojaahNavigator;
 import org.tangaya.quranasrclient.data.service.ASRServerStatusListener;
 import org.tangaya.quranasrclient.data.service.AudioPlayer;
-import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
 import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
 
 import java.util.ArrayList;
@@ -108,7 +108,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
         chapterNum.set(chapter);
-        chapterName.set(QuranScriptRepository.getChapter(chapter).getTitle());
+        chapterName.set(QuranScriptFactory.getChapter(chapter).getTitle());
         EvaluationRepository.clearEvalData();
         //verseNum.set(1);
 
@@ -116,8 +116,8 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     public void showHint() {
-        chapterName.set(QuranScriptRepository.getChapter(chapterNum.get()).getTitle());
-        ayahText.set(QuranScriptRepository.getChapter(chapterNum.get()).getVerseScript(verseNum.get()));
+        chapterName.set(QuranScriptFactory.getChapter(chapterNum.get()).getTitle());
+        ayahText.set(QuranScriptFactory.getChapter(chapterNum.get()).getVerseScript(verseNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
     }
@@ -200,7 +200,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     private boolean isEndOfSurah() {
-        return !QuranScriptRepository.getChapter(chapterNum.get()).isValidVerseNum(verseNum.get()+1);
+        return !QuranScriptFactory.getChapter(chapterNum.get()).isValidVerseNum(verseNum.get()+1);
     }
 
     private void incrementAyah() {
