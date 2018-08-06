@@ -1,11 +1,9 @@
 package org.tangaya.quranasrclient.data.model;
 
 import org.tangaya.quranasrclient.util.QuranScriptFactory;
-import org.tangaya.quranasrclient.util.MurojaahEvaluator;
 
 public class Evaluation {
 
-    private MurojaahEvaluator murojaahEvaluator;
     private Attempt attempt;
     private String transcription, reference;
     private String strResult;

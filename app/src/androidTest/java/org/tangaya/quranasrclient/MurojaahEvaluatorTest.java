@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.tangaya.quranasrclient.util.MurojaahEvaluatorNew;
+import org.tangaya.quranasrclient.util.MurojaahEvaluator;
 import org.tangaya.quranasrclient.util.QuranScriptFactory;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -30,8 +30,8 @@ public class MurojaahEvaluatorTest {
         int chapter=103, verse=3;
         String qScriptRecognized = QuranScriptFactory.getVerseQScript(chapter, verse);
 
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
-        assertThat(evalResult, is(MurojaahEvaluatorNew.CORRECT_MESSAGE));
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
+        assertThat(evalResult, is(MurojaahEvaluator.CORRECT_MESSAGE));
     }
 
     @Test
@@ -39,9 +39,9 @@ public class MurojaahEvaluatorTest {
         int chapter=91, verse=8;
 
         String qScriptRecognized = QuranScriptFactory.getVerseQScript(chapter, verse+1);
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_SKIPPING_ONE_VERSE));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_ONE_VERSE));
     }
 
     @Test
@@ -49,9 +49,9 @@ public class MurojaahEvaluatorTest {
         int chapter=91, verse=8;
 
         String qScriptRecognized = QuranScriptFactory.getVerseQScript(chapter, verse+2);
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_SKIPPING_SOME_VERSES));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_SOME_VERSES));
     }
 
     @Test
@@ -60,8 +60,8 @@ public class MurojaahEvaluatorTest {
 
         for (int i=1; i<verse; i++) {
             String qScriptRecognized = QuranScriptFactory.getVerseQScript(chapter, i);
-            String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
-            assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE));
+            String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
+            assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE));
         }
     }
 
@@ -70,8 +70,8 @@ public class MurojaahEvaluatorTest {
         int chapter=103, verse=3;
         String qScriptRecognized = "eillAl lacIna eAmanU waEamilUS SOliHAti falahum watawASC bilHaqqi watawASC biSSoBr";
 
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
-        assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_INSERTION_PART));
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_INSERTION_PART));
     }
 
     @Test
@@ -79,9 +79,9 @@ public class MurojaahEvaluatorTest {
         int chapter=103, verse=3;
 
         String qScriptRecognized = "eillAl lacIna eAmanU watawASC bilHaqqi watawASC biSSoBr";
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_MISSING_PART));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_MISSING_PART));
     }
 
     @Test
@@ -89,9 +89,9 @@ public class MurojaahEvaluatorTest {
         int chapter=103, verse=3;
 
         String qScriptRecognized = "eillAl lacIna eAmanU falahum bilHaqqi falahum biSSoBr";
-        String evalResult = MurojaahEvaluatorNew.evaluate(chapter, verse, qScriptRecognized);
+        String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluatorNew.INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART));
     }
 
 }

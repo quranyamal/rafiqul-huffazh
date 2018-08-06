@@ -7,8 +7,8 @@ import android.databinding.ObservableInt;
 import android.os.Environment;
 
 import org.json.JSONObject;
-import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.util.MurojaahEvaluator;
+import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.util.QuranScriptConverter;
 import org.tangaya.quranasrclient.util.diff_match_patch;
 
@@ -69,8 +69,6 @@ public class EvaluationOld extends BaseObservable {
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
-    private MurojaahEvaluator murojaahEvaluator = new MurojaahEvaluator();
-
     public EvaluationOld(int chapter, int verse, int sessionId) {
 
     }
@@ -104,7 +102,7 @@ public class EvaluationOld extends BaseObservable {
         if (isCorrect.get()) {
             strResult = "Correct";
         } else {
-            strResult = murojaahEvaluator.getDiffType(attempt.getChapterNum(), attempt.getVerseNum(), transcription);
+            strResult = MurojaahEvaluator.evaluate(attempt.getChapterNum(), attempt.getVerseNum(), transcription);
         }
 
         ////
@@ -119,12 +117,12 @@ public class EvaluationOld extends BaseObservable {
 
         //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
 
-        levenshteinValue = murojaahEvaluator.getLevenshtein(mVerseQScript.get(), mTranscription.get());
+        levenshteinValue = MurojaahEvaluator.getLevenshteinDistance(mVerseQScript.get(), mTranscription.get());
 
         maxPoints.set(mVerseQScript.get().length());
         earnedPoints.set(maxPoints.get() - levenshteinValue);
 
-        score = murojaahEvaluator.getScore(mVerseQScript.get(), mTranscription.get());
+        score = MurojaahEvaluator.getScore(mVerseQScript.get(), mTranscription.get());
         scoreStr.set(String.format("%.2f", score));
 
         if (mTranscription.get().equals(mVerseQScript.get())) {
@@ -134,7 +132,7 @@ public class EvaluationOld extends BaseObservable {
         } else {
             //evalStr.set("Wrong");   // todo: improve
 
-            evalStr.set(new MurojaahEvaluator().getDiffType(mChapter.get(), mVerse.get(), transcription));
+            evalStr.set(MurojaahEvaluator.evaluate(mChapter.get(), mVerse.get(), transcription));
             isCorrect.set(false);
         }
 
