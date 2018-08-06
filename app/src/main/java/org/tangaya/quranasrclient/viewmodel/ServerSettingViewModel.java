@@ -22,6 +22,11 @@ import java.util.Map;
 
 public class ServerSettingViewModel extends AndroidViewModel {
 
+    public static String CONNECTION_STATUS_CONNECTED = "connected";
+    public static String CONNECTION_STATUS_DISCONNECTED = "disconnected";
+    public static String CONNECTION_STATUS_ERROR = "error";
+    public static String CONNECTION_STATUS_CONNECTING = "connecting...";
+
     ServerSettingNavigator mNavigator;
     SharedPreferences sharedPref;
 
@@ -51,21 +56,21 @@ public class ServerSettingViewModel extends AndroidViewModel {
                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                     super.onConnected(websocket, headers);
 
-                    connectionStatus.set("connected");
+                    connectionStatus.set(CONNECTION_STATUS_CONNECTED);
                 }
 
                 @Override
                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
 
-                    connectionStatus.set("disconnected");
+                    connectionStatus.set(CONNECTION_STATUS_DISCONNECTED);
                 }
 
                 @Override
                 public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                     super.onConnectError(websocket, exception);
 
-                    connectionStatus.set("error");
+                    connectionStatus.set(CONNECTION_STATUS_ERROR);
                 }
 
                 @Override
