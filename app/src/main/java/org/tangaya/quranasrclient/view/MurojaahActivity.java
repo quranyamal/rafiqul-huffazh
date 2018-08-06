@@ -1,6 +1,7 @@
 package org.tangaya.quranasrclient.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
@@ -9,12 +10,15 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.ViewModelFactory;
@@ -38,9 +42,15 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     private ActivityMurojaahBinding mMurojaahDataBinding;
     private LifecycleRegistry mLifecycleRegistry;
 
+    private ProgressBar progressBar;
+    private int progressStatus = 0;
+    private TextView textView;
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
@@ -94,6 +104,9 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         };
 
         mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+
+        textView = findViewById(R.id.progressbar_info);
+        progressBar = findViewById(R.id.recognizing_progressbar);
     }
 
     @Override
@@ -114,8 +127,11 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
     @Override
     public void gotoResult() {
+        showProgressBar();
+
         Intent intent = new Intent(this, ScoreboardActivity.class);
         finish();
+
         startActivity(intent);
     }
 
@@ -123,5 +139,35 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     @Override
     public Lifecycle getLifecycle() {
         return mLifecycleRegistry;
+    }
+
+    private void showProgressBar() {
+
+        Timber.d("showing progress bar");
+        progressBar = findViewById(R.id.recognizing_progressbar);
+        // Start long running operation in a background thread
+        new Thread(new Runnable() {
+            public void run() {
+                while (progressStatus < 100) {
+                    progressStatus += 1;
+                    // Update the progress bar and display the
+                    //current value in the text view
+                    handler.post(new Runnable() {
+                        public void run() {
+                            progressBar.setProgress(progressStatus);
+                            textView.setText(progressStatus+"/"+progressBar.getMax());
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+        Timber.d("end of progress bar");
     }
 }

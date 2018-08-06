@@ -9,193 +9,216 @@
             type="org.tangaya.quranasrclient.viewmodel.MurojaahViewModel" />
     </data>
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".murojaah.MurojaahFragment"
-        android:orientation="vertical"
-        android:layout_weight="10"
-        android:padding="15dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ProgressBar
+            android:id="@+id/recognizing_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/progressbar_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@id/recognizing_progressbar"
+            android:text="recognizing..."/>
+
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:orientation="vertical"
+            android:padding="15dp"
+            tools:context=".murojaah.MurojaahFragment">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_weight="7"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/murojaah_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Muroja'ah"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/murojaah_title"
+                            android:text="@{`Chapter ` + viewmodel.chapterName, default=`Chapter 10. Taha`}" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/murojaah_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Muroja'ah"
-                        android:textStyle="bold"
-                        android:textSize="18dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/murojaah_title"
-                        android:text="@{`Chapter ` + viewmodel.chapterName, default=`Chapter 10. Taha`}"/>
+                        android:text="@{viewmodel.serverStatus, default=`[server status]`}" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewmodel.serverStatus, default=`[server status]`}"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:paddingTop="30dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{`Verse ` + viewmodel.verseNum, default=`Verse X`}"
-                    android:textStyle="bold"
-                    android:textSize="32dp"/>
-
-                <TextView
-                    android:id="@+id/hint_text"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:text="@{viewmodel.ayahText, default=`بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ`}"
+                    android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="50dp"
-                    android:visibility="@{viewmodel.hintVisibility}"/>
+                    android:orientation="vertical"
+                    android:paddingTop="30dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewmodel.isRecording ? `recording ...` : ``}"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{`Verse ` + viewmodel.verseNum, default=`Verse X`}"
+                        android:textSize="32dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/instruction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewmodel.isRecording ? @string/recording_true : @string/recording_false}" />
+                    <TextView
+                        android:id="@+id/hint_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="50dp"
+                        android:gravity="center_horizontal"
+                        android:text="@{viewmodel.ayahText, default=`بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ`}"
+                        android:visibility="@{viewmodel.hintVisibility}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewmodel.isRecording ? `recording ...` : ``}" />
+
+                    <TextView
+                        android:id="@+id/instruction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewmodel.isRecording ? @string/recording_true : @string/recording_false}" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
+                <ImageView
+                    android:id="@+id/cancel_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toLeftOf="@id/record"
+                    android:clickable="@{viewmodel.isRecording ? true : false}"
+                    android:onClick="@{() -> viewmodel.cancelAttempt()}"
+                    android:src="@{viewmodel.isRecording ? @drawable/cancel_black_100 : @drawable/cancel_grey_100}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/record"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/cancel_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toLeftOf="@id/record"
-                android:src="@{viewmodel.isRecording ? @drawable/cancel_black_100 : @drawable/cancel_grey_100}"
-                android:onClick="@{() -> viewmodel.cancelAttempt()}"
-                android:clickable="@{viewmodel.isRecording ? true : false}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/record"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/cancel_icon"
+                    android:layout_alignRight="@id/cancel_icon"
+                    android:layout_below="@id/cancel_icon"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="cancel"
+                    android:textColor="#000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/record"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cancel_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/cancel_icon"
-                android:layout_alignRight="@id/cancel_icon"
-                android:layout_below="@id/cancel_icon"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="cancel"
-                android:textColor="#000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/record"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cancel_icon" />
+                <ImageView
+                    android:id="@+id/record"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> viewmodel.attemptVerse()}"
+                    android:src="@{viewmodel.isRecording ? @drawable/arrow_black_100 : @drawable/mic_black_100}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/record"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerInParent="true"
-                android:src="@{viewmodel.isRecording ? @drawable/arrow_black_100 : @drawable/mic_black_100}"
-                android:onClick="@{() -> viewmodel.attemptVerse()}"
-                android:layout_margin="25dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/hint_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/record"
+                    android:clickable="@{viewmodel.isHintRequested ? false : true}"
+                    android:onClick="@{() -> viewmodel.showHint()}"
+                    android:src="@{viewmodel.isHintRequested ? @drawable/eye_grey_100 : @drawable/eye_black_100}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/record"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/hint_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/record"
-                android:src="@{viewmodel.isHintRequested ? @drawable/eye_grey_100 : @drawable/eye_black_100}"
-                android:onClick="@{() -> viewmodel.showHint()}"
-                android:clickable="@{viewmodel.isHintRequested ? false : true}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/record"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/hint_icon"
+                    android:layout_below="@id/hint_icon"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="hint"
+                    android:textColor="#000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/record"
+                    app:layout_constraintTop_toBottomOf="@+id/hint_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/hint_icon"
-                android:layout_below="@id/hint_icon"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="hint"
-                android:textColor="#000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/record"
-                app:layout_constraintTop_toBottomOf="@+id/hint_icon" />
+            </android.support.constraint.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
-
-        <!--<FrameLayout-->
+            <!--<FrameLayout-->
             <!--android:id="@+id/murojaah_control_frame"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="0dp"-->
             <!--android:layout_weight="3"-->
             <!--android:elevation="3dp">-->
-        <!--</FrameLayout>-->
+            <!--</FrameLayout>-->
 
-    </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.v7.widget.LinearLayoutCompat>
+
+
+    </RelativeLayout>
+
 </layout>

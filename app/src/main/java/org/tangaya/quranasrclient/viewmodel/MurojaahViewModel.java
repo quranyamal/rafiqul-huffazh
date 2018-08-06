@@ -154,7 +154,7 @@ public class MurojaahViewModel extends AndroidViewModel
         evaluation.setFilepath(recordingFilepath);
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();

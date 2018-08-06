@@ -43,7 +43,8 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginLeft="8dp"
-                        android:src="@drawable/speaker_24"/>
+                        android:src="@drawable/speaker_24"
+                        android:onClick="@{()->viewmodel.playReference()}"/>
 
                 </LinearLayout>
 

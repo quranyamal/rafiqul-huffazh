@@ -15,6 +15,8 @@ import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class EvalDetailViewModel extends AndroidViewModel {
 
     //todo: should be one source in a session
@@ -32,9 +34,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
     public final ObservableInt maxPoint = new ObservableInt();
     public final ObservableInt earnedPoint = new ObservableInt();
 
-
     public final ObservableBoolean isCorrect = new ObservableBoolean();
-
 
     public MutableLiveData<ArrayList<EvalDetailViewModel>> arrayListMutableLiveData = new MutableLiveData<>();
 
@@ -77,5 +77,9 @@ public class EvalDetailViewModel extends AndroidViewModel {
         arrayListMutableLiveData.setValue(arrayList);
 
         return arrayListMutableLiveData;
+    }
+
+    public void playReference() {
+        Timber.d("playing reference");
     }
 }

@@ -31,6 +31,7 @@
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:text="use the button above to start recording"
+        android:textSize="18dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
