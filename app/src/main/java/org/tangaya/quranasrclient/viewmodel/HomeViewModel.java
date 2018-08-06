@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import org.tangaya.quranasrclient.navigator.HomeNavigator;
+import org.tangaya.quranasrclient.view.navigator.HomeNavigator;
 
 public class HomeViewModel extends AndroidViewModel {
 

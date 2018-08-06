@@ -5,8 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
 import org.tangaya.quranasrclient.util.QScriptToArabic;
 
 import java.util.ArrayList;

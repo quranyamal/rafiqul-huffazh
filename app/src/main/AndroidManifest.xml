@@ -17,7 +17,7 @@
         android:theme="@android:style/Theme.Material.Light.DarkActionBar">
 
         <activity
-            android:name=".view.HomeActivity"
+            android:name=".view.ui.HomeActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,18 +25,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.MurojaahActivity"
+            android:name=".view.ui.MurojaahActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen"/>
-        <activity android:name=".view.DevspaceActivity"/>
-        <activity android:name=".view.ServerSettingActivity"/>
+        <activity android:name=".view.ui.DevspaceActivity"/>
+        <activity android:name=".view.ui.ServerSettingActivity"/>
         <activity android:name=".util.AudioRecordTest" />
-        <activity android:name=".view.ChapterSelectionActivity"/>
+        <activity android:name=".view.ui.ChapterSelectionActivity"/>
         <activity
-            android:name=".view.ScoreboardActivity"
+            android:name=".view.ui.ScoreboardActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
-        <activity android:name=".view.AboutActivity" />
-        <activity android:name=".view.ScoreDetailActivity" />
-        <activity android:name=".view.TutorialActivity" />
+        <activity android:name=".view.ui.AboutActivity" />
+        <activity android:name=".view.ui.ScoreDetailActivity" />
+        <activity android:name=".view.ui.TutorialActivity" />
     </application>
 
 </manifest>

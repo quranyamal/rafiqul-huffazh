@@ -1,6 +1,6 @@
 package org.tangaya.quranasrclient.util;
 
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
 
 import java.util.HashSet;
 import java.util.LinkedList;

@@ -13,17 +13,15 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.neovisionaries.ws.client.WebSocket;
-
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Attempt;
-import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.RecognitionTask;
-import org.tangaya.quranasrclient.data.source.EvaluationRepository;
-import org.tangaya.quranasrclient.navigator.DevspaceNavigator;
-import org.tangaya.quranasrclient.service.ASRServerStatusListener;
-import org.tangaya.quranasrclient.service.AudioPlayer;
-import org.tangaya.quranasrclient.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.data.model.Attempt;
+import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.data.service.RecognitionTask;
+import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
+import org.tangaya.quranasrclient.view.navigator.DevspaceNavigator;
+import org.tangaya.quranasrclient.data.service.ASRServerStatusListener;
+import org.tangaya.quranasrclient.data.service.AudioPlayer;
+import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -31,8 +29,6 @@ import java.util.LinkedList;
 import timber.log.Timber;
 
 public class DevspaceViewModel extends AndroidViewModel {
-
-    WebSocket webSocket;
 
     ASRServerStatusListener statusListener;
 

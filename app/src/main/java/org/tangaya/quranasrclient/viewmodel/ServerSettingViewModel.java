@@ -14,7 +14,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.navigator.ServerSettingNavigator;
+import org.tangaya.quranasrclient.view.navigator.ServerSettingNavigator;
 
 import java.io.IOException;
 import java.util.List;

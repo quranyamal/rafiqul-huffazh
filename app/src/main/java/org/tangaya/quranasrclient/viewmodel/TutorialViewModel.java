@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.databinding.ObservableField;
 import android.util.Log;
 
-import org.tangaya.quranasrclient.navigator.TutorialNavigator;
+import org.tangaya.quranasrclient.view.navigator.TutorialNavigator;
 
 // todo: view
 public class TutorialViewModel extends AndroidViewModel {

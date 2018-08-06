@@ -16,27 +16,22 @@ import android.util.Log;
 import android.view.View;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.Attempt;
-import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.RecognitionTask;
-import org.tangaya.quranasrclient.data.source.EvaluationRepository;
-import org.tangaya.quranasrclient.navigator.MurojaahNavigator;
-import org.tangaya.quranasrclient.service.ASRServerStatusListener;
-import org.tangaya.quranasrclient.service.AudioPlayer;
-import org.tangaya.quranasrclient.data.source.RecordingRepository;
-import org.tangaya.quranasrclient.data.source.TranscriptionsDataSource;
-import org.tangaya.quranasrclient.data.source.TranscriptionsRepository;
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
-import org.tangaya.quranasrclient.service.WavAudioRecorder;
+import org.tangaya.quranasrclient.data.model.Attempt;
+import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.data.service.RecognitionTask;
+import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
+import org.tangaya.quranasrclient.view.navigator.MurojaahNavigator;
+import org.tangaya.quranasrclient.data.service.ASRServerStatusListener;
+import org.tangaya.quranasrclient.data.service.AudioPlayer;
+import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
+import org.tangaya.quranasrclient.data.service.WavAudioRecorder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import timber.log.Timber;
 
-public class MurojaahViewModel extends AndroidViewModel
-        implements TranscriptionsDataSource.PerformRecognitionCallback {
+public class MurojaahViewModel extends AndroidViewModel {
 
     public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
@@ -53,13 +48,9 @@ public class MurojaahViewModel extends AndroidViewModel
     public final ObservableBoolean isRecording = new ObservableBoolean();
     public final ObservableBoolean isHintRequested = new ObservableBoolean();
 
-    private boolean isLastVerse;
-
     AudioPlayer audioPlayer;
 
     Context mContext;
-    TranscriptionsRepository mTranscriptionsRepository;
-    RecordingRepository mRecordingRepository;
     MurojaahNavigator mNavigator;
 
     AudioPlayer mPlayer = new AudioPlayer();
@@ -91,14 +82,10 @@ public class MurojaahViewModel extends AndroidViewModel
         return evalsMutableLiveData;
     }
 
-    public MurojaahViewModel(@NonNull Application context,
-                             @NonNull TranscriptionsRepository transcriptionsRepository,
-                             @NonNull RecordingRepository recordingRepository) {
+    public MurojaahViewModel(@NonNull Application context) {
         super(context);
 
         mContext = context;
-        mTranscriptionsRepository = transcriptionsRepository;
-        mRecordingRepository = recordingRepository;
 
         audioPlayer = new AudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
@@ -154,7 +141,7 @@ public class MurojaahViewModel extends AndroidViewModel
         evaluation.setFilepath(recordingFilepath);
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         mRecorder.setOutputFile(recordingFilepath);
         mRecorder.prepare();
@@ -171,7 +158,7 @@ public class MurojaahViewModel extends AndroidViewModel
         Timber.d("submitAttempt() 1");
 
         Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
-        //attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         Timber.d("file path:" + attempt.getAudioFilePath());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
@@ -220,16 +207,6 @@ public class MurojaahViewModel extends AndroidViewModel
         verseNum.set(verseNum.get()+1);
         hintVisibility.set(View.INVISIBLE);
         isHintRequested.set(false);
-    }
-
-    @Override
-    public void onRecognitionCompleted() {
-
-    }
-
-    @Override
-    public void onRecognitionError() {
-
     }
 
     private boolean isExternalStorageWritable() {

@@ -9,9 +9,9 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.source.EvaluationRepository;
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
+import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
 
 import java.util.ArrayList;
 

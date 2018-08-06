@@ -8,11 +8,11 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
-import org.tangaya.quranasrclient.data.EvaluationOld;
-import org.tangaya.quranasrclient.data.source.EvaluationRepository;
-import org.tangaya.quranasrclient.data.source.QuranScriptRepository;
+import org.tangaya.quranasrclient.data.model.EvaluationOld;
+import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
+import org.tangaya.quranasrclient.data.repository.QuranScriptRepository;
 import org.tangaya.quranasrclient.MyApplication;
-import org.tangaya.quranasrclient.navigator.ScoreboardNavigator;
+import org.tangaya.quranasrclient.view.navigator.ScoreboardNavigator;
 import org.tangaya.quranasrclient.util.Evaluator;
 
 import java.util.ArrayList;

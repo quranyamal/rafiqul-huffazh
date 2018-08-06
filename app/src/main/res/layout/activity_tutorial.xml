@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="5dp"
-        tools:context="org.tangaya.quranasrclient.view.TutorialActivity">
+        tools:context="org.tangaya.quranasrclient.view.ui.TutorialActivity">
 
         <TextView
             android:id="@+id/skip_tutorial"
