@@ -1,11 +1,11 @@
 package org.tangaya.quranasrclient.data.model;
 
 import org.tangaya.quranasrclient.util.QuranScriptFactory;
-import org.tangaya.quranasrclient.util.Evaluator;
+import org.tangaya.quranasrclient.util.MurojaahEvaluator;
 
 public class Evaluation {
 
-    private Evaluator evaluator;
+    private MurojaahEvaluator murojaahEvaluator;
     private Attempt attempt;
     private String transcription, reference;
     private String strResult;
@@ -22,7 +22,7 @@ public class Evaluation {
         chapter = attempt.getChapterNum();
         verse = attempt.getVerseNum();
 
-        reference = QuranScriptFactory.getChapter(chapter).getVerseScript(verse);
+        reference = QuranScriptFactory.getChapter(chapter).getVerseArabicScript(verse);
         isCorrect = transcription.equals(reference);
 
         if (isCorrect) {

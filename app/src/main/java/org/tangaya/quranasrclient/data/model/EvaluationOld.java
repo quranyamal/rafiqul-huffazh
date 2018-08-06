@@ -8,7 +8,7 @@ import android.os.Environment;
 
 import org.json.JSONObject;
 import org.tangaya.quranasrclient.util.QuranScriptFactory;
-import org.tangaya.quranasrclient.util.Evaluator;
+import org.tangaya.quranasrclient.util.MurojaahEvaluator;
 import org.tangaya.quranasrclient.util.QuranScriptConverter;
 import org.tangaya.quranasrclient.util.diff_match_patch;
 
@@ -69,7 +69,7 @@ public class EvaluationOld extends BaseObservable {
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
-    private Evaluator evaluator = new Evaluator();
+    private MurojaahEvaluator murojaahEvaluator = new MurojaahEvaluator();
 
     public EvaluationOld(int chapter, int verse, int sessionId) {
 
@@ -91,7 +91,7 @@ public class EvaluationOld extends BaseObservable {
 
         verseNum.set("Verse " + verse);
 
-        mVerseScript.set(QuranScriptFactory.getChapter(mChapter.get()).getVerseScript(mVerse.get()));
+        mVerseScript.set(QuranScriptFactory.getChapter(mChapter.get()).getVerseArabicScript(mVerse.get()));
         mVerseQScript.set(QuranScriptFactory.getChapter(mChapter.get()).getVerseQScript(mVerse.get()));
 
         isCorrect.set(false);
@@ -104,12 +104,12 @@ public class EvaluationOld extends BaseObservable {
         if (isCorrect.get()) {
             strResult = "Correct";
         } else {
-            strResult = evaluator.getDiffType(attempt.getChapterNum(), attempt.getVerseNum(), transcription);
+            strResult = murojaahEvaluator.getDiffType(attempt.getChapterNum(), attempt.getVerseNum(), transcription);
         }
 
         ////
         mTranscription.set(transcription);
-        mVerseScript.set(QuranScriptFactory.getChapter(chapter).getVerseScript(verse));
+        mVerseScript.set(QuranScriptFactory.getChapter(chapter).getVerseArabicScript(verse));
 
         mVerseQScript.set(QuranScriptFactory.getChapter(chapter).getVerseQScript(verse));
 
@@ -119,12 +119,12 @@ public class EvaluationOld extends BaseObservable {
 
         //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
 
-        levenshteinValue = evaluator.getLevenshtein(mVerseQScript.get(), mTranscription.get());
+        levenshteinValue = murojaahEvaluator.getLevenshtein(mVerseQScript.get(), mTranscription.get());
 
         maxPoints.set(mVerseQScript.get().length());
         earnedPoints.set(maxPoints.get() - levenshteinValue);
 
-        score = evaluator.getScore(mVerseQScript.get(), mTranscription.get());
+        score = murojaahEvaluator.getScore(mVerseQScript.get(), mTranscription.get());
         scoreStr.set(String.format("%.2f", score));
 
         if (mTranscription.get().equals(mVerseQScript.get())) {
@@ -134,7 +134,7 @@ public class EvaluationOld extends BaseObservable {
         } else {
             //evalStr.set("Wrong");   // todo: improve
 
-            evalStr.set(new Evaluator().getDiffType(mChapter.get(), mVerse.get(), transcription));
+            evalStr.set(new MurojaahEvaluator().getDiffType(mChapter.get(), mVerse.get(), transcription));
             isCorrect.set(false);
         }
 

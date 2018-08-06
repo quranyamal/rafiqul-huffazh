@@ -14,6 +14,8 @@ public class QuranScriptFactory {
     private static BufferedReader brChapter, brVerse, brQScript;
     private static Chapter[] listOfChapter;
 
+    public static String INVALID_INDEX_MESSAGE = "[not exist. invalid index!]";
+
     public static void init(AssetManager assetManager) {
 
         try {
@@ -88,10 +90,13 @@ public class QuranScriptFactory {
     }
 
     public static String getArabicVerseScript(int chapter, int verse) {
-        return getChapter(chapter).getVerseScript(verse);
+        return getChapter(chapter).getVerseArabicScript(verse);
     }
 
     public static String getVerseQScript(int chapter, int verse) {
+        if (chapter<1 || chapter>114) {
+            return INVALID_INDEX_MESSAGE;
+        }
         return getChapter(chapter).getVerseQScript(verse);
     }
 
@@ -104,13 +109,6 @@ public class QuranScriptFactory {
 
         private Chapter() {
             listOfVerse = new ArrayList();
-            listOfQScript = new ArrayList<>();
-        }
-
-        public Chapter(int id, String title) {
-            mId = id;
-            mTitle = title;
-            listOfVerse = new ArrayList<>();
             listOfQScript = new ArrayList<>();
         }
 
@@ -130,11 +128,17 @@ public class QuranScriptFactory {
             listOfQScript.add(str);
         }
 
-        public String getVerseScript(int i) {
+        public String getVerseArabicScript(int i) {
+            if (!isValidVerseNum(i)) {
+                return INVALID_INDEX_MESSAGE;
+            }
             return listOfVerse.get(i-1).toString();
         }
 
         public String getVerseQScript(int i) {
+            if (!isValidVerseNum(i)) {
+                return INVALID_INDEX_MESSAGE;
+            }
             return listOfQScript.get(i-1).toString();
         }
 

@@ -117,7 +117,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     public void showHint() {
         chapterName.set(QuranScriptFactory.getChapter(chapterNum.get()).getTitle());
-        ayahText.set(QuranScriptFactory.getChapter(chapterNum.get()).getVerseScript(verseNum.get()));
+        ayahText.set(QuranScriptFactory.getChapter(chapterNum.get()).getVerseArabicScript(verseNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
     }

@@ -6,20 +6,18 @@ import java.util.Set;
 
 import timber.log.Timber;
 
-public class Evaluator extends diff_match_patch {
+public class MurojaahEvaluator extends diff_match_patch {
 
     int levDif;
 
-    public Evaluator() {}
+    public static String INCORRECT_MESSAGE_INSERTION_PART = "penambahan elemen";
+    public static String INCORRECT_MESSAGE_MISSING_PART = "elemen hilang";
+    public static String INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART = "penambahan dan elemen hilang";
+    public static String INCORRECT_MESSAGE_SKIPPING_ONE_VERSE = "melewatkan satu ayat";
+    public static String INCORRECT_MESSAGE_SKIPPING_SOME_VERSES = "melewatkan beberapa ayat ";
+    public static String INCORRECT_MESSAGE_BACKWARD = "mundur ke ayat sebelumnya";
 
-    boolean isExistDiffWithText(LinkedList<Diff> diffs, String text) {
-        for (Diff diff : diffs) {
-            if (diff.text.equals(text)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public MurojaahEvaluator() {}
 
     public String getDiffType(int chapter, int verse, String recognized) {
 //        assert !reference.equals(recognized);   // should never equal
@@ -48,11 +46,11 @@ public class Evaluator extends diff_match_patch {
         oprSet.remove(Operation.EQUAL);
 
         if (oprSet.size()>1) {
-            return "insertion + deletion";
+            return INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART;
         } else if (oprSet.contains(Operation.INSERT)) {
-            return "insertion";
+            return INCORRECT_MESSAGE_INSERTION_PART;
         } else {
-            return "deletion";
+            return INCORRECT_MESSAGE_MISSING_PART;
         }
     }
 
@@ -69,7 +67,7 @@ public class Evaluator extends diff_match_patch {
     }
 
     public static void main(String[] args) {
-        Evaluator eval = new Evaluator();
+        MurojaahEvaluator eval = new MurojaahEvaluator();
 
         System.out.println(eval.getDiffType(1,1, "mAliki yWmid dIn"));
     }

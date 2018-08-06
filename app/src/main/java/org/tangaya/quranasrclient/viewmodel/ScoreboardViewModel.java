@@ -13,7 +13,7 @@ import org.tangaya.quranasrclient.data.repository.EvaluationRepository;
 import org.tangaya.quranasrclient.util.QuranScriptFactory;
 import org.tangaya.quranasrclient.MyApplication;
 import org.tangaya.quranasrclient.view.navigator.ScoreboardNavigator;
-import org.tangaya.quranasrclient.util.Evaluator;
+import org.tangaya.quranasrclient.util.MurojaahEvaluator;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ import timber.log.Timber;
 public class ScoreboardViewModel extends AndroidViewModel {
 
     ScoreboardNavigator mNavigator;
-    Evaluator evaluator;
+    MurojaahEvaluator murojaahEvaluator;
 
     public final ObservableField<String> currentChapter = new ObservableField<>();
     public final ObservableField<String> nextChapter = new ObservableField<>();

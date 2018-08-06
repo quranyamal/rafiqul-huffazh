@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -28,6 +29,51 @@ public class QuranScriptFactoryTest {
     public void loadQuranScriptData() {
 
         QuranScriptFactory.init(assetManager);
+    }
+
+    @Test
+    public void quranScriptFactory_GetQScriptWithValidIndexes_NeverReturnsInvalidIndexMessage() {
+
+        for (int chapter=1; chapter<=114; chapter++) {
+            int numVerse = QuranScriptFactory.getChapter(chapter).getNumVerse();
+
+            for (int verse=1; verse<=numVerse; verse++) {
+                assertThat(QuranScriptFactory.getArabicVerseScript(chapter, verse),
+                        not(QuranScriptFactory.INVALID_INDEX_MESSAGE));
+            }
+        }
+    }
+
+    @Test
+    public void quranScriptFactory_GetQScriptWithMinimumIndex_ReturnsCorrectString() {
+
+        String fatihah1 = QuranScriptFactory.getVerseQScript(1,1);
+        assertThat(fatihah1, is("bismil lAhir roHmAnir roHIm"));
+    }
+
+    @Test
+    public void quranScriptFactory_GetQScriptWithMaximumIndex_ReturnsCorrectString() {
+
+        String annas6 = QuranScriptFactory.getVerseQScript(114,6);
+        assertThat(annas6, is("minal jinnati wannAs"));
+    }
+
+    @Test
+    public void quranScriptFactory_GetQScriptWithInvalidIndexes_ReturnsInvalidIndexMessage() {
+
+        String invalidIdxMsg = QuranScriptFactory.INVALID_INDEX_MESSAGE;
+        assertThat(QuranScriptFactory.getVerseQScript(0,0), is(invalidIdxMsg));
+        assertThat(QuranScriptFactory.getVerseQScript(0,1), is(invalidIdxMsg));
+        assertThat(QuranScriptFactory.getVerseQScript(1,8), is(invalidIdxMsg));
+        assertThat(QuranScriptFactory.getVerseQScript(114,0), is(invalidIdxMsg));
+        assertThat(QuranScriptFactory.getVerseQScript(115,1), is(invalidIdxMsg));
+    }
+
+    @Test
+    public void quranScriptFactory_GetFirstQScript() {
+
+        String fatihah1 = QuranScriptFactory.getVerseQScript(1,1);
+        assertThat(fatihah1, is("bismil lAhir roHmAnir roHIm"));
     }
 
     @Test
