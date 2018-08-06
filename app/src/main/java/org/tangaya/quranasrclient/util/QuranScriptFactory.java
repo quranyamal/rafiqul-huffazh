@@ -87,6 +87,10 @@ public class QuranScriptFactory {
         return listOfChapter[i];
     }
 
+    public static String getArabicVerseScript(int chapter, int verse) {
+        return getChapter(chapter).getVerseScript(verse);
+    }
+
     public static String getVerseQScript(int chapter, int verse) {
         return getChapter(chapter).getVerseQScript(verse);
     }
