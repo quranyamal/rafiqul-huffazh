@@ -20,7 +20,10 @@ public class TutorialActivity extends Activity implements TutorialNavigator {
     TextView skipBtn;
 
     private ViewPager mViewPager;
-    private int[] layouts = {R.layout.slide_tutorial_one, R.layout.slide_tutorial_two, R.layout.slide_tutorial_three};
+    private int[] layouts = {R.layout.slide_tutorial_one,
+            R.layout.slide_tutorial_two,
+            R.layout.slide_tutorial_three,
+            R.layout.slide_tutorial_four};
     private TutorialPagerAdapter mPagerAdapter;
 
     @Override

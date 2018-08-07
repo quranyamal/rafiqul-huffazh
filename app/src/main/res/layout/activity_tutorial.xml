@@ -1,84 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <variable
             name="viewmodel"
             type="org.tangaya.quranasrclient.viewmodel.TutorialViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        tools:context="org.tangaya.quranasrclient.view.ui.TutorialActivity">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="30dp">
 
         <TextView
-            android:id="@+id/skip_tutorial"
-            android:layout_width="wrap_content"
+            android:id="@+id/tutorial_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="5dp"
-            android:onClick="@{() -> viewmodel.skipTutorial()}"
-            android:text="skip"
-            android:textSize="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Tutorial"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tutorial_title"
+            android:text="swipe to navigate"
+            android:textAlignment="center"
+            android:paddingBottom="15dp"/>
 
         <ImageView
             android:id="@+id/next_tutorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/forward_48"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/forward_48"/>
 
         <ImageView
             android:id="@+id/previous_tutorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/backward_48"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/backward_48" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/tutorial_view_pager"
-            android:layout_width="368dp"
-            android:layout_height="495dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></android.support.v4.view.ViewPager>
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true">
+        </android.support.v4.view.ViewPager>
 
         <TextView
-            android:layout_width="368dp"
+            android:id="@+id/skip_tutorial"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:text="slide to navigate tutorial"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:paddingBottom="15dp"/>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="skip"
+            android:textSize="18dp"
+            android:onClick="@{() -> viewmodel.skipTutorial()}"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 
 </layout>

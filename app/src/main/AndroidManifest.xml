@@ -36,7 +36,9 @@
             android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
         <activity android:name=".view.ui.AboutActivity" />
         <activity android:name=".view.ui.ScoreDetailActivity" />
-        <activity android:name=".view.ui.TutorialActivity" />
+        <activity
+            android:name=".view.ui.TutorialActivity"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
     </application>
 
 </manifest>
