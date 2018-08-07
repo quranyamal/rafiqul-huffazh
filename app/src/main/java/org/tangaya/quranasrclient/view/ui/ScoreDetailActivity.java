@@ -40,7 +40,7 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner {
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-        final RecyclerView recyclerView = findViewById(R.id.devspace_detail_recycler);
+        final RecyclerView recyclerView = findViewById(R.id.score_detail_recycler);
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 

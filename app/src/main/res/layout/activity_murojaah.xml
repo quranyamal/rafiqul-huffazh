@@ -211,14 +211,6 @@
 
             </android.support.constraint.ConstraintLayout>
 
-            <!--<FrameLayout-->
-            <!--android:id="@+id/murojaah_control_frame"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="3"-->
-            <!--android:elevation="3dp">-->
-            <!--</FrameLayout>-->
-
         </android.support.v7.widget.LinearLayoutCompat>
 
 
