@@ -18,6 +18,10 @@ public class EvaluationOld extends BaseObservable {
     String extStorageDir = Environment.getExternalStorageDirectory()+"";
     String quranVerseAudioDir = extStorageDir + "/rafiqul-huffazh";
 
+    static int count = 0;
+
+    public int id;
+
     // only store response with final transcription status
     //JSONObject mResponse;
     private ObservableField<JSONObject> mResponse = new ObservableField<>();
@@ -69,13 +73,11 @@ public class EvaluationOld extends BaseObservable {
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
-    public EvaluationOld(int chapter, int verse, int sessionId) {
-
-    }
+    public EvaluationOld(int chapter, int verse, int sessionId) {}
 
     Attempt attempt;
     String transcription, reference, strResult;
-    int chapter, verse;
+    public int chapter, verse;
 
     public EvaluationOld(Attempt attempt, String transcription) {
         this.attempt = attempt;
@@ -137,6 +139,7 @@ public class EvaluationOld extends BaseObservable {
         }
 
         notifyChange();
+        id = count++;
     }
 
     public ObservableInt getStatus() {

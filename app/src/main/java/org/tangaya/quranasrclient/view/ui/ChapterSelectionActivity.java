@@ -31,7 +31,7 @@ public class ChapterSelectionActivity extends Activity {
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
         final SharedPreferences.Editor editor = sharedPref.edit();
 
-        mRecyclerView = findViewById(R.id.verses_recycler_view);
+        mRecyclerView = findViewById(R.id.chapters_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                 LinearLayoutManager.VERTICAL));

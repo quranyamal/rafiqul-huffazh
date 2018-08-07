@@ -5,6 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import org.tangaya.quranasrclient.data.model.EvaluationOld;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import timber.log.Timber;
 
@@ -30,15 +32,21 @@ public class EvaluationRepository {
     }
 
     public static void addToEvalSet(EvaluationOld eval) {
-        Timber.d("addToEvalSet 1");
         evals.add(eval);
-        Timber.d("addToEvalSet 2");
+        sortEvals();
         evalsLiveData.postValue(evals);
-        Timber.d("addToEvalSet 3");
     }
 
     public static void clearEvalData() {
         evalsLiveData.getValue().clear();
     }
 
+    public static void sortEvals() {
+        Collections.sort(evals, new Comparator<EvaluationOld>() {
+            @Override
+            public int compare(EvaluationOld eval1, EvaluationOld eval2) {
+                return Integer.compare(eval1.verse, eval2.verse);
+            }
+        });
+    }
 }

@@ -40,13 +40,14 @@
             android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <Button
+            android:id="@+id/murojaah_button_home"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Murojaah"
             android:onClick="@{() -> viewmodel.gotoMurojaah()}"/>
 
         <Button
-            android:id="@+id/setting_button"
+            android:id="@+id/setting_button_home"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Server Setting"

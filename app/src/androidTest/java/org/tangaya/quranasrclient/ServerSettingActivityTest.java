@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ASRServerTest {
+public class ServerSettingActivityTest {
 
     private String ipAddress, port;
 
@@ -43,7 +43,7 @@ public class ASRServerTest {
         ipAddress = "10.1.3.31";
         port = "8888";
 
-        onView(withId(R.id.setting_button)).perform(click());
+        onView(withId(R.id.setting_button_home)).perform(click());
 
         onView(withId(R.id.hostname_input)).perform(click(), clearText(), typeText(ipAddress));
 
@@ -66,7 +66,7 @@ public class ASRServerTest {
         ipAddress = "10.1.3.123";
         port = "8888";
 
-        onView(withId(R.id.setting_button)).perform(click());
+        onView(withId(R.id.setting_button_home)).perform(click());
 
         onView(withId(R.id.hostname_input)).perform(click(), clearText(), typeText(ipAddress));
 

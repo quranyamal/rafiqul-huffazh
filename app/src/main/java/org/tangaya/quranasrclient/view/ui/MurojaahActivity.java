@@ -44,7 +44,6 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
@@ -90,20 +89,26 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
             @Override
             public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
-                Timber.d("eval set has changed");
+                Timber.d("eval set has changed. num eval = " + evaluations.size());
             }
         };
 
         mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
 
-        textView = findViewById(R.id.progressbar_info);
-        progressBar = findViewById(R.id.recognizing_progressbar);
+        //textView = findViewById(R.id.progressbar_info);
+        //progressBar = findViewById(R.id.recognizing_progressbar);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         mLifecycleRegistry.markState(Lifecycle.State.STARTED);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewModel.deleteRecordingFiles();
     }
 
     public static MurojaahViewModel obtainViewModel(Activity activity) {
@@ -114,47 +119,46 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
     @Override
     public void gotoResult() {
-        showProgressBar();
+//        showProgressBar();
 
         Intent intent = new Intent(this, ScoreboardActivity.class);
         finish();
 
         startActivity(intent);
     }
-
     @NonNull
     @Override
     public Lifecycle getLifecycle() {
         return mLifecycleRegistry;
     }
 
-    private void showProgressBar() {
-
-        Timber.d("showing progress bar");
-        progressBar = findViewById(R.id.recognizing_progressbar);
-        // Start long running operation in a background thread
-        new Thread(new Runnable() {
-            public void run() {
-                while (progressStatus < 100) {
-                    progressStatus += 1;
-                    // Update the progress bar and display the
-                    //current value in the text view
-                    handler.post(new Runnable() {
-                        public void run() {
-                            progressBar.setProgress(progressStatus);
-                            textView.setText(progressStatus+"/"+progressBar.getMax());
-                        }
-                    });
-                    try {
-                        // Sleep for 200 milliseconds.
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-
-        Timber.d("end of progress bar");
-    }
+//    private void showProgressBarOld() {
+//
+//        Timber.d("showing progress bar");
+//        progressBar = findViewById(R.id.recognizing_progressbar);
+//        // Start long running operation in a background thread
+//        new Thread(new Runnable() {
+//            public void run() {
+//                while (progressStatus < 100) {
+//                    progressStatus += 1;
+//                    // Update the progress bar and display the
+//                    //current value in the text view
+//                    handler.post(new Runnable() {
+//                        public void run() {
+//                            progressBar.setProgress(progressStatus);
+//                            textView.setText(progressStatus+"/"+progressBar.getMax());
+//                        }
+//                    });
+//                    try {
+//                        // Sleep for 200 milliseconds.
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
+//
+//        Timber.d("end of progress bar");
+//    }
 }

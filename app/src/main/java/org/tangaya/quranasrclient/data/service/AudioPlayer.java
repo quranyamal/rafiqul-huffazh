@@ -21,6 +21,7 @@ public class AudioPlayer extends MediaPlayer {
 
     public void play(Uri fileUri) {
         try {
+            reset();
             setDataSource(fileUri.getPath());
             prepare();
         } catch (IOException e) {
