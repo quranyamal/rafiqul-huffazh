@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.viewmodel.ScoreboardViewModel" />
+            type="org.tangaya.rafiqulhuffazh.viewmodel.ScoreboardViewModel" />
     </data>
 
     <LinearLayout

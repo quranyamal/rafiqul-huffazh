@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.viewmodel.ServerSettingViewModel" />
+            type="org.tangaya.rafiqulhuffazh.viewmodel.ServerSettingViewModel" />
     </data>
 
     <LinearLayout

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.viewmodel.EvalDetailViewModel"/>
+            type="org.tangaya.rafiqulhuffazh.viewmodel.EvalDetailViewModel"/>
     </data>
 
     <RelativeLayout

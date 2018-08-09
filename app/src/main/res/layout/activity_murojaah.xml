@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.viewmodel.MurojaahViewModel" />
+            type="org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel" />
     </data>
 
     <RelativeLayout

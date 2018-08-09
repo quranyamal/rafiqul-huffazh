@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="org.tangaya.quranasrclient.viewmodel.HomeViewModel" />
+            type="org.tangaya.rafiqulhuffazh.viewmodel.HomeViewModel" />
     </data>
 
     <android.support.v7.widget.LinearLayoutCompat
