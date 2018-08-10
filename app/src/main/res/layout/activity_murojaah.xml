@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewmodel"
             type="org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel" />
@@ -19,7 +20,7 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_centerInParent="true"-->
-            <!--android:visibility="visible"/>-->
+            <!--android:visibility="@{viewmodel.isFinishedMurojaah ? View.VISIBLE : View.INVISIBLE}"/>-->
 
         <!--<TextView-->
             <!--android:id="@+id/progressbar_info"-->

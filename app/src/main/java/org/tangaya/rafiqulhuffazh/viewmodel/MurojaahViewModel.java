@@ -182,7 +182,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         isRecording.set(false);
 
         if (isEndOfSurah()) {
-            mNavigator.gotoResult();
+            mNavigator.onMurojaahFinished();
         } else {
             incrementAyah();
         }

@@ -1,14 +1,17 @@
 package org.tangaya.rafiqulhuffazh.view.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -19,7 +22,9 @@ import android.widget.TextView;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.R;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
+import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel;
 
@@ -34,11 +39,6 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
     private LifecycleRegistry mLifecycleRegistry;
-
-    private ProgressBar progressBar;
-    private int progressStatus = 0;
-    private TextView textView;
-    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,47 +118,64 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     }
 
     @Override
-    public void gotoResult() {
-//        showProgressBar();
+    public void onMurojaahFinished() {
+        showProgressDialog();
+    }
 
+    @Override
+    public void gotoResult() {
         Intent intent = new Intent(this, ScoreboardActivity.class);
         finish();
-
         startActivity(intent);
     }
+
     @NonNull
     @Override
     public Lifecycle getLifecycle() {
         return mLifecycleRegistry;
     }
 
-//    private void showProgressBarOld() {
-//
-//        Timber.d("showing progress bar");
-//        progressBar = findViewById(R.id.recognizing_progressbar);
-//        // Start long running operation in a background thread
-//        new Thread(new Runnable() {
-//            public void run() {
-//                while (progressStatus < 100) {
-//                    progressStatus += 1;
-//                    // Update the progress bar and display the
-//                    //current value in the text view
-//                    handler.post(new Runnable() {
-//                        public void run() {
-//                            progressBar.setProgress(progressStatus);
-//                            textView.setText(progressStatus+"/"+progressBar.getMax());
-//                        }
-//                    });
-//                    try {
-//                        // Sleep for 200 milliseconds.
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
-//
-//        Timber.d("end of progress bar");
-//    }
+    private void showProgressDialog() {
+        final ProgressDialog progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMax(QuranScriptFactory.getChapter(mViewModel.chapterNum.get()).getNumVerse());
+        progressDoalog.setMessage("Recognizing your recitation... " + progressDoalog.getProgress());
+        progressDoalog.setTitle("Please wait");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDoalog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                gotoResult();
+            }
+        });
+
+        final Handler handle = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                progressDoalog.incrementProgressBy(5);
+            }
+        };
+
+        progressDoalog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (progressDoalog.getProgress() <= progressDoalog.getMax()) {
+                        Thread.sleep(300);
+                        handle.sendMessage(handle.obtainMessage());
+                        if (progressDoalog.getProgress() == progressDoalog
+                                .getMax()) {
+                            progressDoalog.dismiss();
+                        }
+                    }
+                    gotoResult();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
 }

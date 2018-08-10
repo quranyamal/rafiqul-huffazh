@@ -38,8 +38,8 @@ public class ServerSettingViewModel extends AndroidViewModel {
         super(application);
 
         sharedPref = ((MyApplication) application).getPreferences();
-        hostname.set(sharedPref.getString("SERVER_HOSTNAME", "0.0.0.1"));
-        port.set(sharedPref.getString("SERVER_PORT", "9998"));
+        hostname.set(sharedPref.getString("SERVER_HOSTNAME", "192.168.1.100"));
+        port.set(sharedPref.getString("SERVER_PORT", "8888"));
     }
 
     public void onActivityCreated(ServerSettingNavigator navigator) {
