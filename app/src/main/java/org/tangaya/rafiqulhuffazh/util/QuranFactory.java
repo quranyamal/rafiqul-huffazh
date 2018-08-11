@@ -70,4 +70,16 @@ public class QuranFactory {
         }
     }
 
+    public static boolean isValidAyahNum(int surah, int ayah) {
+        if (surah<1 || surah>114) {
+            return false;
+        } else {
+            int numAyah = getNumAyah(surah);
+            if (ayah<1 || ayah>numAyah) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

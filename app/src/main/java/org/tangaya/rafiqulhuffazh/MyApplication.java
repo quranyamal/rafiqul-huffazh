@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranFactory;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
 
         //connectToServer();
-        QuranScriptFactory.init(getApplicationContext().getAssets());
+        QuranFactory.init(getApplicationContext().getAssets());
         QuranScriptConverter.init(getApplicationContext());
         //QuranScriptConverter.init(this);
 

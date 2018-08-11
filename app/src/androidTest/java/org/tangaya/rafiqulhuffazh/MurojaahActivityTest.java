@@ -12,9 +12,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranFactory;
 import org.tangaya.rafiqulhuffazh.view.ui.ChapterSelectionActivity;
-import org.tangaya.rafiqulhuffazh.view.ui.HomeActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.MurojaahActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.ScoreDetailActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.ScoreboardActivity;
@@ -52,7 +51,7 @@ public class MurojaahActivityTest {
 
     @Test
     public void murojaahActivityTest_ShowArabicVerseScript() {
-        String hintText = QuranScriptFactory.getArabicVerseScript(103,1);
+        String hintText = QuranFactory.getAyah(103,1);
 
         onView(withId(R.id.hint_icon)).perform(click());
         onView(withId(R.id.hint_text)).check(matches(withText(hintText )));

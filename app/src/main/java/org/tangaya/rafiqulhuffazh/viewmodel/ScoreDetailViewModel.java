@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranFactory;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class ScoreDetailViewModel extends AndroidViewModel {
         super(application);
 
         int currentChapterNum = ((MyApplication) getApplication()).getCurrentChapterNum();
-        currentChapter.set(QuranScriptFactory.getChapter(currentChapterNum).getTitle());
+        currentChapter.set(QuranFactory.getSurahName(currentChapterNum));
 
         verseNumber.set(evaluation.getVerseNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());

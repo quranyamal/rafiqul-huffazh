@@ -18,7 +18,7 @@ import android.view.View;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranFactory;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
@@ -116,7 +116,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
         mNavigator = navigator;
         chapterNum.set(chapter);
-        chapterName.set(QuranScriptFactory.getChapter(chapter).getTitle());
+        chapterName.set(QuranFactory.getSurahName(chapter));
         EvaluationRepository.clearEvalData();
         //verseNum.set(1);
 
@@ -124,8 +124,8 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     public void showHint() {
-        chapterName.set(QuranScriptFactory.getChapter(chapterNum.get()).getTitle());
-        ayahText.set(QuranScriptFactory.getChapter(chapterNum.get()).getVerseArabicScript(verseNum.get()));
+        chapterName.set(QuranFactory.getSurahName(chapterNum.get()));
+        ayahText.set(QuranFactory.getAyah(chapterNum.get(), verseNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
     }
@@ -230,7 +230,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     private boolean isEndOfSurah() {
-        return !QuranScriptFactory.getChapter(chapterNum.get()).isValidVerseNum(verseNum.get()+1);
+        return !QuranFactory.isValidAyahNum(chapterNum.get(), verseNum.get()+1);
     }
 
     private void incrementAyah() {

@@ -24,6 +24,7 @@ import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
+import org.tangaya.rafiqulhuffazh.util.QuranFactory;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel;
@@ -137,7 +138,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
     private void showProgressDialog() {
         final ProgressDialog progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(QuranScriptFactory.getChapter(mViewModel.chapterNum.get()).getNumVerse());
+        progressDoalog.setMax(99);
         progressDoalog.setMessage("Recognizing your recitation... " + progressDoalog.getProgress());
         progressDoalog.setTitle("Please wait");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
