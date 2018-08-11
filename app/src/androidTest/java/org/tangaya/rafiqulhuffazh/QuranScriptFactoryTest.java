@@ -1,17 +1,22 @@
 package org.tangaya.rafiqulhuffazh;
 
+import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
 
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -29,6 +34,31 @@ public class QuranScriptFactoryTest {
     public void loadQuranScriptData() {
 
         QuranScriptFactory.init(assetManager);
+    }
+
+    @Test
+    public void generateJson() {
+        try {
+            JSONObject jsonObject = new JSONObject("{key:1}");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        String filename = "myfile";
+        String filename =  Environment.getExternalStorageDirectory()+"/rafiqul-huffazh/tesfile.txt";
+        String fileContents = "Hello world!";
+        FileOutputStream outputStream;
+
+        Context context = InstrumentationRegistry.getContext();
+
+        try {
+            outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test

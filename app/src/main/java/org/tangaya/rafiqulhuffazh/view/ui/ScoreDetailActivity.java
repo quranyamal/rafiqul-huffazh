@@ -16,13 +16,13 @@ import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreDetailBinding;
 import org.tangaya.rafiqulhuffazh.view.adapter.EvalAdapter;
-import org.tangaya.rafiqulhuffazh.viewmodel.EvalDetailViewModel;
+import org.tangaya.rafiqulhuffazh.viewmodel.ScoreDetailViewModel;
 
 import java.util.ArrayList;
 
 public class ScoreDetailActivity extends Activity implements LifecycleOwner {
 
-    private EvalDetailViewModel mViewModel;
+    private ScoreDetailViewModel mViewModel;
     private ActivityScoreDetailBinding mBinding;
     private LifecycleRegistry mLifecycleRegistry;
 
@@ -34,9 +34,6 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner {
 
         setTitle("Score Detail");
 
-        //setSupportActionBar(findViewById(R.id.my_toolbar));
-
-
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
@@ -44,12 +41,10 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        //EvaluationOld attempt = ((MyApplication) getApplication()).getEvaluations().get(0);
-
-        mViewModel = new EvalDetailViewModel(getApplication(), new EvaluationOld(1,1,1));
-        mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<EvalDetailViewModel>>() {
+        mViewModel = new ScoreDetailViewModel(getApplication(), new EvaluationOld(1,1,1));
+        mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<ScoreDetailViewModel>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<EvalDetailViewModel> devspaceDetailViewModels) {
+            public void onChanged(@Nullable ArrayList<ScoreDetailViewModel> devspaceDetailViewModels) {
 
                 EvalAdapter mAdapter = new EvalAdapter(ScoreDetailActivity.this, devspaceDetailViewModels);
                 recyclerView.setLayoutManager(mLayoutManager);

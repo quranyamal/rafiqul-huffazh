@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.databinding.EvalCardBinding;
-import org.tangaya.rafiqulhuffazh.viewmodel.EvalDetailViewModel;
+import org.tangaya.rafiqulhuffazh.viewmodel.ScoreDetailViewModel;
 
 import java.util.ArrayList;
 
 public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> {
 
-    private ArrayList<EvalDetailViewModel> mArrayList;
+    private ArrayList<ScoreDetailViewModel> mArrayList;
 
     private Context mContext;
 
@@ -43,7 +43,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
             levScore = itemView.findViewById(R.id.levenshtein_score);
         }
 
-        public void bind(EvalDetailViewModel viewModel) {
+        public void bind(ScoreDetailViewModel viewModel) {
             mBinding.setViewmodel(viewModel);
             mBinding.executePendingBindings();
         }
@@ -53,7 +53,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
         }
     }
 
-    public EvalAdapter(Context context, ArrayList<EvalDetailViewModel> arrayList) {
+    public EvalAdapter(Context context, ArrayList<ScoreDetailViewModel> arrayList) {
         mContext = context;
         mArrayList = arrayList;
     }
@@ -75,7 +75,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        EvalDetailViewModel mViewModel = mArrayList.get(position);
+        ScoreDetailViewModel mViewModel = mArrayList.get(position);
         holder.bind(mViewModel);
     }
 

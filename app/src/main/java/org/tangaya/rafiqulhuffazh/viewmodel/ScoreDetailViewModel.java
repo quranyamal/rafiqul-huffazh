@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class EvalDetailViewModel extends AndroidViewModel {
+public class ScoreDetailViewModel extends AndroidViewModel {
 
     //todo: should be one source in a session
     public final ObservableField<String> currentChapter = new ObservableField<>();
@@ -36,11 +36,11 @@ public class EvalDetailViewModel extends AndroidViewModel {
 
     public final ObservableBoolean isCorrect = new ObservableBoolean();
 
-    public MutableLiveData<ArrayList<EvalDetailViewModel>> arrayListMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<ScoreDetailViewModel>> arrayListMutableLiveData = new MutableLiveData<>();
 
-    private ArrayList<EvalDetailViewModel> arrayList;
+    private ArrayList<ScoreDetailViewModel> arrayList;
 
-    public EvalDetailViewModel(@NonNull Application application, EvaluationOld evaluation) {
+    public ScoreDetailViewModel(@NonNull Application application, EvaluationOld evaluation) {
         super(application);
 
         int currentChapterNum = ((MyApplication) getApplication()).getCurrentChapterNum();
@@ -61,7 +61,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
         earnedPoint.set(evaluation.getEarnedPoints().get());
     }
 
-    public MutableLiveData<ArrayList<EvalDetailViewModel>> getArrayListMutableLiveData() {
+    public MutableLiveData<ArrayList<ScoreDetailViewModel>> getArrayListMutableLiveData() {
 
         arrayList = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class EvalDetailViewModel extends AndroidViewModel {
         ArrayList<EvaluationOld> evaluations = EvaluationRepository.getEvals();
 
         for (int i = 0; i< evaluations.size(); i++) {
-            EvalDetailViewModel mViewModel = new EvalDetailViewModel(getApplication(), evaluations.get(i));
+            ScoreDetailViewModel mViewModel = new ScoreDetailViewModel(getApplication(), evaluations.get(i));
             arrayList.add(mViewModel);
         }
 
