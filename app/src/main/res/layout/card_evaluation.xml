@@ -35,10 +35,10 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/verse_num_evaluation"
+                        android:id="@+id/ayah_num_evaluation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewmodel.verseNumber, default=`Ayat 1`}"/>
+                        android:text="@{viewmodel.ayahNum, default=`Ayat 1`}"/>
 
 
                     <TextView
@@ -52,13 +52,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/verse_ref_evaluation"
+                    android:id="@+id/ayah_ref_evaluation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`reference : `+viewmodel.refereceArabicScript, default=`rec: بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
                 <TextView
-                    android:id="@+id/verse_rec_evaluation"
+                    android:id="@+id/ayah_rec_evaluation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`recognized: `+viewmodel.recognizedArabicTranscript, default=`rec: اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>

@@ -52,7 +52,7 @@ public class RecognitionTask extends WebSocketAdapter {
 
     public void execute() {
         if (attempt.getMockType()== Attempt.MockType.MOCK_RESULT) {
-            transcription = QuranUtil.getQScript(attempt.getChapterNum(), attempt.getVerseNum());
+            transcription = QuranUtil.getQScript(attempt.getSurahNum(), attempt.getAyahNum());
             EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
 
             EvaluationRepository.addToEvalSet(evaluation);

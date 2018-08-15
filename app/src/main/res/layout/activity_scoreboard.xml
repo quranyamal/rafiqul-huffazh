@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{`Chapter ` + viewmodel.currentChapter}"/>
+                android:text="@{`Surah ` + viewmodel.currentSurah}"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
                 android:onClick="@{() -> viewmodel.showDetail() }"/>
 
             <ImageView
-                android:id="@+id/next_chapter"
+                android:id="@+id/next_surah"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="30dp"
@@ -77,17 +77,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.nextChapter() }"/>
+                android:onClick="@{() -> viewmodel.nextSurah() }"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next Chapter"/>
+                android:text="Surat Selanjutnya"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{`(` + viewmodel.nextChapter + `)`}"/>
+                android:text="@{`(` + viewmodel.nextSurah + `)`}"/>
 
         </LinearLayout>
 
@@ -109,7 +109,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/imageView5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{ () -> viewmodel.retryChapter() }"/>
+                android:onClick="@{ () -> viewmodel.retrySurah() }"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -139,7 +139,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="@{() -> viewmodel.selectAnotherChapter()}"/>
+                android:onClick="@{() -> viewmodel.selectAnotherSurah()}"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="select chapter"
+                android:text="select surah"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

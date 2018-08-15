@@ -114,7 +114,7 @@ public class MyApplication extends Application {
         return "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/speech";
     }
 
-    public int getCurrentChapterNum() {
-        return getPreferences().getInt("CURRENT_CHAPTER_NUM", -1) + 1;
+    public int getCurrentSurahNum() {
+        return getPreferences().getInt("CURRENT_SURAH_NUM", -1) + 1;
     }
 }

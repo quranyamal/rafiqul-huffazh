@@ -35,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chapter: "/>
+                    android:text="Surat: "/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -46,21 +46,21 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="-"
-                        android:onClick="@{() -> viewmodel.decrementChapter() }"/>
+                        android:onClick="@{() -> viewmodel.decrementSurah() }"/>
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:text="@={viewmodel.chapter + ``}"
+                        android:text="@={viewmodel.surah + ``}"
                         android:textAlignment="center"/>
 
                     <Button
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="+"
-                        android:onClick="@{() -> viewmodel.incrementChapter() }"/>
+                        android:onClick="@{() -> viewmodel.incrementSurah() }"/>
 
                 </LinearLayout>
 
@@ -75,7 +75,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Verse: "/>
+                    android:text="Ayat: "/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,21 +86,21 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="-"
-                        android:onClick="@{() -> viewmodel.decrementVerse()}"/>
+                        android:onClick="@{() -> viewmodel.decrementSurah()}"/>
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:text="@={viewmodel.verse + ``}"
+                        android:text="@={viewmodel.ayah + ``}"
                         android:textAlignment="center"/>
 
                     <Button
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="+"
-                        android:onClick="@{() -> viewmodel.incrementVerse()}"/>
+                        android:onClick="@{() -> viewmodel.incrementSurah()}"/>
 
                 </LinearLayout>
 

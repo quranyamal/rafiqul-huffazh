@@ -6,31 +6,31 @@ public class Recording {
 
     private int mId;
 
-    private int mChapter;
+    private int mSurah;
 
-    private int mVerse;
+    private int mAyah;
 
     private String mFilename;
 
-    public Recording(int chapter, int verse) {
+    public Recording(int surah, int ayah) {
         mId = Recording.count++;
-        mChapter = chapter;
-        mVerse = verse;
+        mSurah = surah;
+        mAyah = ayah;
     }
 
-    public Recording(int chapter, int verse, String filename) {
+    public Recording(int surah, int ayah, String filename) {
         mId = Recording.count++;
-        mChapter = chapter;
-        mVerse = verse;
+        mSurah = surah;
+        mAyah = ayah;
         mFilename = filename;
     }
 
-    public int getChapter() {
-        return mChapter;
+    public int getSurah() {
+        return mSurah;
     }
 
-    public int getVerse() {
-        return mVerse;
+    public int getAyah() {
+        return mAyah;
     }
 
 }

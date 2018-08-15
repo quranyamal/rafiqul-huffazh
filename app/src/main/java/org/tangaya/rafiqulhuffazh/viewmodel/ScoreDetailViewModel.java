@@ -20,9 +20,9 @@ import timber.log.Timber;
 public class ScoreDetailViewModel extends AndroidViewModel {
 
     //todo: should be one source in a session
-    public final ObservableField<String> currentChapter = new ObservableField<>();
+    public final ObservableField<String> currentSurah = new ObservableField<>();
 
-    public final ObservableField<String> verseNumber = new ObservableField<>();
+    public final ObservableField<String> ayahNum = new ObservableField<>();
     public final ObservableField<String> recognizedTranscript = new ObservableField<>();
     public final ObservableField<String> recognizedArabicTranscript = new ObservableField<>();
     public final ObservableField<String> refereceTranscript = new ObservableField<>();
@@ -43,14 +43,14 @@ public class ScoreDetailViewModel extends AndroidViewModel {
     public ScoreDetailViewModel(@NonNull Application application, EvaluationOld evaluation) {
         super(application);
 
-        int currentChapterNum = ((MyApplication) getApplication()).getCurrentChapterNum();
-        currentChapter.set(QuranUtil.getSurahName(currentChapterNum));
+        int currentSurahNum = ((MyApplication) getApplication()).getCurrentSurahNum();
+        currentSurah.set(QuranUtil.getSurahName(currentSurahNum));
 
-        verseNumber.set(evaluation.getVerseNum().get());
+        ayahNum.set(evaluation.getAyahNum().get());
         recognizedTranscript.set(evaluation.getTranscription().get());
         recognizedArabicTranscript.set(evaluation.getArabicTranscription().get());
-        refereceTranscript.set(evaluation.getVerseQScript().get());
-        refereceArabicScript.set(evaluation.getVerseScript().get());
+        refereceTranscript.set(evaluation.getAyahQScript().get());
+        refereceArabicScript.set(evaluation.getAyahArabicScript().get());
         diff.set(evaluation.getDiff().get());
         evalStr.set(evaluation.getEvalStr().get());
 

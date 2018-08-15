@@ -15,9 +15,6 @@ import org.tangaya.rafiqulhuffazh.util.diff_match_patch;
 
 public class EvaluationOld extends BaseObservable {
 
-    String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    String quranVerseAudioDir = extStorageDir + "/rafiqul-huffazh";
-
     static int count = 0;
 
     public int id;
@@ -31,17 +28,17 @@ public class EvaluationOld extends BaseObservable {
 
     private ObservableField<String> mArabicTranscription = new ObservableField<>();
 
-    //String mVerseScript;
-    private ObservableField<String> mVerseScript = new ObservableField<>();;
+    //String mAyahArabic;
+    private ObservableField<String> mAyahArabic = new ObservableField<>();;
 
-    //String mVerseQScript;
-    private ObservableField<String> mVerseQScript = new ObservableField<>();
+    //String mAyahQScript;
+    private ObservableField<String> mAyahQScript = new ObservableField<>();
 
     //String mFilepath;
     private ObservableField<String> mFilepath = new ObservableField<>();
 
-    //String verseNum;
-    private ObservableField<String> verseNum = new ObservableField<>();
+    //String ayahNum;
+    private ObservableField<String> ayahNum = new ObservableField<>();
 
     //LinkedList<diff_match_patch.Diff> mDiff;
     //private ObservableField<LinkedList<diff_match_patch.Diff>> mDiff = new ObservableField<>();
@@ -55,9 +52,9 @@ public class EvaluationOld extends BaseObservable {
     // Correct | Insertion | Deletion | Combination
     private ObservableField<String> evalStr = new ObservableField<>();
 
-    //private int mChapter, mVerse, mSessionId;
-    private ObservableInt mChapter = new ObservableInt();
-    private ObservableInt mVerse = new ObservableInt();
+    //private int mSurah, mAyah, mSessionId;
+    private ObservableInt mSurah = new ObservableInt();
+    private ObservableInt mAyah = new ObservableInt();
     private ObservableInt mStatus = new ObservableInt();
 
     private int levenshteinValue;
@@ -73,68 +70,68 @@ public class EvaluationOld extends BaseObservable {
     // todo: refactor to mvvm
     private diff_match_patch dmp = new diff_match_patch();
 
-    public EvaluationOld(int chapter, int verse, int sessionId) {}
+    public EvaluationOld(int surah, int ayah, int sessionId) {}
 
     Attempt attempt;
     String transcription, reference, strResult;
-    public int chapter, verse;
+    public int surah, ayah;
 
     public EvaluationOld(Attempt attempt, String transcription) {
         this.attempt = attempt;
         this.transcription = transcription;
 
-        chapter = attempt.getChapterNum();
-        verse = attempt.getVerseNum();
+        surah = attempt.getSurahNum();
+        ayah = attempt.getAyahNum();
 
-        mChapter.set(chapter);
-        mVerse.set(verse);
+        mSurah.set(surah);
+        mAyah.set(ayah);
 
-        verseNum.set("Verse " + verse);
+        ayahNum.set("Ayat " + ayah);
 
-        mVerseScript.set(QuranUtil.getAyah(mChapter.get(), mVerse.get()));
-        mVerseQScript.set(QuranUtil.getQScript(mChapter.get(), mVerse.get()));
+        mAyahArabic.set(QuranUtil.getAyah(mSurah.get(), mAyah.get()));
+        mAyahQScript.set(QuranUtil.getQScript(mSurah.get(), mAyah.get()));
 
         isCorrect.set(false);
 
         notifyChange();
 
-        reference = QuranUtil.getQScript(chapter, verse);
+        reference = QuranUtil.getQScript(surah, ayah);
         isCorrect.set(transcription.equals(reference));
 
         if (isCorrect.get()) {
             strResult = "Correct";
         } else {
-            strResult = MurojaahEvaluator.evaluate(attempt.getChapterNum(), attempt.getVerseNum(), transcription);
+            strResult = MurojaahEvaluator.evaluate(attempt.getSurahNum(), attempt.getAyahNum(), transcription);
         }
 
         ////
         mTranscription.set(transcription);
-        mVerseScript.set(QuranUtil.getAyah(chapter, verse));
+        mAyahArabic.set(QuranUtil.getAyah(surah, ayah));
 
-        mVerseQScript.set(QuranUtil.getQScript(chapter, verse));
+        mAyahQScript.set(QuranUtil.getQScript(surah, ayah));
 
         mArabicTranscription.set(QuranScriptConverter.toArabic(transcription));
 
-        mDiff.set(dmp.diff_main(mVerseQScript.get(), mTranscription.get()).toString());
+        mDiff.set(dmp.diff_main(mAyahQScript.get(), mTranscription.get()).toString());
 
-        //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mVerseQScript.get(), mTranscription.get())));
+        //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mAyahQScript.get(), mTranscription.get())));
 
-        levenshteinValue = MurojaahEvaluator.getLevenshteinDistance(mVerseQScript.get(), mTranscription.get());
+        levenshteinValue = MurojaahEvaluator.getLevenshteinDistance(mAyahQScript.get(), mTranscription.get());
 
-        maxPoints.set(mVerseQScript.get().length());
+        maxPoints.set(mAyahQScript.get().length());
         earnedPoints.set(maxPoints.get() - levenshteinValue);
 
-        score = MurojaahEvaluator.getScore(mVerseQScript.get(), mTranscription.get());
+        score = MurojaahEvaluator.getScore(mAyahQScript.get(), mTranscription.get());
         scoreStr.set(String.format("%.2f", score));
 
-        if (mTranscription.get().equals(mVerseQScript.get())) {
+        if (mTranscription.get().equals(mAyahQScript.get())) {
             evalStr.set("Correct");
             scoreStr.set("1");
             isCorrect.set(true);
         } else {
             //evalStr.set("Wrong");   // todo: improve
 
-            evalStr.set(MurojaahEvaluator.evaluate(mChapter.get(), mVerse.get(), transcription));
+            evalStr.set(MurojaahEvaluator.evaluate(mSurah.get(), mAyah.get(), transcription));
             isCorrect.set(false);
         }
 
@@ -162,20 +159,20 @@ public class EvaluationOld extends BaseObservable {
         return mArabicTranscription;
     }
 
-    public ObservableField<String> getVerseScript() {
-        return mVerseScript;
+    public ObservableField<String> getAyahArabicScript() {
+        return mAyahArabic;
     }
 
-    public ObservableField<String> getVerseQScript() {
-        return mVerseQScript;
+    public ObservableField<String> getAyahQScript() {
+        return mAyahQScript;
     }
 
     public ObservableField<String> getDiff() {
         return mDiff;
     }
 
-    public ObservableField<String> getVerseNum() {
-        return verseNum;
+    public ObservableField<String> getAyahNum() {
+        return ayahNum;
     }
 
     public ObservableBoolean isCorrect() {

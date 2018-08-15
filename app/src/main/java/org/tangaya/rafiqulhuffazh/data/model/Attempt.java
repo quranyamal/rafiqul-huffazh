@@ -13,8 +13,8 @@ public class Attempt {
 
     private MockType mockType;
 
-    private int mChapter;
-    private int mVerse;
+    private int mSurah;
+    private int mAyah;
     private int mSource;
 
     private String audioFilePath;
@@ -22,31 +22,31 @@ public class Attempt {
     private String extStorageDir = Environment.getExternalStorageDirectory()+"";
     private String audioDir = extStorageDir + "/rafiqul-huffazh";
 
-    public Attempt(int chapter, int verse) {
+    public Attempt(int surah, int ayah) {
         mockType = MockType.NONE;
 
-        mChapter = chapter;
-        mVerse = verse;
+        mSurah = surah;
+        mAyah = ayah;
 
-        audioFilePath = audioDir + "/recording/"+mChapter+"_"+mVerse+".wav";
+        audioFilePath = audioDir + "/recording/"+ mSurah +"_"+ mAyah +".wav";
     }
 
     public String getAudioFilePath() {
         return audioFilePath;
     }
 
-    public int getChapterNum() {
-        return mChapter;
+    public int getSurahNum() {
+        return mSurah;
     }
 
-    public int getVerseNum() {
-        return mVerse;
+    public int getAyahNum() {
+        return mAyah;
     }
 
     public void setMockType(MockType mockType) {
         this.mockType = mockType;
         if (mockType == MockType.MOCK_RECORDING) {
-            audioFilePath = audioDir + "/test/"+mChapter+"_"+mVerse+".wav";
+            audioFilePath = audioDir + "/test/"+ mSurah +"_"+ mAyah +".wav";
         }
     }
 

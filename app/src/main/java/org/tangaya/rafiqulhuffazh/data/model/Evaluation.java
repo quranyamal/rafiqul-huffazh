@@ -10,17 +10,17 @@ public class Evaluation {
 
     boolean isCorrect;
 
-    int verse, chapter;
+    int ayah, surah;
 
     public Evaluation(Attempt attempt, String transcription_) {
 
         this.attempt = attempt;
         this.transcription = transcription_;
 
-        chapter = attempt.getChapterNum();
-        verse = attempt.getVerseNum();
+        surah = attempt.getSurahNum();
+        ayah = attempt.getAyahNum();
 
-        reference = QuranUtil.getAyah(chapter, verse);
+        reference = QuranUtil.getAyah(surah, ayah);
         isCorrect = transcription.equals(reference);
 
         if (isCorrect) {

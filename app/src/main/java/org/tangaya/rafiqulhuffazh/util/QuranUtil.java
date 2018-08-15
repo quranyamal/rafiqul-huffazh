@@ -63,7 +63,7 @@ public class QuranUtil {
 
     public static int getNumAyah(int surahNum) {
         try {
-            return jsonObject.getJSONArray("surah").getJSONObject(surahNum-1).getInt("num_verse");
+            return jsonObject.getJSONArray("surah").getJSONObject(surahNum-1).getInt("num_ayah");
         } catch (JSONException e) {
             e.printStackTrace();
             return -999;

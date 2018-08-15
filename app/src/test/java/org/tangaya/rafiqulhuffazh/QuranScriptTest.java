@@ -81,7 +81,7 @@ public class QuranScriptTest {
 //            e.printStackTrace();
 //        }
 
-//        System.out.println(QuranScriptFactory.getChapter(1).getVerseQScript(1));
+//        System.out.println(QuranScriptFactory.getSurah(1).getVerseQScript(1));
 
         assertThat(qscriptUrl, notNullValue());
         assertThat(quranUrl, notNullValue());

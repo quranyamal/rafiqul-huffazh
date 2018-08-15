@@ -11,11 +11,11 @@ import android.view.View;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.view.adapter.ChapterAdapter;
-import org.tangaya.rafiqulhuffazh.view.listener.ChapterRecyclerTouchListener;
+import org.tangaya.rafiqulhuffazh.view.adapter.SurahAdapter;
+import org.tangaya.rafiqulhuffazh.view.listener.SurahRecyclerTouchListener;
 
 
-public class ChapterSelectionActivity extends Activity {
+public class SurahSelectionActivity extends Activity {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -24,24 +24,24 @@ public class ChapterSelectionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chapter_selection);
+        setContentView(R.layout.activity_surah_selection);
 
-        setTitle("Select Chapter");
+        setTitle("Pilih Surat");
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
         final SharedPreferences.Editor editor = sharedPref.edit();
 
-        mRecyclerView = findViewById(R.id.chapters_recycler_view);
+        mRecyclerView = findViewById(R.id.surahs_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                 LinearLayoutManager.VERTICAL));
 
-        mRecyclerView.addOnItemTouchListener(new ChapterRecyclerTouchListener(getApplicationContext(),
-                mRecyclerView, new ChapterRecyclerTouchListener.ClickListener() {
+        mRecyclerView.addOnItemTouchListener(new SurahRecyclerTouchListener(getApplicationContext(),
+                mRecyclerView, new SurahRecyclerTouchListener.ClickListener() {
 
             @Override
             public void onClick(View view, int position) {
-                editor.putInt("CURRENT_CHAPTER_NUM", position);
+                editor.putInt("CURRENT_SURAH_NUM", position);
                 editor.commit();
 
                 Intent intent = new Intent(getApplicationContext(), TutorialActivity.class);
@@ -53,7 +53,7 @@ public class ChapterSelectionActivity extends Activity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ChapterAdapter();
+        mAdapter = new SurahAdapter();
         mRecyclerView.setAdapter(mAdapter);
     }
 }

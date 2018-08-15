@@ -1,20 +1,15 @@
 package org.tangaya.rafiqulhuffazh.view.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 
 import org.tangaya.rafiqulhuffazh.view.navigator.HomeNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.HomeViewModel;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityHomeBinding;
 import org.tangaya.rafiqulhuffazh.R;
-
-import java.io.File;
-import java.io.FileOutputStream;
 
 public class HomeActivity extends Activity implements HomeNavigator {
 
@@ -59,7 +54,7 @@ public class HomeActivity extends Activity implements HomeNavigator {
 
     @Override
     public void gotoMurojaah() {
-        Intent intent = new Intent(this, ChapterSelectionActivity.class);
+        Intent intent = new Intent(this, SurahSelectionActivity.class);
         startActivity(intent);
     }
 

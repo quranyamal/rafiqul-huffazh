@@ -30,7 +30,7 @@
         <activity android:name=".view.ui.DevspaceActivity"/>
         <activity android:name=".view.ui.ServerSettingActivity"/>
         <activity android:name=".util.AudioRecordTest" />
-        <activity android:name=".view.ui.ChapterSelectionActivity"/>
+        <activity android:name=".view.ui.SurahSelectionActivity"/>
         <activity
             android:name=".view.ui.ScoreboardActivity"
             android:theme="@android:style/Theme.Material.Light.NoActionBar"/>

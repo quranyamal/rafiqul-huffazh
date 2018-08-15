@@ -33,8 +33,8 @@ public class DevspaceViewModel extends AndroidViewModel {
     ASRServerStatusListener statusListener;
 
 
-    public final ObservableInt chapter = new ObservableInt();
-    public final ObservableInt verse = new ObservableInt();
+    public final ObservableInt surah = new ObservableInt();
+    public final ObservableInt ayah = new ObservableInt();
     public final ObservableField<String> result= new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
     public final ObservableBoolean isRecording = new ObservableBoolean();
@@ -72,8 +72,8 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         mPlayer = new AudioPlayer();
 
-        chapter.set(1);
-        verse.set(1);
+        surah.set(1);
+        ayah.set(1);
         serverStatus.set("disconnected");
         isRecording.set(false);
         attemptCount.set(0);
@@ -99,12 +99,12 @@ public class DevspaceViewModel extends AndroidViewModel {
         }
     }
 
-    private String getRecordingFilepath(int chapter, int verse) {
-        return audioDir + "/recording/"+chapter+"_"+verse+".wav";
+    private String getRecordingFilepath(int surah, int ayah) {
+        return audioDir + "/recording/"+surah+"_"+ayah+".wav";
     }
 
-    private String getTestFilepath(int chapter, int verse) {
-        return audioDir + "/test/"+chapter+"_"+verse+".wav";
+    private String getTestFilepath(int surah, int ayah) {
+        return audioDir + "/test/"+surah+"_"+ayah+".wav";
     }
 
     public ASRServerStatusListener getStatusListener() {
@@ -119,7 +119,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         if (!isRecording.get()) {
 
-            mRecorder.setOutputFile(getRecordingFilepath(chapter.get(), verse.get()));
+            mRecorder.setOutputFile(getRecordingFilepath(surah.get(), ayah.get()));
             mRecorder.prepare();
             mRecorder.start();
 
@@ -135,7 +135,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void playRecordedAudio() {
-        mPlayer.play(Uri.parse(getRecordingFilepath(chapter.get(), verse.get())));
+        mPlayer.play(Uri.parse(getRecordingFilepath(surah.get(), ayah.get())));
         Log.d("DVM", "playing recording...");
     }
 
@@ -143,7 +143,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void recognizeRecording() {
         Timber.d("recognizeRecording()");
 
-        Attempt attempt = new Attempt(chapter.get(), verse.get());
+        Attempt attempt = new Attempt(surah.get(), ayah.get());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         recognitionTaskQueue.add(recognitionTask);
         dequeueRecognitionTasks();
@@ -153,7 +153,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void recognizeTestFile() {
         Timber.d("recognizeTestFile()");
 
-        Attempt attempt = new Attempt(chapter.get(), verse.get());
+        Attempt attempt = new Attempt(surah.get(), ayah.get());
         attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         recognitionTaskQueue.add(recognitionTask);
@@ -162,7 +162,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void fakeRecognition() {
-        Attempt attempt = new Attempt(chapter.get(), verse.get());
+        Attempt attempt = new Attempt(surah.get(), ayah.get());
         attempt.setMockType(Attempt.MockType.MOCK_RESULT);
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
         recognitionTaskQueue.add(recognitionTask);
@@ -171,7 +171,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void playTestFile() {
-        mPlayer.play(Uri.parse(getTestFilepath(chapter.get(), verse.get())));
+        mPlayer.play(Uri.parse(getTestFilepath(surah.get(), ayah.get())));
         Log.d("DVM", "playing test file...");
     }
 
@@ -183,25 +183,25 @@ public class DevspaceViewModel extends AndroidViewModel {
         mNavigator.gotoScoreboard();
     }
 
-    public void incrementVerse() {
-        verse.set(verse.get()+1);
+    public void incrementAyah() {
+        ayah.set(ayah.get()+1);
     }
 
-    public void decrementVerse() {
-        if (verse.get()>1) {
-            verse.set(verse.get()-1);
+    public void decrementAyah() {
+        if (ayah.get()>1) {
+            ayah.set(ayah.get()-1);
         }
     }
 
-    public void incrementChapter() {
-        Log.d("DVM", "increment chapter clicked");
-        chapter.set(chapter.get()+1);
+    public void incrementSurah() {
+        Log.d("DVM", "increment surahId clicked");
+        surah.set(surah.get()+1);
     }
 
-    public void decrementChapter() {
-        Log.d("DVM", "decrement chapter clicked");
-        if (chapter.get()>1) {
-            chapter.set(chapter.get()-1);
+    public void decrementSurah() {
+        Log.d("DVM", "decrement surahId clicked");
+        if (surah.get()>1) {
+            surah.set(surah.get()-1);
         }
     }
 

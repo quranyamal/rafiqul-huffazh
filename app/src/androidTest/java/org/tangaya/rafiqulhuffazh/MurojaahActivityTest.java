@@ -13,7 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
-import org.tangaya.rafiqulhuffazh.view.ui.ChapterSelectionActivity;
+import org.tangaya.rafiqulhuffazh.view.ui.SurahSelectionActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.MurojaahActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.ScoreDetailActivity;
 import org.tangaya.rafiqulhuffazh.view.ui.ScoreboardActivity;
@@ -67,7 +67,7 @@ public class MurojaahActivityTest {
         assert !recording.exists();
 
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
-        onView(withId(R.id.verse_num_text)).perform(click());           // used to play verse
+        onView(withId(R.id.ayah_num_text)).perform(click());           // used to play ayah
 
         try {
             Thread.sleep(3000);
@@ -85,9 +85,9 @@ public class MurojaahActivityTest {
     @Test
     public void murojaahActivityTest_UITestFromHome() {
         onView(withId(R.id.murojaah_button_home)).perform(click());
-        intended(hasComponent(ChapterSelectionActivity.class.getName()));
+        intended(hasComponent(SurahSelectionActivity.class.getName()));
 
-        onView(withId(R.id.chapters_recycler_view)).perform(RecyclerViewActions.scrollToPosition(105));
+        onView(withId(R.id.surahs_recycler_view)).perform(RecyclerViewActions.scrollToPosition(105));
         onView(withText("Al 'Asr")).check(matches(isDisplayed()));
 
         onView((withText("Al 'Asr"))).perform(click());
@@ -96,21 +96,21 @@ public class MurojaahActivityTest {
         onView((withText("skip"))).perform(click());
         intended(hasComponent(MurojaahActivity.class.getName()));
 
-        // verse 1
+        // ayah 1
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_false)));
 
-        // verse 2
+        // ayah 2
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_false)));
 
-        //verse 3
+        //ayah 3
         onView(withId(R.id.attempt_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 

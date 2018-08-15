@@ -12,37 +12,37 @@ public class MurojaahEvaluator {
     public static String INCORRECT_MESSAGE_INSERTION_PART = "penambahan elemen";
     public static String INCORRECT_MESSAGE_MISSING_PART = "elemen hilang";
     public static String INCORRECT_MESSAGE_INSERTION_AND_MISSING_PART = "penambahan dan elemen hilang";
-    public static String INCORRECT_MESSAGE_SKIPPING_ONE_VERSE = "melewatkan satu ayat";
-    public static String INCORRECT_MESSAGE_SKIPPING_SOME_VERSES = "melewatkan beberapa ayat ";
-    public static String INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE = "mundur ke ayat sebelumnya";
+    public static String INCORRECT_MESSAGE_SKIPPING_ONE_AYAH = "melewatkan satu ayat";
+    public static String INCORRECT_MESSAGE_SKIPPING_SOME_AYAHS = "melewatkan beberapa ayat ";
+    public static String INCORRECT_MESSAGE_RETURNING_TO_PREV_AYAH = "mundur ke ayat sebelumnya";
 
     private static diff_match_patch dmp = new diff_match_patch();
 
     private MurojaahEvaluator() {}
 
-    public static String evaluate(int chapter, int verse, String recognized) {
+    public static String evaluate(int surah, int ayah, String recognized) {
 
-        String reference = QuranUtil.getQScript(chapter, verse);
+        String reference = QuranUtil.getQScript(surah, ayah);
 
         if (recognized.equals(reference)) {
             return CORRECT_MESSAGE;
-        } else if (QuranUtil.isValidAyahNum(chapter, verse+1)) {
-            if (recognized.equals(QuranUtil.getQScript(chapter, verse+1))) {
-                return INCORRECT_MESSAGE_SKIPPING_ONE_VERSE;
+        } else if (QuranUtil.isValidAyahNum(surah, ayah+1)) {
+            if (recognized.equals(QuranUtil.getQScript(surah, ayah+1))) {
+                return INCORRECT_MESSAGE_SKIPPING_ONE_AYAH;
             } else {
-                int verseNum = verse+2;
-                while (QuranUtil.isValidAyahNum(chapter, verseNum)) {
-                    if (recognized.equals(QuranUtil.getQScript(chapter, verseNum))) {
-                        return INCORRECT_MESSAGE_SKIPPING_SOME_VERSES;
+                int ayahNum = ayah+2;
+                while (QuranUtil.isValidAyahNum(surah, ayahNum)) {
+                    if (recognized.equals(QuranUtil.getQScript(surah, ayahNum))) {
+                        return INCORRECT_MESSAGE_SKIPPING_SOME_AYAHS;
                     }
-                    verseNum++;
+                    ayahNum++;
                 }
             }
         }
 
-        for (int i=1; i<verse; i++) {
-            if (recognized.equals(QuranUtil.getQScript(chapter, i))) {
-                return INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE;
+        for (int i=1; i<ayah; i++) {
+            if (recognized.equals(QuranUtil.getQScript(surah, i))) {
+                return INCORRECT_MESSAGE_RETURNING_TO_PREV_AYAH;
             }
         }
 

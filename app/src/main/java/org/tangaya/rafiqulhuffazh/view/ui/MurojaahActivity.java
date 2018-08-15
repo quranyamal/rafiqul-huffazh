@@ -30,7 +30,7 @@ import timber.log.Timber;
 
 public class MurojaahActivity extends Activity implements LifecycleOwner, MurojaahNavigator {
 
-    private int CHAPTER_NUM;
+    private int SURAH_NUM;
 
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
@@ -49,12 +49,12 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
 
-        CHAPTER_NUM = sharedPref.getInt("CURRENT_CHAPTER_NUM", -1) + 1;
-        Log.d("MA", "chapter num:"+CHAPTER_NUM);
+        SURAH_NUM = sharedPref.getInt("CURRENT_SURAH_NUM", -1) + 1;
+        Log.d("MA", "surahId num:"+ SURAH_NUM);
 
         if (mViewModel==null) {
             mViewModel = obtainViewModel(this);
-            mViewModel.onActivityCreated(this, CHAPTER_NUM);
+            mViewModel.onActivityCreated(this, SURAH_NUM);
         }
 
         mMurojaahDataBinding.setViewmodel(mViewModel);

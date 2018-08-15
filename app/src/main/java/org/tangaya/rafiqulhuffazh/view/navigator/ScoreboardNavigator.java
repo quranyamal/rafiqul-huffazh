@@ -4,11 +4,11 @@ public interface ScoreboardNavigator {
 
     void showDetail();
 
-    void retryChapter();
+    void retrySurah();
 
-    void nextChapter();
+    void nextSurah();
 
-    void selectAnotherChapter();
+    void selectAnotherSurah();
 
     void exit();
 }

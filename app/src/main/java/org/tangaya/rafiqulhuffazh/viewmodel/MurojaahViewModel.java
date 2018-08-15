@@ -37,9 +37,9 @@ public class MurojaahViewModel extends AndroidViewModel {
     public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
-    public final ObservableField<Integer> chapterNum = new ObservableField<>();
-    public final ObservableField<String> chapterName = new ObservableField<>();
-    public final ObservableField<Integer> verseNum = new ObservableField<>(1);
+    public final ObservableField<Integer> surahNum = new ObservableField<>();
+    public final ObservableField<String> surahName = new ObservableField<>();
+    public final ObservableField<Integer> ayahNum = new ObservableField<>(1);
     public final ObservableField<Integer> attemptState= new ObservableField<>();
 
     public final ObservableField<String> hintText = new ObservableField<>();
@@ -113,24 +113,24 @@ public class MurojaahViewModel extends AndroidViewModel {
         Timber.d("MurojaahViewModel constructor");
     }
 
-    public void onActivityCreated(MurojaahNavigator navigator, int chapter) {
+    public void onActivityCreated(MurojaahNavigator navigator, int surah) {
         mNavigator = navigator;
-        chapterNum.set(chapter);
-        chapterName.set(QuranUtil.getSurahName(chapter));
+        surahNum.set(surah);
+        surahName.set(QuranUtil.getSurahName(surah));
         EvaluationRepository.clearEvalData();
-        //verseNum.set(1);
+        //ayahNum.set(1);
 
         Timber.d("onActivityCreated");
     }
 
     public void showHint() {
-        chapterName.set(QuranUtil.getSurahName(chapterNum.get()));
-        ayahText.set(QuranUtil.getAyah(chapterNum.get(), verseNum.get()));
+        surahName.set(QuranUtil.getSurahName(surahNum.get()));
+        ayahText.set(QuranUtil.getAyah(surahNum.get(), ayahNum.get()));
         hintVisibility.set(View.VISIBLE);
         isHintRequested.set(true);
     }
 
-    public void attemptVerse() {
+    public void attemptAyah() {
         if (isRecording.get()) {
             submitAttempt();
         } else {
@@ -140,13 +140,13 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     void createAttempt() {
         // todo: fix filename of recording. save file to cache directory
-        recordingFilepath = audioDir + "/recording/"+chapterNum.get()+"_"+verseNum.get()+".wav";
-        testFilePath = audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
+        recordingFilepath = audioDir + "/recording/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
+        testFilePath = audioDir + "/test/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
 
-        evaluation = new EvaluationOld(chapterNum.get(), verseNum.get(), 123);
+        evaluation = new EvaluationOld(surahNum.get(), ayahNum.get(), 123);
         evaluation.setFilepath(recordingFilepath);
 
-        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
+        Attempt attempt = new Attempt(surahNum.get(), ayahNum.get());
 
         if (!isMockRecording) {
             attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
@@ -167,7 +167,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         Timber.d("submitAttempt() 1");
 
-        Attempt attempt = new Attempt(chapterNum.get(), verseNum.get());
+        Attempt attempt = new Attempt(surahNum.get(), ayahNum.get());
         attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         Timber.d("file path:" + attempt.getAudioFilePath());
@@ -226,15 +226,15 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     private String getTestFilePath() {
-        return audioDir + "/test/"+chapterNum.get()+"_"+verseNum.get()+".wav";
+        return audioDir + "/test/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
     }
 
     private boolean isEndOfSurah() {
-        return !QuranUtil.isValidAyahNum(chapterNum.get(), verseNum.get()+1);
+        return !QuranUtil.isValidAyahNum(surahNum.get(), ayahNum.get()+1);
     }
 
     private void incrementAyah() {
-        verseNum.set(verseNum.get()+1);
+        ayahNum.set(ayahNum.get()+1);
         hintVisibility.set(View.INVISIBLE);
         isHintRequested.set(false);
     }

@@ -62,24 +62,24 @@ public class ScoreboardActivity extends Activity implements LifecycleOwner, Scor
     }
 
     @Override
-    public void retryChapter() {
+    public void retrySurah() {
         Intent intent = new Intent(this, MurojaahActivity.class);
         finish();
         startActivity(intent);
     }
 
     @Override
-    public void nextChapter() {
+    public void nextSurah() {
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
-        int chapterNum = sharedPref.getInt("CURRENT_CHAPTER_NUM", -1);
+        int surahNum = sharedPref.getInt("CURRENT_SURAH_NUM", -1);
 
-        if (chapterNum==115) {
+        if (surahNum==115) {
             exit();
         } else {
-            chapterNum++;
+            surahNum++;
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt("CURRENT_CHAPTER_NUM", chapterNum);
+            editor.putInt("CURRENT_SURAH_NUM", surahNum);
             editor.commit();
 
             Intent intent = new Intent(this, MurojaahActivity.class);
@@ -89,8 +89,8 @@ public class ScoreboardActivity extends Activity implements LifecycleOwner, Scor
     }
 
     @Override
-    public void selectAnotherChapter() {
-        Intent intent = new Intent(this, ChapterSelectionActivity.class);
+    public void selectAnotherSurah() {
+        Intent intent = new Intent(this, SurahSelectionActivity.class);
         finish();
         startActivity(intent);
     }

@@ -22,8 +22,8 @@ public class ScoreboardViewModel extends AndroidViewModel {
 
     ScoreboardNavigator mNavigator;
 
-    public final ObservableField<String> currentChapter = new ObservableField<>();
-    public final ObservableField<String> nextChapter = new ObservableField<>();
+    public final ObservableField<String> currentSurah = new ObservableField<>();
+    public final ObservableField<String> nextSurah = new ObservableField<>();
     public final ObservableInt score = new ObservableInt();
 
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
@@ -37,10 +37,10 @@ public class ScoreboardViewModel extends AndroidViewModel {
         mNavigator = navigator;
 
         SharedPreferences preferences = ((MyApplication) getApplication()).getPreferences();
-        int chapterNum = preferences.getInt("CURRENT_CHAPTER_NUM", -1)+1;
+        int surahNum = preferences.getInt("CURRENT_SURAH_NUM", -1)+1;
 
-        currentChapter.set(QuranUtil.getSurahName(chapterNum));
-        nextChapter.set(QuranUtil.getSurahName(chapterNum+1));
+        currentSurah.set(QuranUtil.getSurahName(surahNum));
+        nextSurah.set(QuranUtil.getSurahName(surahNum+1));
 
         updateScore();
     }
@@ -69,16 +69,16 @@ public class ScoreboardViewModel extends AndroidViewModel {
         mNavigator.showDetail();
     }
 
-    public void retryChapter() {
-        mNavigator.retryChapter();
+    public void retrySurah() {
+        mNavigator.retrySurah();
     }
 
-    public void nextChapter() {
-        mNavigator.nextChapter();
+    public void nextSurah() {
+        mNavigator.nextSurah();
     }
 
-    public void selectAnotherChapter() {
-        mNavigator.selectAnotherChapter();
+    public void selectAnotherSurah() {
+        mNavigator.selectAnotherSurah();
     }
 
     public void exit() {

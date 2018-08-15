@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import timber.log.Timber;
-
 public class EvaluationRepository {
 
     private static ArrayList<EvaluationOld> evals;
@@ -45,7 +43,7 @@ public class EvaluationRepository {
         Collections.sort(evals, new Comparator<EvaluationOld>() {
             @Override
             public int compare(EvaluationOld eval1, EvaluationOld eval2) {
-                return Integer.compare(eval1.verse, eval2.verse);
+                return Integer.compare(eval1.ayah, eval2.ayah);
             }
         });
     }

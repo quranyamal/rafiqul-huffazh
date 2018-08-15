@@ -42,7 +42,7 @@ public class MurojaahEvaluatorTest {
         String qScriptRecognized = QuranUtil.getQScript(chapter, verse+1);
         String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_ONE_VERSE));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_ONE_AYAH));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MurojaahEvaluatorTest {
         String qScriptRecognized = QuranUtil.getQScript(chapter, verse+2);
         String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
-        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_SOME_VERSES));
+        assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_SOME_AYAHS));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class MurojaahEvaluatorTest {
         for (int i=1; i<verse; i++) {
             String qScriptRecognized = QuranUtil.getQScript(chapter, i);
             String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
-            assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE));
+            assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_RETURNING_TO_PREV_AYAH));
         }
     }
 
