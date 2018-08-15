@@ -22,17 +22,17 @@ public class MurojaahEvaluator {
 
     public static String evaluate(int chapter, int verse, String recognized) {
 
-        String reference = QuranFactory.getQScript(chapter, verse);
+        String reference = QuranUtil.getQScript(chapter, verse);
 
         if (recognized.equals(reference)) {
             return CORRECT_MESSAGE;
-        } else if (QuranFactory.isValidAyahNum(chapter, verse+1)) {
-            if (recognized.equals(QuranFactory.getQScript(chapter, verse+1))) {
+        } else if (QuranUtil.isValidAyahNum(chapter, verse+1)) {
+            if (recognized.equals(QuranUtil.getQScript(chapter, verse+1))) {
                 return INCORRECT_MESSAGE_SKIPPING_ONE_VERSE;
             } else {
                 int verseNum = verse+2;
-                while (QuranFactory.isValidAyahNum(chapter, verseNum)) {
-                    if (recognized.equals(QuranFactory.getQScript(chapter, verseNum))) {
+                while (QuranUtil.isValidAyahNum(chapter, verseNum)) {
+                    if (recognized.equals(QuranUtil.getQScript(chapter, verseNum))) {
                         return INCORRECT_MESSAGE_SKIPPING_SOME_VERSES;
                     }
                     verseNum++;
@@ -41,7 +41,7 @@ public class MurojaahEvaluator {
         }
 
         for (int i=1; i<verse; i++) {
-            if (recognized.equals(QuranFactory.getQScript(chapter, i))) {
+            if (recognized.equals(QuranUtil.getQScript(chapter, i))) {
                 return INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE;
             }
         }

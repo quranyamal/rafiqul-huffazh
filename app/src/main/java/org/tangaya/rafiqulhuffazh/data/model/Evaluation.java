@@ -1,7 +1,6 @@
 package org.tangaya.rafiqulhuffazh.data.model;
 
-import org.tangaya.rafiqulhuffazh.util.QuranFactory;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 public class Evaluation {
 
@@ -21,7 +20,7 @@ public class Evaluation {
         chapter = attempt.getChapterNum();
         verse = attempt.getVerseNum();
 
-        reference = QuranFactory.getAyah(chapter, verse);
+        reference = QuranUtil.getAyah(chapter, verse);
         isCorrect = transcription.equals(reference);
 
         if (isCorrect) {

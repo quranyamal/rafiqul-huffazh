@@ -9,7 +9,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class QuranFactory {
+public class QuranUtil {
 
     public static String INVALID_INDEX_MESSAGE = "INVALID!";
 

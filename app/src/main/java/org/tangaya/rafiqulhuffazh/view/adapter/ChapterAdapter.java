@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.util.QuranFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ChaptersViewHolder> {
 
@@ -27,7 +27,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.Chapters
     public void onBindViewHolder(@NonNull ChaptersViewHolder holder, int position) {
 
         int chapterId = position+1;
-        String chapterTitile = QuranFactory.getSurahName(chapterId);
+        String chapterTitile = QuranUtil.getSurahName(chapterId);
         holder.chapterId.setText(chapterId+" ");
         holder.chapterName.setText(chapterTitile);
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recording_true">tekan tombol lanjut untuk berhenti merekam</string>
+    <string name="recording_false">tekan tombol rekam dan mulai membaca ayat</string>
+    <string name="about_description">Rafiqul Huffazh adalah sebuah aplikasi Android untuk membantu muroja\'ah hafalan Al Quran</string>
+    <string name="about_contact">Hubungi pengembang di mal.qurany@gmail.com</string>
+</resources>

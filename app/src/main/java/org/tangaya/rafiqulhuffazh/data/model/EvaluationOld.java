@@ -8,7 +8,7 @@ import android.os.Environment;
 
 import org.json.JSONObject;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
-import org.tangaya.rafiqulhuffazh.util.QuranFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
 import org.tangaya.rafiqulhuffazh.util.diff_match_patch;
 
@@ -91,14 +91,14 @@ public class EvaluationOld extends BaseObservable {
 
         verseNum.set("Verse " + verse);
 
-        mVerseScript.set(QuranFactory.getAyah(mChapter.get(), mVerse.get()));
-        mVerseQScript.set(QuranFactory.getQScript(mChapter.get(), mVerse.get()));
+        mVerseScript.set(QuranUtil.getAyah(mChapter.get(), mVerse.get()));
+        mVerseQScript.set(QuranUtil.getQScript(mChapter.get(), mVerse.get()));
 
         isCorrect.set(false);
 
         notifyChange();
 
-        reference = QuranFactory.getQScript(chapter, verse);
+        reference = QuranUtil.getQScript(chapter, verse);
         isCorrect.set(transcription.equals(reference));
 
         if (isCorrect.get()) {
@@ -109,9 +109,9 @@ public class EvaluationOld extends BaseObservable {
 
         ////
         mTranscription.set(transcription);
-        mVerseScript.set(QuranFactory.getAyah(chapter, verse));
+        mVerseScript.set(QuranUtil.getAyah(chapter, verse));
 
-        mVerseQScript.set(QuranFactory.getQScript(chapter, verse));
+        mVerseQScript.set(QuranUtil.getQScript(chapter, verse));
 
         mArabicTranscription.set(QuranScriptConverter.toArabic(transcription));
 

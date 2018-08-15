@@ -38,9 +38,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
             verseNum = itemView.findViewById(R.id.verse_num_evaluation);
             rec = itemView.findViewById(R.id.verse_rec_evaluation);
             ref = itemView.findViewById(R.id.verse_ref_evaluation);
-            evaluationIcon = itemView.findViewById(R.id.evaluation_icon);
-            eval = itemView.findViewById(R.id.eval);
-            levScore = itemView.findViewById(R.id.levenshtein_score);
+            eval = itemView.findViewById(R.id.eval_result);
         }
 
         public void bind(ScoreDetailViewModel viewModel) {

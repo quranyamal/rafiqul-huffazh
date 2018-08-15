@@ -30,21 +30,24 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/verse_num_evaluation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{viewmodel.verseNumber, default=`verse 1`}"/>
+                        android:text="@{viewmodel.verseNumber, default=`Ayat 1`}"/>
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginLeft="8dp"
-                        android:src="@drawable/speaker_24"
-                        android:onClick="@{()->viewmodel.playReference()}"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Incorrect"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -60,34 +63,26 @@
                     android:layout_height="wrap_content"
                     android:text="@{`recognized: `+viewmodel.recognizedArabicTranscript, default=`rec: اللَّهِ الرَّحْمَٰنِ الرَّحِيم`}"/>
 
-                <TextView
-                    android:id="@+id/levenshtein_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{`points: `+ viewmodel.earnedPoint + `/` +viewmodel.maxPoint, default=`points: 12/12`}"
-                    android:paddingBottom="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/eval_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{`poin: `+ viewmodel.earnedPoint + `/` +viewmodel.maxPoint, default=`poin: 8/12`}"
+                        android:paddingBottom="5dp"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/eval_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="missing element"
+                        android:textAlignment="textEnd" />
 
-                <ImageView
-                    android:id="@+id/evaluation_icon"
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@{viewmodel.isCorrect ? @drawable/check_100 : @drawable/cross_red_64, default=@drawable/cross_red_64}"/>
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/eval"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewmodel.evalStr, default=`missing element`}"
-                    android:textAlignment="center"
-                    android:paddingBottom="5dp"/>
 
             </LinearLayout>
 

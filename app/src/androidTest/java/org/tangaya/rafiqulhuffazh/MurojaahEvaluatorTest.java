@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
-import org.tangaya.rafiqulhuffazh.util.QuranFactory;
+import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -23,13 +23,13 @@ public class MurojaahEvaluatorTest {
 
     @Before
     public void initQuranScriptFactory() {
-        QuranFactory.init(assetManager);
+        QuranUtil.init(assetManager);
     }
 
     @Test
     public void murojaahEvaluator_CorrectAttempt_ReturnsCorrectMessage() {
         int chapter=103, verse=3;
-        String qScriptRecognized = QuranFactory.getQScript(chapter, verse);
+        String qScriptRecognized = QuranUtil.getQScript(chapter, verse);
 
         String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
         assertThat(evalResult, is(MurojaahEvaluator.CORRECT_MESSAGE));
@@ -39,7 +39,7 @@ public class MurojaahEvaluatorTest {
     public void murojaahEvaluator_IncorrectAttemptBySkippingVerse_ReturnsSkippingVerseIncorrectMessage() {
         int chapter=91, verse=8;
 
-        String qScriptRecognized = QuranFactory.getQScript(chapter, verse+1);
+        String qScriptRecognized = QuranUtil.getQScript(chapter, verse+1);
         String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
         assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_ONE_VERSE));
@@ -49,7 +49,7 @@ public class MurojaahEvaluatorTest {
     public void murojaahEvaluator_IncorrectAttemptBySkippingVerses_ReturnsSkippingVersesIncorrectMessage() {
         int chapter=91, verse=8;
 
-        String qScriptRecognized = QuranFactory.getQScript(chapter, verse+2);
+        String qScriptRecognized = QuranUtil.getQScript(chapter, verse+2);
         String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
 
         assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_SKIPPING_SOME_VERSES));
@@ -60,7 +60,7 @@ public class MurojaahEvaluatorTest {
         int chapter=91, verse=8;
 
         for (int i=1; i<verse; i++) {
-            String qScriptRecognized = QuranFactory.getQScript(chapter, i);
+            String qScriptRecognized = QuranUtil.getQScript(chapter, i);
             String evalResult = MurojaahEvaluator.evaluate(chapter, verse, qScriptRecognized);
             assertThat(evalResult, is(MurojaahEvaluator.INCORRECT_MESSAGE_RETURNING_TO_PREV_VERSE));
         }
