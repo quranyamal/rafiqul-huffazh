@@ -9,20 +9,20 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
 import android.util.Log;
 
-public class WavAudioRecorder {
+public class MyAudioRecorder {
     private final static int[] sampleRates = {44100, 22050, 11025, 8000};
 
-    public static WavAudioRecorder getInstance() {
-        WavAudioRecorder result = null;
+    public static MyAudioRecorder getInstance() {
+        MyAudioRecorder result = null;
 //        int i=0;
 //        do {
-//            result = new WavAudioRecorder(AudioSource.MIC,
+//            result = new MyAudioRecorder(AudioSource.MIC,
 //                    sampleRates[i],
 //                    AudioFormat.CHANNEL_IN_MONO,
 //                    AudioFormat.ENCODING_PCM_16BIT);
-//        } while((++i<sampleRates.length) & !(result.getState() == WavAudioRecorder.State.INITIALIZING));
+//        } while((++i<sampleRates.length) & !(result.getState() == MyAudioRecorder.State.INITIALIZING));
 
-        result = new WavAudioRecorder(AudioSource.MIC,
+        result = new MyAudioRecorder(AudioSource.MIC,
                         16000,
                         AudioFormat.CHANNEL_IN_MONO,
                         AudioFormat.ENCODING_PCM_16BIT);
@@ -78,7 +78,7 @@ public class WavAudioRecorder {
 
     /**
      *
-     * Returns the state of the recorder in a WavAudioRecorder.State typed object.
+     * Returns the state of the recorder in a MyAudioRecorder.State typed object.
      * Useful, as no exceptions are thrown.
      *
      * @return recorder state
@@ -95,16 +95,16 @@ public class WavAudioRecorder {
         //	periodic updates on the progress of the record head
         public void onPeriodicNotification(AudioRecord recorder) {
             if (State.STOPPED == state) {
-                Log.d(WavAudioRecorder.this.getClass().getName(), "recorder stopped");
+                Log.d(MyAudioRecorder.this.getClass().getName(), "recorder stopped");
                 return;
             }
             int numOfBytes = audioRecorder.read(buffer, 0, buffer.length); // read audio data to buffer
-//			Log.d(WavAudioRecorder.this.getClass().getName(), state + ":" + numOfBytes);
+//			Log.d(MyAudioRecorder.this.getClass().getName(), state + ":" + numOfBytes);
             try {
                 randomAccessWriter.write(buffer); 		  // write audio data to file
                 payloadSize += buffer.length;
             } catch (IOException e) {
-                Log.e(WavAudioRecorder.class.getName(), "Error occured in updateListener, recording is aborted");
+                Log.e(MyAudioRecorder.class.getName(), "Error occured in updateListener, recording is aborted");
                 e.printStackTrace();
             }
         }
@@ -121,7 +121,7 @@ public class WavAudioRecorder {
      * In case of errors, no exception is thrown, but the state is set to ERROR
      *
      */
-    public WavAudioRecorder(int audioSource, int sampleRate, int channelConfig, int audioFormat) {
+    public MyAudioRecorder(int audioSource, int sampleRate, int channelConfig, int audioFormat) {
         try {
             if (audioFormat == AudioFormat.ENCODING_PCM_16BIT) {
                 mBitsPersample = 16;
@@ -146,7 +146,7 @@ public class WavAudioRecorder {
                 mBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
                 // Set frame period and timer interval accordingly
                 mPeriodInFrames = mBufferSize / ( 2 * mBitsPersample * nChannels / 8 );
-                Log.w(WavAudioRecorder.class.getName(), "Increasing buffer size to " + Integer.toString(mBufferSize));
+                Log.w(MyAudioRecorder.class.getName(), "Increasing buffer size to " + Integer.toString(mBufferSize));
             }
 
             audioRecorder = new AudioRecord(audioSource, sampleRate, channelConfig, audioFormat, mBufferSize);
@@ -160,9 +160,9 @@ public class WavAudioRecorder {
             state = State.INITIALIZING;
         } catch (Exception e) {
             if (e.getMessage() != null) {
-                Log.e(WavAudioRecorder.class.getName(), e.getMessage());
+                Log.e(MyAudioRecorder.class.getName(), e.getMessage());
             } else {
-                Log.e(WavAudioRecorder.class.getName(), "Unknown error occured while initializing recording");
+                Log.e(MyAudioRecorder.class.getName(), "Unknown error occured while initializing recording");
             }
             state = State.ERROR;
         }
@@ -175,9 +175,9 @@ public class WavAudioRecorder {
             }
         } catch (Exception e) {
             if (e.getMessage() != null) {
-                Log.e(WavAudioRecorder.class.getName(), e.getMessage());
+                Log.e(MyAudioRecorder.class.getName(), e.getMessage());
             } else {
-                Log.e(WavAudioRecorder.class.getName(), "Unknown error occured while setting output path");
+                Log.e(MyAudioRecorder.class.getName(), "Unknown error occured while setting output path");
             }
             state = State.ERROR;
         }
@@ -215,19 +215,19 @@ public class WavAudioRecorder {
                     buffer = new byte[mPeriodInFrames*mBitsPersample/8*nChannels];
                     state = State.READY;
                 } else {
-                    Log.e(WavAudioRecorder.class.getName(), "prepare() method called on uninitialized recorder");
+                    Log.e(MyAudioRecorder.class.getName(), "prepare() method called on uninitialized recorder");
                     state = State.ERROR;
                 }
             } else {
-                Log.e(WavAudioRecorder.class.getName(), "prepare() method called on illegal state");
+                Log.e(MyAudioRecorder.class.getName(), "prepare() method called on illegal state");
                 release();
                 state = State.ERROR;
             }
         } catch(Exception e) {
             if (e.getMessage() != null) {
-                Log.e(WavAudioRecorder.class.getName(), e.getMessage());
+                Log.e(MyAudioRecorder.class.getName(), e.getMessage());
             } else {
-                Log.e(WavAudioRecorder.class.getName(), "Unknown error occured in prepare()");
+                Log.e(MyAudioRecorder.class.getName(), "Unknown error occured in prepare()");
             }
             state = State.ERROR;
         }
@@ -247,7 +247,7 @@ public class WavAudioRecorder {
                 try {
                     randomAccessWriter.close(); // Remove prepared file
                 } catch (IOException e) {
-                    Log.e(WavAudioRecorder.class.getName(), "I/O exception occured while closing output file");
+                    Log.e(MyAudioRecorder.class.getName(), "I/O exception occured while closing output file");
                 }
                 (new File(filePath)).delete();
             }
@@ -280,7 +280,7 @@ public class WavAudioRecorder {
                 state = State.INITIALIZING;
             }
         } catch (Exception e) {
-            Log.e(WavAudioRecorder.class.getName(), e.getMessage());
+            Log.e(MyAudioRecorder.class.getName(), e.getMessage());
             state = State.ERROR;
         }
     }
@@ -299,7 +299,7 @@ public class WavAudioRecorder {
             audioRecorder.read(buffer, 0, buffer.length);	//[TODO: is this necessary]read the existing data in audio hardware, but don't do anything
             state = State.RECORDING;
         } else {
-            Log.e(WavAudioRecorder.class.getName(), "start() called on illegal state");
+            Log.e(MyAudioRecorder.class.getName(), "start() called on illegal state");
             state = State.ERROR;
         }
     }
@@ -324,12 +324,12 @@ public class WavAudioRecorder {
 
                 randomAccessWriter.close();
             } catch(IOException e) {
-                Log.e(WavAudioRecorder.class.getName(), "I/O exception occured while closing output file");
+                Log.e(MyAudioRecorder.class.getName(), "I/O exception occured while closing output file");
                 state = State.ERROR;
             }
             state = State.STOPPED;
         } else {
-            Log.e(WavAudioRecorder.class.getName(), "stop() called on illegal state");
+            Log.e(MyAudioRecorder.class.getName(), "stop() called on illegal state");
             state = State.ERROR;
         }
     }

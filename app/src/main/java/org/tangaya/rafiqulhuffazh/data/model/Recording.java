@@ -1,36 +1,30 @@
 package org.tangaya.rafiqulhuffazh.data.model;
 
+import android.os.Environment;
+
 public class Recording {
+
+    public static String RECORDING_PATH = Environment.getExternalStorageDirectory() +
+            "/rafiqul-huffazh/recording/";
 
     private static int count = 0;
 
     private int mId;
 
-    private int mSurah;
-
-    private int mAyah;
+    private int mSurah, mAyah;
 
     private String mFilename;
 
     public Recording(int surah, int ayah) {
-        mId = Recording.count++;
         mSurah = surah;
         mAyah = ayah;
-    }
-
-    public Recording(int surah, int ayah, String filename) {
+        mFilename = surah + "_" + ayah + ".wav";
         mId = Recording.count++;
-        mSurah = surah;
-        mAyah = ayah;
-        mFilename = filename;
     }
 
-    public int getSurah() {
-        return mSurah;
+    public String getFilename() {
+        return mFilename;
     }
 
-    public int getAyah() {
-        return mAyah;
-    }
 
 }

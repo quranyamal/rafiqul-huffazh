@@ -20,8 +20,6 @@ import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 import org.tangaya.rafiqulhuffazh.data.service.ASRServerStatusListener;
-import org.tangaya.rafiqulhuffazh.data.service.AudioPlayer;
-import org.tangaya.rafiqulhuffazh.data.service.WavAudioRecorder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,31 +28,29 @@ import timber.log.Timber;
 
 public class DevspaceViewModel extends AndroidViewModel {
 
-    ASRServerStatusListener statusListener;
+    private static DevspaceViewModel INSTANCE = null;
 
 
-    public final ObservableInt surah = new ObservableInt();
-    public final ObservableInt ayah = new ObservableInt();
+    public final ObservableInt surah = new ObservableInt(1);
+    public final ObservableInt ayah = new ObservableInt(1);
     public final ObservableField<String> result= new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
-    public final ObservableBoolean isRecording = new ObservableBoolean();
-    public final ObservableInt attemptCount = new ObservableInt();
+    public final ObservableBoolean isRecording = new ObservableBoolean(false);
+    public final ObservableInt attemptCount = new ObservableInt(0);
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
 
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
-
     public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
     }
 
-    private String hostname;
-    private String port;
 
-    String endpoint;
+    private String hostname = ((MyApplication) getApplication()).getServerHostname();
+    private String port = ((MyApplication) getApplication()).getServerPort();
+    ASRServerStatusListener statusListener = new ASRServerStatusListener(hostname, port);
 
-    WavAudioRecorder mRecorder;
-    AudioPlayer mPlayer;
+    String endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
     DevspaceNavigator mNavigator;
 
     private String extStorageDir = Environment.getExternalStorageDirectory()+"";
@@ -62,28 +58,30 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
 
-    public DevspaceViewModel(@NonNull Application application) {
+    private DevspaceViewModel(@NonNull Application application) {
         super(application);
 
-        mRecorder = new WavAudioRecorder(MediaRecorder.AudioSource.MIC,
-                16000,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT);
+//        surah.set(1);
+//        ayah.set(1);
+//        serverStatus.set("disconnected");
+//        isRecording.set(false);
+//        attemptCount.set(0);
+//
+//        hostname = ((MyApplication) getApplication()).getServerHostname();
+//        port = ((MyApplication) getApplication()).getServerPort();
+//        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
+//
+//        statusListener = new ASRServerStatusListener(hostname, port);
+//        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
+    }
 
-        mPlayer = new AudioPlayer();
+    public static DevspaceViewModel getIntance(Application application) {
 
-        surah.set(1);
-        ayah.set(1);
-        serverStatus.set("disconnected");
-        isRecording.set(false);
-        attemptCount.set(0);
-
-        hostname = ((MyApplication) getApplication()).getServerHostname();
-        port = ((MyApplication) getApplication()).getServerPort();
-        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
-
-        statusListener = new ASRServerStatusListener(hostname, port);
-        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
+        if ( INSTANCE == null) {
+            INSTANCE = new DevspaceViewModel(application);
+            RecognitionTask.ENDPOINT = ((MyApplication) application).getRecognitionEndpoint();
+        }
+        return INSTANCE;
     }
 
     public void dequeueRecognitionTasks() {
@@ -118,25 +116,12 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void onClickRecord() {
 
         if (!isRecording.get()) {
-
-            mRecorder.setOutputFile(getRecordingFilepath(surah.get(), ayah.get()));
-            mRecorder.prepare();
-            mRecorder.start();
-
+            mNavigator.onStartRecording(surah.get(), ayah.get());
             isRecording.set(true);
-
         } else {
-
-            mRecorder.stop();
-            mRecorder.reset();
-
+            mNavigator.onStopRecording();
             isRecording.set(false);
         }
-    }
-
-    public void playRecordedAudio() {
-        mPlayer.play(Uri.parse(getRecordingFilepath(surah.get(), ayah.get())));
-        Log.d("DVM", "playing recording...");
     }
 
     // add to recognizing queue
@@ -171,12 +156,11 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void playTestFile() {
-        mPlayer.play(Uri.parse(getTestFilepath(surah.get(), ayah.get())));
-        Log.d("DVM", "playing test file...");
+        mNavigator.onPlayTestFile(surah.get(), ayah.get());
     }
 
-    public void gotoEvalDetail() {
-        mNavigator.gotoEvalDetail();
+    public void playRecording() {
+        mNavigator.onPlayRecording(surah.get(), ayah.get());
     }
 
     public void gotoScoreboard() {

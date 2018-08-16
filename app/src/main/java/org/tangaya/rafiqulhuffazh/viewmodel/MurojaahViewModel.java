@@ -23,8 +23,8 @@ import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.data.service.ASRServerStatusListener;
-import org.tangaya.rafiqulhuffazh.data.service.AudioPlayer;
-import org.tangaya.rafiqulhuffazh.data.service.WavAudioRecorder;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,13 +52,13 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     private boolean isMockRecording = true;
 
-    AudioPlayer audioPlayer;
+    MyAudioPlayer myAudioPlayer;
 
     Context mContext;
     MurojaahNavigator mNavigator;
 
-    AudioPlayer mPlayer = new AudioPlayer();
-    WavAudioRecorder mRecorder;
+    MyAudioPlayer mPlayer = new MyAudioPlayer();
+    MyAudioRecorder mRecorder;
 
     Uri audioFileUri;
     EvaluationOld evaluation;
@@ -88,7 +88,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         mContext = context;
 
-        audioPlayer = new AudioPlayer();
+        myAudioPlayer = new MyAudioPlayer();
         audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
         audioFileUri = Uri.parse(audioDir);
 
@@ -105,7 +105,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
 
         if (!isMockRecording) {
-            mRecorder = new WavAudioRecorder(MediaRecorder.AudioSource.MIC, 16000,
+            mRecorder = new MyAudioRecorder(MediaRecorder.AudioSource.MIC, 16000,
                                                 AudioFormat.CHANNEL_IN_MONO,
                                                 AudioFormat.ENCODING_PCM_16BIT);
         }
@@ -130,15 +130,15 @@ public class MurojaahViewModel extends AndroidViewModel {
         isHintRequested.set(true);
     }
 
-    public void attemptAyah() {
+    public void recordAyah() {
         if (isRecording.get()) {
-            submitAttempt();
+            finishRecording();
         } else {
-            createAttempt();
+            startRecording();
         }
     }
 
-    void createAttempt() {
+    void startRecording() {
         // todo: fix filename of recording. save file to cache directory
         recordingFilepath = audioDir + "/recording/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
         testFilePath = audioDir + "/test/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
@@ -150,29 +150,23 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         if (!isMockRecording) {
             attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
-            mRecorder.setOutputFile(recordingFilepath);
-            mRecorder.prepare();
-            mRecorder.start();
+            mNavigator.onStartRecording(surahNum.get(), ayahNum.get());
         }
 
         isRecording.set(true);
     }
 
-    void submitAttempt() {
+    void finishRecording() {
 
         if (!isMockRecording) {
-            mRecorder.stop();
-            mRecorder.reset();
+            mNavigator.onStopRecording();
         }
-
-        Timber.d("submitAttempt() 1");
 
         Attempt attempt = new Attempt(surahNum.get(), ayahNum.get());
         attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
 
         Timber.d("file path:" + attempt.getAudioFilePath());
         RecognitionTask recognitionTask = new RecognitionTask(attempt);
-        Timber.d("submitAttempt() 3");
         recognitionTaskQueue.add(recognitionTask);
 
         Timber.d("recognitionTaskQueue size: " + recognitionTaskQueue.size());
@@ -187,11 +181,9 @@ public class MurojaahViewModel extends AndroidViewModel {
             incrementAyah();
         }
 
-        Timber.d("submitAttempt() 5");
-
     }
 
-    public void cancelAttempt() {
+    public void cancelRecording() {
         if (!isMockRecording) {
             mRecorder.stop();
             mRecorder.reset();
@@ -213,14 +205,14 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     public void playAttemptRecording() {
-        audioPlayer.play(audioFileUri);
+        myAudioPlayer.play(audioFileUri);
     }
 
     public void playReference() {
         if (!isPlaying.get()) {
-            audioPlayer.play(Uri.parse(getTestFilePath()));
+            myAudioPlayer.play(Uri.parse(getTestFilePath()));
         } else {
-            audioPlayer.stop();
+            myAudioPlayer.stop();
         }
         isPlaying.set(!isPlaying.get());
     }
@@ -239,14 +231,6 @@ public class MurojaahViewModel extends AndroidViewModel {
         isHintRequested.set(false);
     }
 
-    private boolean isExternalStorageWritable() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            Log.d("State", "Yes, it is writable");
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public ASRServerStatusListener getStatusListener() {
         return statusListener;

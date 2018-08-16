@@ -20,6 +20,8 @@ import android.util.Log;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.R;
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel;
@@ -35,6 +37,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mMurojaahDataBinding;
     private LifecycleRegistry mLifecycleRegistry;
+    private MyAudioRecorder mRecorder = MyAudioRecorder.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +175,20 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
             }
         }).start();
 
+    }
+
+    @Override
+    public void onStartRecording(int surah, int ayah) {
+        String filepath = Recording.RECORDING_PATH + surah + "_" + ayah + ".wav";
+        mRecorder.setOutputFile(filepath);
+        mRecorder.prepare();
+        mRecorder.start();
+    }
+
+    @Override
+    public void onStopRecording() {
+        mRecorder.stop();
+        mRecorder.reset();
     }
 
 }

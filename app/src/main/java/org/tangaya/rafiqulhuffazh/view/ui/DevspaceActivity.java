@@ -13,6 +13,9 @@ import android.support.annotation.Nullable;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityDevspaceBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.DevspaceViewModel;
@@ -21,14 +24,14 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-
 public class DevspaceActivity extends Activity implements LifecycleOwner, DevspaceNavigator {
-
-//    private Handler mHandler = new Handler();
 
     public DevspaceViewModel mViewModel;
     private ActivityDevspaceBinding binding;
     private LifecycleRegistry mLifecycleRegistry;
+
+    private MyAudioRecorder mRecorder = MyAudioRecorder.getInstance();
+    MyAudioPlayer mPlayer = new MyAudioPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
 
         setTitle("Development Space");
 
-        mViewModel = new DevspaceViewModel(this.getApplication());
+        mViewModel = DevspaceViewModel.getIntance(this.getApplication());
         mViewModel.onActivityCreated(this);
 
         mLifecycleRegistry = new LifecycleRegistry(this);
@@ -77,12 +80,6 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     }
 
     @Override
-    public void gotoEvalDetail() {
-        Intent intent = new Intent(this, ScoreDetailActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
     public void gotoScoreboard() {
         Intent intent = new Intent(this, ScoreboardActivity.class);
         startActivity(intent);
@@ -92,5 +89,31 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     @Override
     public Lifecycle getLifecycle() {
         return mLifecycleRegistry;
+    }
+
+    @Override
+    public void onStartRecording(int surah, int ayah) {
+        String filepath = Recording.RECORDING_PATH + surah + "_" + ayah + ".wav";
+        mRecorder.setOutputFile(filepath);
+        mRecorder.prepare();
+        mRecorder.start();
+        Timber.d("onStartRecording");
+    }
+
+    @Override
+    public void onStopRecording() {
+        mRecorder.stop();
+        mRecorder.reset();
+        Timber.d("onStopRecording");
+    }
+
+    @Override
+    public void onPlayRecording(int surah, int ayah) {
+        mPlayer.play(MyAudioPlayer.Source.RECORDING, surah, ayah);
+    }
+
+    @Override
+    public void onPlayTestFile(int surah, int ayah) {
+        mPlayer.play(MyAudioPlayer.Source.QARI1, surah, ayah);
     }
 }

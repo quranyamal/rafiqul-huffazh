@@ -86,7 +86,7 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="-"
-                        android:onClick="@{() -> viewmodel.decrementSurah()}"/>
+                        android:onClick="@{() -> viewmodel.decrementAyah()}"/>
 
                     <EditText
                         android:layout_width="0dp"
@@ -100,7 +100,7 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="+"
-                        android:onClick="@{() -> viewmodel.incrementSurah()}"/>
+                        android:onClick="@{() -> viewmodel.incrementAyah()}"/>
 
                 </LinearLayout>
 
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="@{() -> viewmodel.playRecordedAudio()}"
+                android:onClick="@{() -> viewmodel.playRecording()}"
                 android:src="@drawable/play_black_100" />
 
         </LinearLayout>
