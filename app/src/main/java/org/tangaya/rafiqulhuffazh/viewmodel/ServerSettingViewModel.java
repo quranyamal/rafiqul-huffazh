@@ -2,7 +2,6 @@ package org.tangaya.rafiqulhuffazh.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -13,7 +12,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
-import org.tangaya.rafiqulhuffazh.MyApplication;
+import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.view.navigator.ServerSettingNavigator;
 
 import java.io.IOException;
@@ -28,7 +27,6 @@ public class ServerSettingViewModel extends AndroidViewModel {
     public static String CONNECTION_STATUS_CONNECTING = "connecting...";
 
     ServerSettingNavigator mNavigator;
-    SharedPreferences sharedPref;
 
     public final ObservableField<String> hostname = new ObservableField<>();
     public final ObservableField<String> port = new ObservableField<>();
@@ -37,9 +35,8 @@ public class ServerSettingViewModel extends AndroidViewModel {
     public ServerSettingViewModel(@NonNull Application application) {
         super(application);
 
-        sharedPref = ((MyApplication) application).getPreferences();
-        hostname.set(sharedPref.getString("SERVER_HOSTNAME", "192.168.1.100"));
-        port.set(sharedPref.getString("SERVER_PORT", "8888"));
+        hostname.set(ServerSetting.getHostname());
+        port.set(ServerSetting.getPort());
     }
 
     public void onActivityCreated(ServerSettingNavigator navigator) {
@@ -47,7 +44,10 @@ public class ServerSettingViewModel extends AndroidViewModel {
     }
 
     public void testConnection() {
-        String endpoint = "ws://"+hostname.get()+":"+port.get()+"/client/ws/status";
+        ServerSetting.setHostname(hostname.get());
+        ServerSetting.setPort(port.get());
+        ServerSetting.applySetting();
+        String endpoint = ServerSetting.getStatusEndpoint();
 
         try {
             WebSocket ws = new WebSocketFactory().createSocket(endpoint);
@@ -91,12 +91,11 @@ public class ServerSettingViewModel extends AndroidViewModel {
     }
 
     public void saveSetting() {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("SERVER_HOSTNAME", hostname.get());
-        editor.putString("SERVER_PORT", port.get());
-        editor.commit();
+        ServerSetting.setHostname(hostname.get());
+        ServerSetting.setPort(port.get());
+        ServerSetting.applySetting();
 
-        mNavigator.onSettingSaved();
+        mNavigator.onSaveSetting(hostname.get(), port.get());
     }
 
     public void cancelSetting() {

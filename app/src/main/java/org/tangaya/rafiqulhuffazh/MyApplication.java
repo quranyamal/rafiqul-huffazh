@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
 
@@ -16,14 +17,7 @@ import timber.log.Timber;
 
 public class MyApplication extends Application {
 
-    private String STATUS_ENDPOINT;
-
     private SharedPreferences sharedPref;
-
-    private ArrayList<EvaluationOld> evaluations = new ArrayList<>();
-
-    private MutableLiveData<ArrayList<EvaluationOld>> evalsLiveData = new MutableLiveData<>();
-
 
     @Override
     public void onCreate() {
@@ -34,12 +28,13 @@ public class MyApplication extends Application {
         sharedPref = getApplicationContext().getSharedPreferences("APPLICATION_PREFERENCES",
                 Context.MODE_PRIVATE);
 
-        STATUS_ENDPOINT = "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/status";
+        ServerSetting.setHostname(getServerHostname());
+        ServerSetting.setPort(getServerPort());
+        ServerSetting.applySetting();
 
         //connectToServer();
         QuranUtil.init(getApplicationContext().getAssets());
         QuranScriptConverter.init(getApplicationContext());
-        //QuranScriptConverter.init(this);
 
         Timber.d("after quran script repo init");
 
@@ -54,6 +49,14 @@ public class MyApplication extends Application {
 
     public String getServerPort() {
         return sharedPref.getString("SERVER_PORT", "0");
+    }
+
+    public SharedPreferences getPreferences() {
+        return sharedPref;
+    }
+
+    public int getCurrentSurahNum() {
+        return getPreferences().getInt("CURRENT_SURAH_NUM", -1) + 1;
     }
 
 //    public void connectToServer() {
@@ -98,24 +101,4 @@ public class MyApplication extends Application {
 //            e.printStackTrace();
 //        }
 //    }
-
-    public ArrayList<EvaluationOld> getEvaluations() {
-        return evaluations;
-    }
-
-    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsLiveData() {
-        return evalsLiveData;
-    }
-
-    public SharedPreferences getPreferences() {
-        return sharedPref;
-    }
-
-    public String getRecognitionEndpoint() {
-        return "ws://"+getServerHostname()+":"+getServerPort()+"/client/ws/speech";
-    }
-
-    public int getCurrentSurahNum() {
-        return getPreferences().getInt("CURRENT_SURAH_NUM", -1) + 1;
-    }
 }

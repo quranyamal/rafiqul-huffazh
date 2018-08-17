@@ -10,6 +10,10 @@ public class AudioFileHelper {
     private static String QARI1_PATH = Environment.getExternalStorageDirectory() +
             "/rafiqul-huffazh/test/";
 
+    public static String getRecordingPath() {
+        return RECORDING_PATH;
+    }
+
     public static String getRecordingFilePath(int surah, int ayah) {
         return RECORDING_PATH + surah + "_" + ayah + ".wav";
     }

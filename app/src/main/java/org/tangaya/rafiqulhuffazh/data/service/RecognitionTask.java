@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
@@ -28,7 +29,7 @@ import timber.log.Timber;
 
 public class RecognitionTask extends WebSocketAdapter {
 
-    public static String ENDPOINT;
+    public static String ENDPOINT = ServerSetting.getRecognitionEndpoint();
 
     private WebSocket webSocket;
     private Attempt attempt;

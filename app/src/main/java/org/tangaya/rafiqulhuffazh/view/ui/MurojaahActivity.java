@@ -23,9 +23,11 @@ import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
+import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -62,37 +64,35 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
         mMurojaahDataBinding.setViewmodel(mViewModel);
 
-        Timber.d("queue size ==> " + mViewModel.getQueueSize());
-
-        final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
-
-            @Override
-            public void onChanged(@Nullable Integer numAvailWorkers) {
-                Timber.d("num worker has been changed ==> " + numAvailWorkers);
-                Timber.d("queue size ==> " + mViewModel.getQueueSize());
-                mViewModel.numAvailableWorkers.set(numAvailWorkers);
-                if (numAvailWorkers>0) {
-                    if (mViewModel.getQueueSize()>0) {
-                        mViewModel.dequeueRecognitionTasks();
-                    } else {
-                        Timber.d("recognition task queue empty. do nothing");
-                    }
-                } else {
-                    Timber.d("no worker available. do nothing");
-                }
-            }
-        };
-
-        mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
-
-        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
-            @Override
-            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
-                Timber.d("eval set has changed. num eval = " + evaluations.size());
-            }
-        };
-
-        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+//        Timber.d("queue size ==> " + mViewModel.getQueueSize());
+//
+//        final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
+//
+//            @Override
+//            public void onChanged(@Nullable Integer numAvailWorkers) {
+//                Timber.d("num worker has been changed ==> " + numAvailWorkers);
+//                Timber.d("queue size ==> " + mViewModel.getQueueSize());
+//                mViewModel.numAvailableWorkers.set(numAvailWorkers);
+//                if (numAvailWorkers>0) {
+//                    if (mViewModel.getQueueSize()>0) {
+//                        mViewModel.pollRecognitionQueue();
+//                    } else {
+//                        Timber.d("recognition task queue empty. do nothing");
+//                    }
+//                } else {
+//                    Timber.d("no worker available. do nothing");
+//                }
+//            }
+//        };
+//        mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+//
+//        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
+//            @Override
+//            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
+//                Timber.d("eval set has changed. num eval = " + evaluations.size());
+//            }
+//        };
+//        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
 
         //textView = findViewById(R.id.progressbar_info);
         //progressBar = findViewById(R.id.recognizing_progressbar);
@@ -183,12 +183,14 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         mRecorder.setOutputFile(filepath);
         mRecorder.prepare();
         mRecorder.start();
+        Timber.d("onStartRecording");
     }
 
     @Override
     public void onStopRecording() {
         mRecorder.stop();
         mRecorder.reset();
+        Timber.d("onStopRecording");
     }
 
 }

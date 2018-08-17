@@ -2,7 +2,7 @@ package org.tangaya.rafiqulhuffazh.view.navigator;
 
 public interface ServerSettingNavigator {
 
-    void onSettingSaved();
+    void onSaveSetting(String hostname, String port);
 
     void onSettingCancelled();
 

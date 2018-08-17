@@ -71,8 +71,7 @@
                     android:layout_height="wrap_content"
                     android:text="@{`Ayat ` + viewmodel.ayahNum, default=`Ayat 1`}"
                     android:textSize="32dp"
-                    android:textStyle="bold"
-                    android:onClick="@{() -> viewmodel.playReference()}"/>
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/hint_text"

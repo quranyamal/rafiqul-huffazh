@@ -12,12 +12,15 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
+import org.tangaya.rafiqulhuffazh.data.repository.AudioRepository;
+import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
+import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
@@ -28,7 +31,6 @@ import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import timber.log.Timber;
 
@@ -50,32 +52,20 @@ public class MurojaahViewModel extends AndroidViewModel {
     public final ObservableBoolean isHintRequested = new ObservableBoolean();
     public final ObservableBoolean isPlaying = new ObservableBoolean();
 
-    private boolean isMockRecording = true;
+    private boolean isMockRecording = false;
 
     MyAudioPlayer myAudioPlayer;
 
     Context mContext;
     MurojaahNavigator mNavigator;
 
-    MyAudioPlayer mPlayer = new MyAudioPlayer();
-    MyAudioRecorder mRecorder;
-
-    Uri audioFileUri;
-    EvaluationOld evaluation;
-    String endpoint;
-
-    private String storageDir = Environment.getExternalStorageDirectory()+"";
-
-    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    private String audioDir = extStorageDir + "/rafiqul-huffazh";
-
-    String recordingFilepath, testFilePath;
-
-    private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
+    private QuranTranscriber mTranscriber;
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
 
     ASRServerStatusListener statusListener;
+
+    AudioRepository mAudioRepository;
 
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
 
@@ -88,27 +78,13 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         mContext = context;
 
-        myAudioPlayer = new MyAudioPlayer();
-        audioFileUri = Uri.parse(Environment.getExternalStorageDirectory() + "/001.wav");
-        audioFileUri = Uri.parse(audioDir);
-
         isRecording.set(false);
         isHintRequested.set(false);
         isPlaying.set(false);
 
-        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
 
-        String hostname = ((MyApplication) getApplication()).getServerHostname();
-        String port = ((MyApplication) getApplication()).getServerPort();
-        statusListener = new ASRServerStatusListener(hostname, port);
-
-        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
-
-        if (!isMockRecording) {
-            mRecorder = new MyAudioRecorder(MediaRecorder.AudioSource.MIC, 16000,
-                                                AudioFormat.CHANNEL_IN_MONO,
-                                                AudioFormat.ENCODING_PCM_16BIT);
-        }
+        mAudioRepository = AudioRepository.getInstance();
+        mTranscriber = QuranTranscriber.getInstance();
 
         Timber.d("MurojaahViewModel constructor");
     }
@@ -139,40 +115,26 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     void startRecording() {
+        Timber.d("startRecording");
         // todo: fix filename of recording. save file to cache directory
-        recordingFilepath = audioDir + "/recording/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
-        testFilePath = audioDir + "/test/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
-
-        evaluation = new EvaluationOld(surahNum.get(), ayahNum.get(), 123);
-        evaluation.setFilepath(recordingFilepath);
-
-        Attempt attempt = new Attempt(surahNum.get(), ayahNum.get());
-
         if (!isMockRecording) {
-            attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
             mNavigator.onStartRecording(surahNum.get(), ayahNum.get());
         }
-
         isRecording.set(true);
     }
 
     void finishRecording() {
+        Timber.d("finishRecording");
 
         if (!isMockRecording) {
             mNavigator.onStopRecording();
         }
 
-        Attempt attempt = new Attempt(surahNum.get(), ayahNum.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
+        Recording recording = new Recording(surahNum.get(), ayahNum.get());
+        mAudioRepository.addRecording(recording);
 
-        Timber.d("file path:" + attempt.getAudioFilePath());
-        RecognitionTask recognitionTask = new RecognitionTask(attempt);
-        recognitionTaskQueue.add(recognitionTask);
-
-        Timber.d("recognitionTaskQueue size: " + recognitionTaskQueue.size());
-        dequeueRecognitionTasks();
-        Timber.d("recognitionTaskQueue size: " + recognitionTaskQueue.size());
-
+        //pollRecognitionQueue();
+        Timber.d("recognitionTaskQueue size: " + mTranscriber.getQueueSize());
         isRecording.set(false);
 
         if (isEndOfSurah()) {
@@ -185,41 +147,27 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     public void cancelRecording() {
         if (!isMockRecording) {
-            mRecorder.stop();
-            mRecorder.reset();
+            mNavigator.onStopRecording();
         }
 
         isRecording.set(false);
     }
 
-    public void dequeueRecognitionTasks() {
-        Timber.d("dequeueRecognitionTasks()");
+    public void pollRecognitionQueue() {
+        Timber.d("pollRecognitionQueue()");
         assert (numAvailableWorkers.get()>0);
-        assert (getQueueSize()>0);
-        RecognitionTask recognitionTask = recognitionTaskQueue.poll();
-        recognitionTask.execute();
+        assert (mTranscriber.getQueueSize()>0);
+        mTranscriber.processQueue();
     }
 
-    public int getQueueSize() {
-        return recognitionTaskQueue.size();
-    }
-
-    public void playAttemptRecording() {
-        myAudioPlayer.play(audioFileUri);
-    }
-
-    public void playReference() {
-        if (!isPlaying.get()) {
-            myAudioPlayer.play(Uri.parse(getTestFilePath()));
-        } else {
-            myAudioPlayer.stop();
-        }
-        isPlaying.set(!isPlaying.get());
-    }
-
-    private String getTestFilePath() {
-        return audioDir + "/test/"+ surahNum.get()+"_"+ ayahNum.get()+".wav";
-    }
+//    public void playReference() {
+//        if (!isPlaying.get()) {
+//            myAudioPlayer.play(Uri.parse(getTestFilePath()));
+//        } else {
+//            myAudioPlayer.stop();
+//        }
+//        isPlaying.set(!isPlaying.get());
+//    }
 
     private boolean isEndOfSurah() {
         return !QuranUtil.isValidAyahNum(surahNum.get(), ayahNum.get()+1);
@@ -238,7 +186,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     public void deleteRecordingFiles() {
 
-        File recordingDir = new File(audioDir + "/recording/");
+        File recordingDir = new File(AudioFileHelper.getRecordingPath());
         for (File file : recordingDir.listFiles()) {
             file.delete();
         }

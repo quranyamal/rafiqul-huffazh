@@ -16,6 +16,7 @@ import android.util.Log;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
@@ -50,7 +51,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     private String port = ((MyApplication) getApplication()).getServerPort();
     ASRServerStatusListener statusListener = new ASRServerStatusListener(hostname, port);
 
-    String endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
+    String endpoint = ServerSetting.getRecognitionEndpoint();
     DevspaceNavigator mNavigator;
 
     private String extStorageDir = Environment.getExternalStorageDirectory()+"";
@@ -79,7 +80,7 @@ public class DevspaceViewModel extends AndroidViewModel {
 
         if ( INSTANCE == null) {
             INSTANCE = new DevspaceViewModel(application);
-            RecognitionTask.ENDPOINT = ((MyApplication) application).getRecognitionEndpoint();
+            RecognitionTask.ENDPOINT = ServerSetting.getRecognitionEndpoint();
         }
         return INSTANCE;
     }

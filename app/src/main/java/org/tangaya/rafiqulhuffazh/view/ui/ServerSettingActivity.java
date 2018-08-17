@@ -1,9 +1,11 @@
 package org.tangaya.rafiqulhuffazh.view.ui;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 
+import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityServerSettingBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.ServerSettingNavigator;
@@ -32,7 +34,12 @@ public class ServerSettingActivity extends Activity implements ServerSettingNavi
     }
 
     @Override
-    public void onSettingSaved() {
+    public void onSaveSetting(String hostname, String port) {
+        SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("SERVER_HOSTNAME", hostname);
+        editor.putString("SERVER_PORT", port);
+        editor.commit();
         finish();
     }
 
