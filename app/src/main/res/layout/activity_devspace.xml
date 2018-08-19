@@ -170,8 +170,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="fake recognition"
-                android:onClick="@{() -> viewmodel.fakeRecognition()}"/>
+                android:text="fake recognition"/>
 
         </LinearLayout>
 

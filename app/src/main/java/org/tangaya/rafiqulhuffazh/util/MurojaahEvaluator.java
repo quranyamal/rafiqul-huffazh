@@ -1,5 +1,10 @@
 package org.tangaya.rafiqulhuffazh.util;
 
+import android.arch.lifecycle.MutableLiveData;
+
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
+import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -7,6 +12,10 @@ import java.util.Set;
 import timber.log.Timber;
 
 public class MurojaahEvaluator {
+
+    private static MurojaahEvaluator INSTANCE = null;
+
+    MutableLiveData<Evaluation> evalResult = new MutableLiveData<>();
 
     public static String CORRECT_MESSAGE = "benar";
     public static String INCORRECT_MESSAGE_INSERTION_PART = "penambahan elemen";
@@ -20,7 +29,23 @@ public class MurojaahEvaluator {
 
     private MurojaahEvaluator() {}
 
-    public static String evaluate(int surah, int ayah, String recognized) {
+    public static MurojaahEvaluator getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new MurojaahEvaluator();
+        }
+        return INSTANCE;
+    }
+
+    public void evaluate(QuranAyahAudio audio) {
+        Evaluation eval = new Evaluation();
+
+        String evalDesc = getEvalDescrition(audio.getSurah(), audio.getAyah(), audio.getTranscription());
+        eval.setEvalDescription(evalDesc);
+
+        evalResult.setValue(eval);
+    }
+
+    public String getEvalDescrition(int surah, int ayah, String recognized) {
 
         String reference = QuranUtil.getQScript(surah, ayah);
 
@@ -66,12 +91,12 @@ public class MurojaahEvaluator {
         }
     }
 
-    public static int getLevenshteinDistance(String reference, String recognized) {
+    public int getLevenshteinDistance(String reference, String recognized) {
         LinkedList<diff_match_patch.Diff> diff = dmp.diff_main(reference, recognized);
         return dmp.diff_levenshtein(diff);
     }
 
-    public static float getScore(String reference, String recognized){
+    public float getScore(String reference, String recognized){
         LinkedList<diff_match_patch.Diff> diff = dmp.diff_main(reference, recognized);
         float score = 1- ((float) dmp.diff_levenshtein(diff)/reference.length());
         Timber.d("score:" + score);

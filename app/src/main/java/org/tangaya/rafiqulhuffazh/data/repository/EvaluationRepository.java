@@ -1,50 +1,29 @@
 package org.tangaya.rafiqulhuffazh.data.repository;
 
-import android.arch.lifecycle.MutableLiveData;
-
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class EvaluationRepository {
 
-    private static ArrayList<EvaluationOld> evals;
+    private static EvaluationRepository INSTANCE = null;
 
-    private static MutableLiveData<ArrayList<EvaluationOld>> evalsLiveData;
+    private ArrayList<Evaluation> evaluations = new ArrayList<>();
 
-    static {
-        evalsLiveData = new MutableLiveData<>();
-
-        evals = new ArrayList<>();
-        evalsLiveData.setValue(evals);
+    public static EvaluationRepository getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new EvaluationRepository();
+        }
+        return INSTANCE;
     }
 
-    public static MutableLiveData<ArrayList<EvaluationOld>> getEvalsLiveData() {
-        return evalsLiveData;
+    public void add(Evaluation eval) {
+        evaluations.add(eval);
     }
 
-    public static ArrayList<EvaluationOld> getEvals() {
-        return evals;
+    public void tesMethod() {
+
     }
 
-    public static void addToEvalSet(EvaluationOld eval) {
-        evals.add(eval);
-        sortEvals();
-        evalsLiveData.postValue(evals);
-    }
-
-    public static void clearEvalData() {
-        evalsLiveData.getValue().clear();
-    }
-
-    public static void sortEvals() {
-        Collections.sort(evals, new Comparator<EvaluationOld>() {
-            @Override
-            public int compare(EvaluationOld eval1, EvaluationOld eval2) {
-                return Integer.compare(eval1.ayah, eval2.ayah);
-            }
-        });
-    }
+    private EvaluationRepository() {}
 }

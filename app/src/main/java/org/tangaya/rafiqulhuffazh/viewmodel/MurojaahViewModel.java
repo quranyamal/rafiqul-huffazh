@@ -16,7 +16,7 @@ import org.tangaya.rafiqulhuffazh.data.repository.AudioRepository;
 import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 
@@ -58,7 +58,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     AudioRepository mAudioRepository;
 
-    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepositoryOld.getEvalsLiveData();
 
 
     public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
@@ -84,7 +84,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         mNavigator = navigator;
         surahNum.set(surah);
         surahName.set(QuranUtil.getSurahName(surah));
-        EvaluationRepository.clearEvalData();
+        EvaluationRepositoryOld.clearEvalData();
         //ayahNum.set(1);
 
         Timber.d("onActivityCreated");

@@ -12,9 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
 
@@ -57,7 +56,7 @@ public class RecognitionTask extends WebSocketAdapter {
             transcription = QuranUtil.getQScript(attempt.getSurahNum(), attempt.getAyahNum());
             EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
 
-            EvaluationRepository.addToEvalSet(evaluation);
+            EvaluationRepositoryOld.addToEvalSet(evaluation);
         } else {
             webSocket.connectAsynchronously();
         }
@@ -100,7 +99,7 @@ public class RecognitionTask extends WebSocketAdapter {
         if (isTranscriptionFinal(text)) {
             transcription = transcription.substring(0, transcription.length()-1);
             EvaluationOld evaluation = new EvaluationOld(attempt, transcription);
-            EvaluationRepository.addToEvalSet(evaluation);
+            EvaluationRepositoryOld.addToEvalSet(evaluation);
             Timber.d("eval added to eval set");
         }
 

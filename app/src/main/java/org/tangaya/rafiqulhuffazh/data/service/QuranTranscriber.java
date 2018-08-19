@@ -41,4 +41,8 @@ public class QuranTranscriber {
         }
     }
 
+//    public String getTranscription(QuranAyahAudio audio, ) {
+//
+//    }
+
 }

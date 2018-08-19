@@ -6,11 +6,13 @@ public class Evaluation {
 
     private Attempt attempt;
     private String transcription, reference;
-    private String strResult;
+    private String evalDescription;
 
     boolean isCorrect;
 
     int ayah, surah;
+
+    public Evaluation() {}
 
     public Evaluation(Attempt attempt, String transcription_) {
 
@@ -24,11 +26,15 @@ public class Evaluation {
         isCorrect = transcription.equals(reference);
 
         if (isCorrect) {
-            strResult = "Correct";
+            evalDescription = "Correct";
         } else {
-            strResult = "todo";
+            evalDescription = "todo";
         }
 
+    }
+
+    public void setEvalDescription(String desc) {
+        evalDescription = desc;
     }
 
     public static void main(String[] args) {

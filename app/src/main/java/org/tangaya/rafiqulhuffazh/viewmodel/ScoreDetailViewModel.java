@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class ScoreDetailViewModel extends AndroidViewModel {
 
         //ArrayList<EvaluationOld> evaluations = ((MyApplication) getApplication()).getEvaluations();
 
-        ArrayList<EvaluationOld> evaluations = EvaluationRepository.getEvals();
+        ArrayList<EvaluationOld> evaluations = EvaluationRepositoryOld.getEvals();
 
         for (int i = 0; i< evaluations.size(); i++) {
             ScoreDetailViewModel mViewModel = new ScoreDetailViewModel(getApplication(), evaluations.get(i));

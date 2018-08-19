@@ -68,15 +68,15 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
         };
         mViewModel.getServerListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
 
-        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
-            @Override
-            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
-                Timber.d("eval set has changed");
+//        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
+//            @Override
+//            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
+//                Timber.d("eval set has changed");
+//
+//            }
+//        };
 
-            }
-        };
-
-        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+//        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);

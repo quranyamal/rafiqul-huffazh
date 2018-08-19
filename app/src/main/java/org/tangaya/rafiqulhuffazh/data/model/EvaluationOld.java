@@ -4,7 +4,6 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Environment;
 
 import org.json.JSONObject;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
@@ -16,6 +15,8 @@ import org.tangaya.rafiqulhuffazh.util.diff_match_patch;
 public class EvaluationOld extends BaseObservable {
 
     static int count = 0;
+
+    MurojaahEvaluator evaluator = MurojaahEvaluator.getInstance();
 
     public int id;
 
@@ -101,7 +102,7 @@ public class EvaluationOld extends BaseObservable {
         if (isCorrect.get()) {
             strResult = "Correct";
         } else {
-            strResult = MurojaahEvaluator.evaluate(attempt.getSurahNum(), attempt.getAyahNum(), transcription);
+            strResult = evaluator.getEvalDescrition(attempt.getSurahNum(), attempt.getAyahNum(), transcription);
         }
 
         ////
@@ -116,12 +117,12 @@ public class EvaluationOld extends BaseObservable {
 
         //levScore.set(dmp.diff_levenshtein(dmp.diff_main(mAyahQScript.get(), mTranscription.get())));
 
-        levenshteinValue = MurojaahEvaluator.getLevenshteinDistance(mAyahQScript.get(), mTranscription.get());
+        levenshteinValue = evaluator.getLevenshteinDistance(mAyahQScript.get(), mTranscription.get());
 
         maxPoints.set(mAyahQScript.get().length());
         earnedPoints.set(maxPoints.get() - levenshteinValue);
 
-        score = MurojaahEvaluator.getScore(mAyahQScript.get(), mTranscription.get());
+        score = evaluator.getScore(mAyahQScript.get(), mTranscription.get());
         scoreStr.set(String.format("%.2f", score));
 
         if (mTranscription.get().equals(mAyahQScript.get())) {
@@ -131,7 +132,7 @@ public class EvaluationOld extends BaseObservable {
         } else {
             //evalStr.set("Wrong");   // todo: improve
 
-            evalStr.set(MurojaahEvaluator.evaluate(mSurah.get(), mAyah.get(), transcription));
+            evalStr.set(evaluator.getEvalDescrition(mSurah.get(), mAyah.get(), transcription));
             isCorrect.set(false);
         }
 

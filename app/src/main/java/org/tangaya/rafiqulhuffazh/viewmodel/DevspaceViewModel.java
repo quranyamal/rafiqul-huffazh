@@ -2,28 +2,25 @@ package org.tangaya.rafiqulhuffazh.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.tangaya.rafiqulhuffazh.data.model.Attempt;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
+import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import timber.log.Timber;
 
@@ -31,38 +28,35 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     private static DevspaceViewModel INSTANCE = null;
 
-    private ServerStatusListener serverStatusListener = null;
 
     public final ObservableInt surah = new ObservableInt(1);
     public final ObservableInt ayah = new ObservableInt(1);
     public final ObservableField<String> result= new ObservableField<>();
     public final ObservableBoolean isRecording = new ObservableBoolean(false);
     public final ObservableInt attemptCount = new ObservableInt(0);
-
     public final ObservableInt numAvailableWorkers = new ObservableInt();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
-    private QuranTranscriber transcriber = null;
     private QuranAyahAudio audio = null;
 
-    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
-    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
-        return evalsMutableLiveData;
-    }
+    private QuranTranscriber transcriber;
+    private MurojaahEvaluator evaluator;
+    private EvaluationRepository evalRepo;
+    private ServerStatusListener serverStatusListener;
 
     public ObservableInt getNumAvailableWorkers() {
         return numAvailableWorkers;
     }
 
-    DevspaceNavigator mNavigator;
-
-    private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
+    private DevspaceNavigator mNavigator;
 
     private DevspaceViewModel(@NonNull Application application) {
         super(application);
 
         serverStatusListener = ServerStatusListener.getInstance();
         transcriber = QuranTranscriber.getInstance();
+        evaluator = MurojaahEvaluator.getInstance();
+        evalRepo = EvaluationRepository.getInstance();
     }
 
     public static DevspaceViewModel getInstance(Application application) {
@@ -77,19 +71,6 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     public ServerStatusListener getServerListener() {
         return serverStatusListener;
-    }
-
-    public void dequeueRecognitionTasks() {
-        if (numAvailableWorkers.get()>0) {
-            if (recognitionTaskQueue.size()>0) {
-                RecognitionTask recognitionTask = recognitionTaskQueue.poll();
-                recognitionTask.execute();
-            } else {
-                Timber.d("Recognition task queue empty");
-            }
-        } else {
-            Timber.d("no worker available");
-        }
     }
 
     public void onActivityCreated(DevspaceNavigator navigator) {
@@ -130,14 +111,14 @@ public class DevspaceViewModel extends AndroidViewModel {
         pollTranscriptionQueue();
     }
 
-    public void fakeRecognition() {
-        Attempt attempt = new Attempt(surah.get(), ayah.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RESULT);
-        RecognitionTask recognitionTask = new RecognitionTask(attempt);
-        recognitionTaskQueue.add(recognitionTask);
-        dequeueRecognitionTasks();
-        serverStatus.set("recognizing...");
-    }
+//    public void fakeRecognition() {
+//        Attempt attempt = new Attempt(surah.get(), ayah.get());
+//        attempt.setMockType(Attempt.MockType.MOCK_RESULT);
+//        RecognitionTask recognitionTask = new RecognitionTask(attempt);
+//        recognitionTaskQueue.add(recognitionTask);
+//        dequeueRecognitionTasks();
+//        serverStatus.set("recognizing...");
+//    }
 
     public void playTestFile() {
         mNavigator.onPlayTestFile(surah.get(), ayah.get());

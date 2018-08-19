@@ -9,7 +9,7 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.view.navigator.ScoreboardNavigator;
@@ -26,7 +26,7 @@ public class ScoreboardViewModel extends AndroidViewModel {
     public final ObservableField<String> nextSurah = new ObservableField<>();
     public final ObservableInt score = new ObservableInt();
 
-    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepositoryOld.getEvalsLiveData();
 
     public ScoreboardViewModel(@NonNull Application application) {
         super(application);
@@ -50,7 +50,7 @@ public class ScoreboardViewModel extends AndroidViewModel {
     }
 
     public void updateScore() {
-        ArrayList<EvaluationOld> evals = EvaluationRepository.getEvalsLiveData().getValue();
+        ArrayList<EvaluationOld> evals = EvaluationRepositoryOld.getEvalsLiveData().getValue();
         score.set(getScore(evals));
     }
 
