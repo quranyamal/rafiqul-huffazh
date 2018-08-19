@@ -3,83 +3,27 @@ package org.tangaya.rafiqulhuffazh.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
-import org.tangaya.rafiqulhuffazh.MyApplication;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
-import org.tangaya.rafiqulhuffazh.util.QuranUtil;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
 public class ScoreDetailViewModel extends AndroidViewModel {
 
-    //todo: should be one source in a session
-    public final ObservableField<String> currentSurah = new ObservableField<>();
+    private EvaluationRepository evalRepo;
+    public MutableLiveData<ArrayList<Evaluation>> evaluationsLiveData;
+    public ArrayList<Evaluation> evals = new ArrayList<>();
 
-    public final ObservableField<String> ayahNum = new ObservableField<>();
-    public final ObservableField<String> recognizedTranscript = new ObservableField<>();
-    public final ObservableField<String> recognizedArabicTranscript = new ObservableField<>();
-    public final ObservableField<String> refereceTranscript = new ObservableField<>();
-    public final ObservableField<String> refereceArabicScript = new ObservableField<>();
-    public final ObservableField<String> diff = new ObservableField<>();
-    public final ObservableField<String> evalStr = new ObservableField<>();
-
-    public final ObservableField<String> point = new ObservableField<>();
-    public final ObservableInt maxPoint = new ObservableInt();
-    public final ObservableInt earnedPoint = new ObservableInt();
-
-    public final ObservableBoolean isCorrect = new ObservableBoolean();
-
-    public MutableLiveData<ArrayList<ScoreDetailViewModel>> arrayListMutableLiveData = new MutableLiveData<>();
-
-    private ArrayList<ScoreDetailViewModel> arrayList;
-
-    public ScoreDetailViewModel(@NonNull Application application, EvaluationOld evaluation) {
+    public ScoreDetailViewModel(@NonNull Application application) {
         super(application);
 
-        int currentSurahNum = ((MyApplication) getApplication()).getCurrentSurahNum();
-        currentSurah.set(QuranUtil.getSurahName(currentSurahNum));
-
-        ayahNum.set(evaluation.getAyahNum().get());
-        recognizedTranscript.set(evaluation.getTranscription().get());
-        recognizedArabicTranscript.set(evaluation.getArabicTranscription().get());
-        refereceTranscript.set(evaluation.getAyahQScript().get());
-        refereceArabicScript.set(evaluation.getAyahArabicScript().get());
-        diff.set(evaluation.getDiff().get());
-        evalStr.set(evaluation.getEvalStr().get());
-
-        // switch check color to green
-        isCorrect.set(evaluation.isCorrect().get());
-        point.set(evaluation.getScoreStr().get());
-        maxPoint.set(evaluation.getMaxpoints().get());
-        earnedPoint.set(evaluation.getEarnedPoints().get());
+        evalRepo = EvaluationRepository.getInstance();
+        evaluationsLiveData = evalRepo.getEvaluationsLiveData();
     }
 
-    public MutableLiveData<ArrayList<ScoreDetailViewModel>> getArrayListMutableLiveData() {
-
-        arrayList = new ArrayList<>();
-
-        //ArrayList<EvaluationOld> evaluations = ((MyApplication) getApplication()).getEvaluations();
-
-        ArrayList<EvaluationOld> evaluations = EvaluationRepositoryOld.getEvals();
-
-        for (int i = 0; i< evaluations.size(); i++) {
-            ScoreDetailViewModel mViewModel = new ScoreDetailViewModel(getApplication(), evaluations.get(i));
-            arrayList.add(mViewModel);
-        }
-
-        arrayListMutableLiveData.setValue(arrayList);
-
-        return arrayListMutableLiveData;
-    }
-
-    public void playReference() {
-        Timber.d("playing reference");
+    public MutableLiveData<ArrayList<Evaluation>> getEvaluationsLiveData() {
+        return evaluationsLiveData;
     }
 }

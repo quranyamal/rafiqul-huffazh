@@ -1,8 +1,12 @@
 package org.tangaya.rafiqulhuffazh.data.model;
 
+import android.databinding.BaseObservable;
+import android.databinding.BindingAdapter;
+import android.databinding.ObservableInt;
+
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
-public class Evaluation {
+public class Evaluation extends BaseObservable {
 
     private Attempt attempt;
     private String transcription, reference;
@@ -11,6 +15,9 @@ public class Evaluation {
     boolean isCorrect;
 
     int ayah, surah;
+
+    public ObservableInt earnedPoints = new ObservableInt(90);
+    public ObservableInt maxPoints = new ObservableInt(100);
 
     public Evaluation() {}
 
@@ -37,8 +44,12 @@ public class Evaluation {
         evalDescription = desc;
     }
 
-    public static void main(String[] args) {
+    public ObservableInt getEarnedPoints() {
+        return earnedPoints;
+    }
 
+    public ObservableInt getMaxpoints() {
+        return maxPoints;
     }
 
 }

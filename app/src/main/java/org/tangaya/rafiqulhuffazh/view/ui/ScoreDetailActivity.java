@@ -13,7 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreDetailBinding;
 import org.tangaya.rafiqulhuffazh.view.adapter.EvalAdapter;
 import org.tangaya.rafiqulhuffazh.viewmodel.ScoreDetailViewModel;
@@ -41,12 +41,12 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner {
         final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mViewModel = new ScoreDetailViewModel(getApplication(), new EvaluationOld(1,1,1));
-        mViewModel.getArrayListMutableLiveData().observe(this, new Observer<ArrayList<ScoreDetailViewModel>>() {
+        mViewModel = new ScoreDetailViewModel(getApplication());
+        mViewModel.getEvaluationsLiveData().observe(this, new Observer<ArrayList<Evaluation>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<ScoreDetailViewModel> devspaceDetailViewModels) {
+            public void onChanged(@Nullable ArrayList<Evaluation> evaluations) {
 
-                EvalAdapter mAdapter = new EvalAdapter(ScoreDetailActivity.this, devspaceDetailViewModels);
+                EvalAdapter mAdapter = new EvalAdapter(getApplicationContext(), evaluations);
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setAdapter(mAdapter);
             }

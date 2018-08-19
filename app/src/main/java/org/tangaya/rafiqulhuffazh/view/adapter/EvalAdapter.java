@@ -6,81 +6,56 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.databinding.EvalCardBinding;
-import org.tangaya.rafiqulhuffazh.viewmodel.ScoreDetailViewModel;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
+import org.tangaya.rafiqulhuffazh.databinding.CardEvaluationBinding;
 
 import java.util.ArrayList;
 
 public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> {
 
-    private ArrayList<ScoreDetailViewModel> mArrayList;
-
-    private Context mContext;
-
+    private Context context;
+    private ArrayList<Evaluation> evaluations;
     private LayoutInflater layoutInflater;
 
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ayahNum, rec, ref, eval, levScore;
-        ImageView evaluationIcon;
-
-        private EvalCardBinding mBinding;
-
-        public MyViewHolder(EvalCardBinding binding) {
-            super(binding.getRoot());
-
-            mBinding = binding;
-
-            ayahNum = itemView.findViewById(R.id.ayah_num_evaluation);
-            rec = itemView.findViewById(R.id.ayah_rec_evaluation);
-            ref = itemView.findViewById(R.id.ayah_ref_evaluation);
-            eval = itemView.findViewById(R.id.eval_result);
-        }
-
-        public void bind(ScoreDetailViewModel viewModel) {
-            mBinding.setViewmodel(viewModel);
-            mBinding.executePendingBindings();
-        }
-
-        public EvalCardBinding getBinding() {
-            return mBinding;
-        }
-    }
-
-    public EvalAdapter(Context context, ArrayList<ScoreDetailViewModel> arrayList) {
-        mContext = context;
-        mArrayList = arrayList;
+    public EvalAdapter(Context context, ArrayList<Evaluation> evaluations) {
+        this.context =context;
+        this.evaluations = evaluations;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        if (layoutInflater==null) {
+        if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
 
-        EvalCardBinding evalBinding = DataBindingUtil.inflate(layoutInflater,
+        CardEvaluationBinding mBinding = DataBindingUtil.inflate(layoutInflater,
                 R.layout.card_evaluation, parent, false);
-
-        return new MyViewHolder(evalBinding);
+        return new MyViewHolder(mBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        ScoreDetailViewModel mViewModel = mArrayList.get(position);
-        holder.bind(mViewModel);
+        holder.mBinding.setEvaluation(evaluations.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mArrayList.size();
+        return evaluations.size();
     }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        private CardEvaluationBinding mBinding;
+
+        public MyViewHolder(CardEvaluationBinding binding) {
+            super(binding.getRoot());
+
+            mBinding = binding;
+        }
+    }
 }

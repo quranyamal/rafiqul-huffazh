@@ -14,6 +14,7 @@ import android.os.Bundle;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreboardBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.ScoreboardNavigator;
@@ -43,14 +44,14 @@ public class ScoreboardActivity extends Activity implements LifecycleOwner, Scor
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_scoreboard);
         mBinding.setViewmodel(mViewModel);
 
-        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
+        final Observer<ArrayList<Evaluation>> evalsObserver = new Observer<ArrayList<Evaluation>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
+            public void onChanged(@Nullable ArrayList<Evaluation> eval) {
                 Timber.d("eval set has changed");
                 mViewModel.updateScore();
             }
         };
-        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+        mViewModel.getEvaluationsLiveData().observe(this, evalsObserver);
     }
 
 

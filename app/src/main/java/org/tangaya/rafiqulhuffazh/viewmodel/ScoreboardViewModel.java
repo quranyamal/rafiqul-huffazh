@@ -8,8 +8,9 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
+import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.view.navigator.ScoreboardNavigator;
@@ -26,7 +27,9 @@ public class ScoreboardViewModel extends AndroidViewModel {
     public final ObservableField<String> nextSurah = new ObservableField<>();
     public final ObservableInt score = new ObservableInt();
 
-    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepositoryOld.getEvalsLiveData();
+    private EvaluationRepository evalRepo = EvaluationRepository.getInstance();
+
+//    private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepositoryOld.getEvalsLiveData();
 
     public ScoreboardViewModel(@NonNull Application application) {
         super(application);
@@ -45,19 +48,19 @@ public class ScoreboardViewModel extends AndroidViewModel {
         updateScore();
     }
 
-    public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
-        return evalsMutableLiveData;
+    public MutableLiveData<ArrayList<Evaluation>> getEvaluationsLiveData() {
+        return evalRepo.getEvaluationsLiveData();
     }
 
     public void updateScore() {
-        ArrayList<EvaluationOld> evals = EvaluationRepositoryOld.getEvalsLiveData().getValue();
+        ArrayList<Evaluation> evals = evalRepo.getEvaluations();
         score.set(getScore(evals));
     }
 
-    private int getScore(ArrayList<EvaluationOld> evaluations) {
+    private int getScore(ArrayList<Evaluation> evals) {
         int totalPoints=0, maxPoints=0;
 
-        for (EvaluationOld eval : evaluations) {
+        for (Evaluation eval : evals) {
             totalPoints += eval.getEarnedPoints().get();
             maxPoints += eval.getMaxpoints().get();
             Timber.d("total pts:"+totalPoints+"max pts:"+maxPoints);
