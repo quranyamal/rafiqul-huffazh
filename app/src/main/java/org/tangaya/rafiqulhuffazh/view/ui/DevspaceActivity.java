@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.tangaya.rafiqulhuffazh.R;
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
@@ -68,15 +69,13 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
         };
         mViewModel.getServerListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
 
-//        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
-//            @Override
-//            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
-//                Timber.d("eval set has changed");
-//
-//            }
-//        };
-
-//        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+        final Observer<Evaluation> evalResultObserver = new Observer<Evaluation>() {
+            @Override
+            public void onChanged(@Nullable Evaluation eval) {
+                Timber.d("new eval arrived");
+            }
+        };
+        mViewModel.getEvaluator().getEvalResult().observe(this, evalResultObserver);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_devspace);
         binding.setViewmodel(mViewModel);

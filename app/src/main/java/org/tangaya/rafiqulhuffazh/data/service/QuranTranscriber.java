@@ -15,6 +15,8 @@ public class QuranTranscriber {
     private LinkedList<QuranAyahAudio> audioList = new LinkedList<>();
     private MutableLiveData<LinkedList<QuranAyahAudio>> transcriptionQueueLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<QuranAyahAudio> quranAudioLiveData = new MutableLiveData<>();
+
     private QuranTranscriber() {
         transcriptionQueueLiveData.setValue(audioList);
     }
@@ -34,15 +36,10 @@ public class QuranTranscriber {
     public void poll() {
         if (audioList.size()!=0) {
             Timber.d("transcribing audio");
-            RecognitionTaskNew recognitionTask = new RecognitionTaskNew(audioList.poll());
-            recognitionTask.executeTask();
+            TranscriptionTask transcriptionTask = new TranscriptionTask(audioList.poll(), quranAudioLiveData);
+            transcriptionTask.transcribe();
         } else {
             Timber.d("queue empty. do nothing");
         }
     }
-
-//    public String getTranscription(QuranAyahAudio audio, ) {
-//
-//    }
-
 }

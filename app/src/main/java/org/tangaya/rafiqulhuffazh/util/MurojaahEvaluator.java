@@ -17,6 +17,10 @@ public class MurojaahEvaluator {
 
     MutableLiveData<Evaluation> evalResult = new MutableLiveData<>();
 
+    public MutableLiveData<Evaluation> getEvalResult() {
+        return evalResult;
+    }
+
     public static String CORRECT_MESSAGE = "benar";
     public static String INCORRECT_MESSAGE_INSERTION_PART = "penambahan elemen";
     public static String INCORRECT_MESSAGE_MISSING_PART = "elemen hilang";

@@ -37,4 +37,8 @@ public class QuranAyahAudio {
     public String getTranscription() {
         return transcription;
     }
+
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
+    }
 }

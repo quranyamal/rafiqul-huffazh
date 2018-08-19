@@ -44,6 +44,10 @@ public class DevspaceViewModel extends AndroidViewModel {
     private EvaluationRepository evalRepo;
     private ServerStatusListener serverStatusListener;
 
+    public MurojaahEvaluator getEvaluator() {
+        return evaluator;
+    }
+
     public ObservableInt getNumAvailableWorkers() {
         return numAvailableWorkers;
     }
@@ -97,7 +101,9 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void pollTranscriptionQueue() {
+
         if (numAvailableWorkers.get()>0) {
+            Timber.d("idle worker:"+numAvailableWorkers.get()+" processing queue");
             transcriber.poll();
         } else {
             Timber.d("waiting for idle worker");
