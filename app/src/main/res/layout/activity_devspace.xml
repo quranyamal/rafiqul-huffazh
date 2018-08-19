@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="recognize test file"
-                android:onClick="@{() -> viewmodel.recognizeTestFile()}"/>
+                android:onClick="@{() -> viewmodel.transcribeTestFile()}"/>
 
         </LinearLayout>
 
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="recognize recording"
-                android:onClick="@{() -> viewmodel.recognizeRecording()}"/>
+                android:onClick="@{() -> viewmodel.transcribeRecording()}"/>
 
             <Button
                 android:layout_width="wrap_content"

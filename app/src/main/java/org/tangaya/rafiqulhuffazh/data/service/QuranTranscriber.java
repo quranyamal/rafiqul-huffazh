@@ -6,21 +6,17 @@ import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 
 import java.util.LinkedList;
 
+import timber.log.Timber;
+
 public class QuranTranscriber {
 
     private static QuranTranscriber INSTANCE = null;
 
-    private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
-    private MutableLiveData<LinkedList<RecognitionTask>> recognitionTasksLiveData = new MutableLiveData<>();
-
     private LinkedList<QuranAyahAudio> audioList = new LinkedList<>();
-    private MutableLiveData<LinkedList<QuranAyahAudio>> audioListLiveData = new MutableLiveData<>();
-
-    private ServerStatusListener statusListener = null;
+    private MutableLiveData<LinkedList<QuranAyahAudio>> transcriptionQueueLiveData = new MutableLiveData<>();
 
     private QuranTranscriber() {
-        audioListLiveData.setValue(audioList);
-        statusListener = ServerStatusListener.getInstance();
+        transcriptionQueueLiveData.setValue(audioList);
     }
 
     public static QuranTranscriber getInstance() {
@@ -31,16 +27,18 @@ public class QuranTranscriber {
     }
 
     public void addToQueue(QuranAyahAudio audio) {
-        audioListLiveData.getValue().add(audio);
+        audioList.add(audio);
+        transcriptionQueueLiveData.setValue(audioList);
     }
 
-    public void processQueue() {
-        RecognitionTaskNew recognitionTask = new RecognitionTaskNew(audioList.poll());
-        recognitionTask.executeTask();
-    }
-
-    public int getQueueSize() {
-        return recognitionTaskQueue.size();
+    public void poll() {
+        if (audioList.size()!=0) {
+            Timber.d("transcribing audio");
+            RecognitionTaskNew recognitionTask = new RecognitionTaskNew(audioList.poll());
+            recognitionTask.executeTask();
+        } else {
+            Timber.d("queue empty. do nothing");
+        }
     }
 
 }

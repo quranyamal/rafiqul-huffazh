@@ -1,8 +1,10 @@
 package org.tangaya.rafiqulhuffazh.view.navigator;
 
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
+
 public interface DevspaceNavigator {
 
-    void onStartRecording(int surah, int ayah);
+    void onStartRecording(Recording recording);
 
     void onStopRecording();
 

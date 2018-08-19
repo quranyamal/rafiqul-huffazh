@@ -6,19 +6,22 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
+import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
+import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -39,6 +42,9 @@ public class DevspaceViewModel extends AndroidViewModel {
     public final ObservableInt numAvailableWorkers = new ObservableInt();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
+    private QuranTranscriber transcriber = null;
+    private QuranAyahAudio audio = null;
+
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
     public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
@@ -56,9 +62,10 @@ public class DevspaceViewModel extends AndroidViewModel {
         super(application);
 
         serverStatusListener = ServerStatusListener.getInstance();
+        transcriber = QuranTranscriber.getInstance();
     }
 
-    public static DevspaceViewModel getIntance(Application application) {
+    public static DevspaceViewModel getInstance(Application application) {
 
         if ( INSTANCE == null) {
             INSTANCE = new DevspaceViewModel(application);
@@ -92,7 +99,8 @@ public class DevspaceViewModel extends AndroidViewModel {
     public void onClickRecord() {
 
         if (!isRecording.get()) {
-            mNavigator.onStartRecording(surah.get(), ayah.get());
+            audio = new Recording(surah.get(), ayah.get());
+            mNavigator.onStartRecording((Recording) audio);
             isRecording.set(true);
         } else {
             mNavigator.onStopRecording();
@@ -100,26 +108,26 @@ public class DevspaceViewModel extends AndroidViewModel {
         }
     }
 
-    // add to recognizing queue
-    public void recognizeRecording() {
-        Timber.d("recognizeRecording()");
+    public void transcribeRecording() {
+        transcriber.addToQueue(audio);
+        Timber.d("added to queue");
 
-        Attempt attempt = new Attempt(surah.get(), ayah.get());
-        RecognitionTask recognitionTask = new RecognitionTask(attempt);
-        recognitionTaskQueue.add(recognitionTask);
-        dequeueRecognitionTasks();
-        serverStatus.set("recognizing...");
+        pollTranscriptionQueue();
     }
 
-    public void recognizeTestFile() {
-        Timber.d("recognizeTestFile()");
+    public void pollTranscriptionQueue() {
+        if (numAvailableWorkers.get()>0) {
+            transcriber.poll();
+        } else {
+            Timber.d("waiting for idle worker");
+        }
+    }
 
-        Attempt attempt = new Attempt(surah.get(), ayah.get());
-        attempt.setMockType(Attempt.MockType.MOCK_RECORDING);
-        RecognitionTask recognitionTask = new RecognitionTask(attempt);
-        recognitionTaskQueue.add(recognitionTask);
-        dequeueRecognitionTasks();
-        serverStatus.set("recognizing...");
+    public void transcribeTestFile() {
+        transcriber.addToQueue(new QuranAyahAudio(surah.get(), ayah.get()));
+        Timber.d("added to queue");
+
+        pollTranscriptionQueue();
     }
 
     public void fakeRecognition() {
@@ -162,6 +170,14 @@ public class DevspaceViewModel extends AndroidViewModel {
         Log.d("DVM", "decrement surahId clicked");
         if (surah.get()>1) {
             surah.set(surah.get()-1);
+        }
+    }
+
+    public void deleteRecordingFiles() {
+
+        File recordingDir = new File(AudioFileHelper.getUserRecordingPath());
+        for (File file : recordingDir.listFiles()) {
+            file.delete();
         }
     }
 

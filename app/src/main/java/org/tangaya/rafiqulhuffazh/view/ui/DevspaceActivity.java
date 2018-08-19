@@ -13,10 +13,10 @@ import android.support.annotation.Nullable;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityDevspaceBinding;
-import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.DevspaceViewModel;
 
@@ -39,7 +39,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
 
         setTitle("Development Space");
 
-        mViewModel = DevspaceViewModel.getIntance(this.getApplication());
+        mViewModel = DevspaceViewModel.getInstance(this.getApplication());
         mViewModel.onActivityCreated(this);
 
         mLifecycleRegistry = new LifecycleRegistry(this);
@@ -49,7 +49,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
 
             @Override
             public void onChanged(@Nullable String serverStatus) {
-                Timber.d("server status has been changed ==> " + serverStatus);
+                Timber.d("server status has changed ==> " + serverStatus);
                 mViewModel.serverStatus.set(serverStatus);
             }
         };
@@ -59,10 +59,10 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
 
             @Override
             public void onChanged(@Nullable Integer numAvailWorkers) {
-                Timber.d("num worker has been changed ==> " + numAvailWorkers);
+                Timber.d("num worker has changed ==> " + numAvailWorkers);
                 mViewModel.numAvailableWorkers.set(numAvailWorkers);
                 if (numAvailWorkers>0) {
-                    mViewModel.dequeueRecognitionTasks();
+                    mViewModel.pollTranscriptionQueue();
                 }
             }
         };
@@ -101,8 +101,8 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     }
 
     @Override
-    public void onStartRecording(int surah, int ayah) {
-        mRecorder.setOutputFile(AudioFileHelper.getUserRecordingFilePath(surah, ayah));
+    public void onStartRecording(Recording recording) {
+        mRecorder.setOutput(recording);
         mRecorder.prepare();
         mRecorder.start();
         Timber.d("onStartRecording");
@@ -123,5 +123,11 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     @Override
     public void onPlayTestFile(int surah, int ayah) {
         mPlayer.play(MyAudioPlayer.Source.QARI1, surah, ayah);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mViewModel.deleteRecordingFiles();
     }
 }

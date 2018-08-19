@@ -74,7 +74,6 @@ public class MurojaahViewModel extends AndroidViewModel {
         isHintRequested.set(false);
         isPlaying.set(false);
 
-
         mAudioRepository = AudioRepository.getInstance();
         //mTranscriber = QuranTranscriber.getInstance();
 
@@ -110,7 +109,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         Timber.d("startRecording");
         // todo: fix filename of recording. save file to cache directory
         if (!isMockRecording) {
-            mNavigator.onStartRecording(surahNum.get(), ayahNum.get());
+            mNavigator.onStartRecording(new Recording(surahNum.get(), ayahNum.get()));
         }
         isRecording.set(true);
     }

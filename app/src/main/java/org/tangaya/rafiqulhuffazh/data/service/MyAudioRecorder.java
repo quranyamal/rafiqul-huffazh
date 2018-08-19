@@ -9,6 +9,9 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder.AudioSource;
 import android.util.Log;
 
+import org.tangaya.rafiqulhuffazh.data.model.Recording;
+import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
+
 public class MyAudioRecorder {
     private final static int[] sampleRates = {44100, 22050, 11025, 8000};
 
@@ -168,10 +171,13 @@ public class MyAudioRecorder {
         }
     }
 
-    public void setOutputFile(String argPath) {
+    public void setOutput(Recording recording) {
+        String filePath = AudioFileHelper.
+                getUserRecordingFilePath(recording.getSurah(), recording.getAyah());
+
         try {
             if (state == State.INITIALIZING) {
-                filePath = argPath;
+                this.filePath = filePath;
             }
         } catch (Exception e) {
             if (e.getMessage() != null) {
