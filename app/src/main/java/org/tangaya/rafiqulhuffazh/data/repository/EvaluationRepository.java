@@ -4,6 +4,8 @@ import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class EvaluationRepository {
 
     private static EvaluationRepository INSTANCE = null;
@@ -19,10 +21,7 @@ public class EvaluationRepository {
 
     public void add(Evaluation eval) {
         evaluations.add(eval);
-    }
-
-    public void tesMethod() {
-
+        Timber.d("eval added to repo");
     }
 
     private EvaluationRepository() {}

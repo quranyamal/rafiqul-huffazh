@@ -2,6 +2,7 @@ package org.tangaya.rafiqulhuffazh.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 
+import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
@@ -33,7 +35,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     public final ObservableInt ayah = new ObservableInt(1);
     public final ObservableField<String> result= new ObservableField<>();
     public final ObservableBoolean isRecording = new ObservableBoolean(false);
-    public final ObservableInt attemptCount = new ObservableInt(0);
+    public final ObservableInt evalCount = new ObservableInt(0);
     public final ObservableInt numAvailableWorkers = new ObservableInt();
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
@@ -44,8 +46,22 @@ public class DevspaceViewModel extends AndroidViewModel {
     private EvaluationRepository evalRepo;
     private ServerStatusListener serverStatusListener;
 
+    private MutableLiveData<QuranAyahAudio> transcribedAudioHolder = new MutableLiveData<>();
+
+    public MutableLiveData<QuranAyahAudio> getTranscribedAudioHolder() {
+        return transcribedAudioHolder;
+    }
+
     public MurojaahEvaluator getEvaluator() {
         return evaluator;
+    }
+
+    public void evaluate(QuranAyahAudio audio) {
+        evaluator.evaluate(audio);
+    }
+
+    public void addEvalToRepo(Evaluation eval) {
+        evalRepo.add(eval);
     }
 
     public ObservableInt getNumAvailableWorkers() {
@@ -58,7 +74,7 @@ public class DevspaceViewModel extends AndroidViewModel {
         super(application);
 
         serverStatusListener = ServerStatusListener.getInstance();
-        transcriber = QuranTranscriber.getInstance();
+        transcriber = QuranTranscriber.getInstance(transcribedAudioHolder);
         evaluator = MurojaahEvaluator.getInstance();
         evalRepo = EvaluationRepository.getInstance();
     }
