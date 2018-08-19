@@ -1,9 +1,8 @@
 package org.tangaya.rafiqulhuffazh.data.service;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import org.tangaya.rafiqulhuffazh.MyApplication;
+import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 
 import java.util.LinkedList;
 
@@ -12,17 +11,17 @@ public class QuranTranscriber {
     private static QuranTranscriber INSTANCE = null;
 
     private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
-
     private MutableLiveData<LinkedList<RecognitionTask>> recognitionTasksLiveData = new MutableLiveData<>();
 
-//    String hostname = ((MyApplication) getApplication()).getServerHostname();
-//    String port = ((MyApplication) getApplication()).getServerPort();
-//    String endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
+    private LinkedList<QuranAyahAudio> audioList = new LinkedList<>();
+    private MutableLiveData<LinkedList<QuranAyahAudio>> audioListLiveData = new MutableLiveData<>();
 
-//    ASRServerStatusListener statusListener = new ASRServerStatusListener(hostname, port);
+    private ServerStatusListener statusListener = null;
 
-
-    private QuranTranscriber() {}
+    private QuranTranscriber() {
+        audioListLiveData.setValue(audioList);
+        statusListener = ServerStatusListener.getInstance();
+    }
 
     public static QuranTranscriber getInstance() {
         if (INSTANCE == null) {
@@ -31,13 +30,13 @@ public class QuranTranscriber {
         return INSTANCE;
     }
 
-    public void addToQueue(RecognitionTask recognitionTask) {
-        recognitionTaskQueue.add(recognitionTask);
+    public void addToQueue(QuranAyahAudio audio) {
+        audioListLiveData.getValue().add(audio);
     }
 
     public void processQueue() {
-        RecognitionTask recognitionTask = recognitionTaskQueue.poll();
-        recognitionTask.execute();
+        RecognitionTaskNew recognitionTask = new RecognitionTaskNew(audioList.poll());
+        recognitionTask.executeTask();
     }
 
     public int getQueueSize() {

@@ -13,10 +13,10 @@ import android.support.annotation.Nullable;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
-import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityDevspaceBinding;
+import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.DevspaceViewModel;
 
@@ -45,6 +45,16 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
+        final Observer<String> serverStatusObserver = new Observer<String>() {
+
+            @Override
+            public void onChanged(@Nullable String serverStatus) {
+                Timber.d("server status has been changed ==> " + serverStatus);
+                mViewModel.serverStatus.set(serverStatus);
+            }
+        };
+        mViewModel.getServerListener().getStatus().observe(this, serverStatusObserver);
+
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
             @Override
@@ -56,8 +66,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
                 }
             }
         };
-
-        mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+        mViewModel.getServerListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
 
         final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
             @Override
@@ -93,8 +102,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
 
     @Override
     public void onStartRecording(int surah, int ayah) {
-        String filepath = Recording.RECORDING_PATH + surah + "_" + ayah + ".wav";
-        mRecorder.setOutputFile(filepath);
+        mRecorder.setOutputFile(AudioFileHelper.getUserRecordingFilePath(surah, ayah));
         mRecorder.prepare();
         mRecorder.start();
         Timber.d("onStartRecording");

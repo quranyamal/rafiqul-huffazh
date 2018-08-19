@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         QuranUtil.init(getApplicationContext().getAssets());
         QuranScriptConverter.init(getApplicationContext());
 
-        Timber.d("after quran script repo init");
+        Timber.d("after quran script repo connect");
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

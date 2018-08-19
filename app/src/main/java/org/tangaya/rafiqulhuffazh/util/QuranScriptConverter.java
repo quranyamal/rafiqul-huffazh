@@ -41,7 +41,7 @@ public class QuranScriptConverter {
 //            System.out.println(word);
 //        }
 
-        System.out.println("done init QuranScriptConverter");
+        System.out.println("done connect QuranScriptConverter");
 
         return 0;
     }
@@ -123,7 +123,7 @@ public class QuranScriptConverter {
 //        String s = currentRelativePath.toAbsolutePath().toString();
 //        System.out.println("Current relative path is: " + s);
 //
-//        init();
+//        connect();
 
         System.out.println(toArabic("bismil lAhir roHmAnir roHIm"));
         System.out.println(toArabic("ealHamdu lillAhi robbil EAlamIn"));

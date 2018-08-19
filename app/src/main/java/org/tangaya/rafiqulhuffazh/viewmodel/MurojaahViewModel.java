@@ -7,27 +7,18 @@ import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.media.AudioFormat;
-import android.media.MediaRecorder;
-import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import org.tangaya.rafiqulhuffazh.MyApplication;
-import org.tangaya.rafiqulhuffazh.data.model.Attempt;
 import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.repository.AudioRepository;
-import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
+import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
-import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
-import org.tangaya.rafiqulhuffazh.data.service.ASRServerStatusListener;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
-import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -59,15 +50,16 @@ public class MurojaahViewModel extends AndroidViewModel {
     Context mContext;
     MurojaahNavigator mNavigator;
 
-    private QuranTranscriber mTranscriber;
+
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
 
-    ASRServerStatusListener statusListener;
+    ServerStatusListener statusListener;
 
     AudioRepository mAudioRepository;
 
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
+
 
     public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
@@ -84,7 +76,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
 
         mAudioRepository = AudioRepository.getInstance();
-        mTranscriber = QuranTranscriber.getInstance();
+        //mTranscriber = QuranTranscriber.getInstance();
 
         Timber.d("MurojaahViewModel constructor");
     }
@@ -134,7 +126,7 @@ public class MurojaahViewModel extends AndroidViewModel {
         mAudioRepository.addRecording(recording);
 
         //pollRecognitionQueue();
-        Timber.d("recognitionTaskQueue size: " + mTranscriber.getQueueSize());
+        //Timber.d("recognitionTaskQueue size: " + mTranscriber.getQueueSize());
         isRecording.set(false);
 
         if (isEndOfSurah()) {
@@ -156,8 +148,8 @@ public class MurojaahViewModel extends AndroidViewModel {
     public void pollRecognitionQueue() {
         Timber.d("pollRecognitionQueue()");
         assert (numAvailableWorkers.get()>0);
-        assert (mTranscriber.getQueueSize()>0);
-        mTranscriber.processQueue();
+        //assert (mTranscriber.getQueueSize()>0);
+        //mTranscriber.processQueue();
     }
 
 //    public void playReference() {
@@ -180,13 +172,13 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
 
-    public ASRServerStatusListener getStatusListener() {
+    public ServerStatusListener getStatusListener() {
         return statusListener;
     }
 
     public void deleteRecordingFiles() {
 
-        File recordingDir = new File(AudioFileHelper.getRecordingPath());
+        File recordingDir = new File(AudioFileHelper.getUserRecordingPath());
         for (File file : recordingDir.listFiles()) {
             file.delete();
         }

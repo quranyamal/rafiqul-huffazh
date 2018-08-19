@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,22 +12,16 @@ import android.databinding.DataBindingUtil;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.util.Log;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.MurojaahViewModel;
-
-import java.io.File;
-import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -179,8 +172,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
     @Override
     public void onStartRecording(int surah, int ayah) {
-        String filepath = Recording.RECORDING_PATH + surah + "_" + ayah + ".wav";
-        mRecorder.setOutputFile(filepath);
+        mRecorder.setOutputFile(AudioFileHelper.getUserRecordingFilePath(surah, ayah));
         mRecorder.prepare();
         mRecorder.start();
         Timber.d("onStartRecording");

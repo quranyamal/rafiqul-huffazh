@@ -6,9 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.media.AudioFormat;
-import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -19,8 +16,8 @@ import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
+import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
-import org.tangaya.rafiqulhuffazh.data.service.ASRServerStatusListener;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -31,58 +28,48 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     private static DevspaceViewModel INSTANCE = null;
 
+    private ServerStatusListener serverStatusListener = null;
 
     public final ObservableInt surah = new ObservableInt(1);
     public final ObservableInt ayah = new ObservableInt(1);
     public final ObservableField<String> result= new ObservableField<>();
-    public final ObservableField<String> serverStatus = new ObservableField<>();
     public final ObservableBoolean isRecording = new ObservableBoolean(false);
     public final ObservableInt attemptCount = new ObservableInt(0);
 
     public final ObservableInt numAvailableWorkers = new ObservableInt();
+    public final ObservableField<String> serverStatus = new ObservableField<>();
 
     private MutableLiveData<ArrayList<EvaluationOld>> evalsMutableLiveData = EvaluationRepository.getEvalsLiveData();
     public MutableLiveData<ArrayList<EvaluationOld>> getEvalsMutableLiveData() {
         return evalsMutableLiveData;
     }
 
+    public ObservableInt getNumAvailableWorkers() {
+        return numAvailableWorkers;
+    }
 
-    private String hostname = ((MyApplication) getApplication()).getServerHostname();
-    private String port = ((MyApplication) getApplication()).getServerPort();
-    ASRServerStatusListener statusListener = new ASRServerStatusListener(hostname, port);
-
-    String endpoint = ServerSetting.getRecognitionEndpoint();
     DevspaceNavigator mNavigator;
-
-    private String extStorageDir = Environment.getExternalStorageDirectory()+"";
-    private String audioDir = extStorageDir + "/rafiqul-huffazh";
 
     private LinkedList<RecognitionTask> recognitionTaskQueue = new LinkedList<>();
 
     private DevspaceViewModel(@NonNull Application application) {
         super(application);
 
-//        surah.set(1);
-//        ayah.set(1);
-//        serverStatus.set("disconnected");
-//        isRecording.set(false);
-//        attemptCount.set(0);
-//
-//        hostname = ((MyApplication) getApplication()).getServerHostname();
-//        port = ((MyApplication) getApplication()).getServerPort();
-//        endpoint = ((MyApplication) getApplication()).getRecognitionEndpoint();
-//
-//        statusListener = new ASRServerStatusListener(hostname, port);
-//        RecognitionTask.ENDPOINT = ((MyApplication) getApplication()).getRecognitionEndpoint();
+        serverStatusListener = ServerStatusListener.getInstance();
     }
 
     public static DevspaceViewModel getIntance(Application application) {
 
         if ( INSTANCE == null) {
             INSTANCE = new DevspaceViewModel(application);
-            RecognitionTask.ENDPOINT = ServerSetting.getRecognitionEndpoint();
         }
+        RecognitionTask.ENDPOINT = ServerSetting.getRecognitionEndpoint();
+
         return INSTANCE;
+    }
+
+    public ServerStatusListener getServerListener() {
+        return serverStatusListener;
     }
 
     public void dequeueRecognitionTasks() {
@@ -96,18 +83,6 @@ public class DevspaceViewModel extends AndroidViewModel {
         } else {
             Timber.d("no worker available");
         }
-    }
-
-    private String getRecordingFilepath(int surah, int ayah) {
-        return audioDir + "/recording/"+surah+"_"+ayah+".wav";
-    }
-
-    private String getTestFilepath(int surah, int ayah) {
-        return audioDir + "/test/"+surah+"_"+ayah+".wav";
-    }
-
-    public ASRServerStatusListener getStatusListener() {
-        return statusListener;
     }
 
     public void onActivityCreated(DevspaceNavigator navigator) {

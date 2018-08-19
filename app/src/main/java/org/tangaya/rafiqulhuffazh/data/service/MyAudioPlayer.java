@@ -50,10 +50,10 @@ public class MyAudioPlayer extends MediaPlayer {
             reset();
             switch (src) {
                 case RECORDING:
-                    setDataSource(AudioFileHelper.getRecordingFilePath(surah, ayah));
+                    setDataSource(AudioFileHelper.getUserRecordingFilePath(surah, ayah));
                     break;
                 case QARI1:
-                    setDataSource(AudioFileHelper.getQari1FilePath(surah, ayah));
+                    setDataSource(AudioFileHelper.getQari1AudioFilePath(surah, ayah));
             }
             prepare();
         } catch (IOException e) {

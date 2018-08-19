@@ -60,7 +60,7 @@ public class QuranScriptTest {
         URL quranUrl= getClass().getClassLoader().getResource("quran-uthmani.txt");
         URL quranSurahsUrl = getClass().getClassLoader().getResource("quran_surahs_name.csv");
 
-//        QuranScriptFactory.init(is1, is2, is3);
+//        QuranScriptFactory.connect(is1, is2, is3);
 
         URLConnection qscriptUrlConn, quranUrlConn, quranSurahUrlConn;
 
