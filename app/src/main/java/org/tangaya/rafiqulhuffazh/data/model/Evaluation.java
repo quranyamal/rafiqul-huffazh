@@ -2,54 +2,42 @@ package org.tangaya.rafiqulhuffazh.data.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 public class Evaluation extends BaseObservable {
 
-    private Attempt attempt;
-    private String transcription, reference;
-    private String evalDescription;
+    public ObservableInt earnedPoints = new ObservableInt();
+    public ObservableInt maxPoints = new ObservableInt();
+    public ObservableField<String> qscript = new ObservableField<>();
+    public ObservableField<String> description = new ObservableField<>();
+    public ObservableField<QuranAyahAudio> audio = new ObservableField<>();
 
-    boolean isCorrect;
+    public Evaluation(QuranAyahAudio audio) {
+        this.audio.set(audio);
 
-    int ayah, surah;
+    }
 
-    public ObservableInt earnedPoints = new ObservableInt(90);
-    public ObservableInt maxPoints = new ObservableInt(100);
+    public int getEarnedPoints() {
+        return earnedPoints.get();
+    }
 
-    public Evaluation() {}
-
-    public Evaluation(Attempt attempt, String transcription_) {
-
-        this.attempt = attempt;
-        this.transcription = transcription_;
-
-        surah = attempt.getSurahNum();
-        ayah = attempt.getAyahNum();
-
-        reference = QuranUtil.getAyah(surah, ayah);
-        isCorrect = transcription.equals(reference);
-
-        if (isCorrect) {
-            evalDescription = "Correct";
-        } else {
-            evalDescription = "todo";
-        }
-
+    public int getMaxPoints() {
+        return maxPoints.get();
     }
 
     public void setEvalDescription(String desc) {
-        evalDescription = desc;
+         description.set(desc);
     }
 
-    public ObservableInt getEarnedPoints() {
-        return earnedPoints;
+    public void setMaxPoints(int maxPts) {
+        maxPoints.set(maxPts);
     }
 
-    public ObservableInt getMaxpoints() {
-        return maxPoints;
+    public void setEarnedPoints(int pts) {
+        earnedPoints.set(pts);
     }
 
 }

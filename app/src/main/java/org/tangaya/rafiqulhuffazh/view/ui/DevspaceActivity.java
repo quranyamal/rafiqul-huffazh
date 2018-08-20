@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
@@ -21,8 +20,6 @@ import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityDevspaceBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.DevspaceViewModel;
-
-import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -88,15 +85,15 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
         };
         mViewModel.getTranscribedAudioHolder().observe(this, transcribedAudioObserver);
 
-        final Observer<Evaluation> evalResultObserver = new Observer<Evaluation>() {
-            @Override
-            public void onChanged(@Nullable Evaluation eval) {
-                Timber.d("new eval arrived");
-                mViewModel.addEvalToRepo(eval);
-                mViewModel.evalCount.set(mViewModel.evalCount.get()+1);
-            }
-        };
-        mViewModel.getEvaluator().getEvalResult().observe(this, evalResultObserver);
+//        final Observer<Evaluation> evalResultObserver = new Observer<Evaluation>() {
+//            @Override
+//            public void onChanged(@Nullable Evaluation eval) {
+//                Timber.d("new eval arrived");
+//                mViewModel.addEvalToRepo(eval);
+//                mViewModel.evalCount.set(mViewModel.evalCount.get()+1);
+//            }
+//        };
+//        mViewModel.getEvaluator().getEvalResult().observe(this, evalResultObserver);
     }
 
     @Override

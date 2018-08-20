@@ -102,7 +102,7 @@ public class EvaluationOld extends BaseObservable {
         if (isCorrect.get()) {
             strResult = "Correct";
         } else {
-            strResult = evaluator.getEvalDescrition(attempt.getSurahNum(), attempt.getAyahNum(), transcription);
+            strResult = evaluator.getEvalDescription(attempt.getSurahNum(), attempt.getAyahNum(), transcription);
         }
 
         ////
@@ -132,7 +132,7 @@ public class EvaluationOld extends BaseObservable {
         } else {
             //evalStr.set("Wrong");   // todo: improve
 
-            evalStr.set(evaluator.getEvalDescrition(mSurah.get(), mAyah.get(), transcription));
+            evalStr.set(evaluator.getEvalDescription(mSurah.get(), mAyah.get(), transcription));
             isCorrect.set(false);
         }
 

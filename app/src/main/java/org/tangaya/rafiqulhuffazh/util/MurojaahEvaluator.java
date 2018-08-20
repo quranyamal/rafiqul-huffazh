@@ -40,16 +40,22 @@ public class MurojaahEvaluator {
         return INSTANCE;
     }
 
-    public void evaluate(QuranAyahAudio audio) {
-        Evaluation eval = new Evaluation();
+    public Evaluation evaluate(QuranAyahAudio audio) {
+        Evaluation eval = new Evaluation(audio);
 
-        String evalDesc = getEvalDescrition(audio.getSurah(), audio.getAyah(), audio.getTranscription());
+        String evalDesc = getEvalDescription(audio.getSurah(), audio.getAyah(), audio.getTranscription());
         eval.setEvalDescription(evalDesc);
 
+        int levenshteinValue = getLevenshteinDistance(audio.getQScript(), audio.getTranscription());
+        int maxPts = audio.getQScript().length();
+
+        eval.setMaxPoints(maxPts);
+        eval.setEarnedPoints(maxPts - levenshteinValue);
         evalResult.setValue(eval);
+        return eval;
     }
 
-    public String getEvalDescrition(int surah, int ayah, String recognized) {
+    public String getEvalDescription(int surah, int ayah, String recognized) {
 
         String reference = QuranUtil.getQScript(surah, ayah);
 

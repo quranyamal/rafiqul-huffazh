@@ -61,8 +61,8 @@ public class ScoreboardViewModel extends AndroidViewModel {
         int totalPoints=0, maxPoints=0;
 
         for (Evaluation eval : evals) {
-            totalPoints += eval.getEarnedPoints().get();
-            maxPoints += eval.getMaxpoints().get();
+            totalPoints += eval.getEarnedPoints();
+            maxPoints += eval.getMaxPoints();
             Timber.d("total pts:"+totalPoints+"max pts:"+maxPoints);
         }
         return Math.round(totalPoints / (float) maxPoints * 100);

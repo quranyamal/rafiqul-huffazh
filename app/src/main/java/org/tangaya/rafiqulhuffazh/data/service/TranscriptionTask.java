@@ -17,6 +17,8 @@ import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
+import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
+import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -114,6 +116,7 @@ public class TranscriptionTask extends WebSocketAdapter {
             transcription = transcription.substring(0, transcription.length()-1);
 
             inputAudio.setTranscription(transcription);
+            inputAudio.setArabicTranscription(QuranScriptConverter.toArabic(transcription));
             resultHolder.postValue(inputAudio);
         }
     }

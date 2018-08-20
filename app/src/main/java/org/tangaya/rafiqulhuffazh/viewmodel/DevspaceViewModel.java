@@ -57,10 +57,7 @@ public class DevspaceViewModel extends AndroidViewModel {
     }
 
     public void evaluate(QuranAyahAudio audio) {
-        evaluator.evaluate(audio);
-    }
-
-    public void addEvalToRepo(Evaluation eval) {
+        Evaluation eval = evaluator.evaluate(audio);
         evalRepo.add(eval);
     }
 
