@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Rafiqul Huffazh</string>
-    <string name="recording_true">press next button to finish ayah recitation</string>
-    <string name="recording_false">press record button and recite ayah</string>
-    <string name="about_description">Rafiqul Huffazh is a mobile application to help Quran memorizer to do muroja\'ah (an activity in memorizing Quran to keep Quran verses in mind)</string>
-    <string name="about_contact">Contact developer at mal.qurany@gmail.com</string>
+    <string name="recording_true">tekan tombol lanjut untuk berhenti merekam</string>
+    <string name="recording_false">tekan tombol rekam dan mulai membaca ayat</string>
+    <string name="about_description">Rafiqul Huffazh adalah sebuah aplikasi Android untuk membantu muroja\'ah hafalan Al Quran</string>
+    <string name="about_contact">Hubungi pengembang di mal.qurany@gmail.com</string>
 
     <string name="CURRENT_CHAPTER_NUM">chapternum</string>
     <string name="server_ip">0.0.0.0</string>

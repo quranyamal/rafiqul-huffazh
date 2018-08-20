@@ -30,14 +30,6 @@ public class AboutActivity extends Activity implements AboutNavigator {
         mBinding.setViewmodel(mViewModel);
 
         setTitle("About");
-
-        Configuration configuration = getResources().getConfiguration();
-        configuration.setLocale(Locale.getDefault());
-        Locale primaryLocale = Locale.getDefault();
-        String locale = primaryLocale.getDisplayName();
-
-        ((TextView) findViewById(R.id.locale)).setText(locale);
-
     }
 
     @Override

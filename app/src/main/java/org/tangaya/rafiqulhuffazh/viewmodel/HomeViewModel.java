@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
+import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.view.navigator.HomeNavigator;
 
 public class HomeViewModel extends AndroidViewModel {
@@ -13,17 +14,24 @@ public class HomeViewModel extends AndroidViewModel {
 
     public final ObservableField<String> serverStatus = new ObservableField<>();
 
-//    private MutableLiveData<String> cobaLiveData;
-//
-//    public MutableLiveData<String> getCobaLiveData() {
-//        return cobaLiveData;
-//    }
+    private ServerStatusListener listener = ServerStatusListener.getInstance();
 
+    public ServerStatusListener getServerStatusListener() {
+        return listener;
+    }
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
 
-        serverStatus.set("tes status");
+        serverStatus.set("connecting...");
+    }
+
+    public ObservableField<String> getServerStatus() {
+        return serverStatus;
+    }
+
+    public void setServerStatus(String status) {
+        serverStatus.set(status);
     }
 
     public void onActivityCreated(HomeNavigator navigator) {
