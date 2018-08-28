@@ -33,7 +33,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Your Score"
+                android:text="Skor Anda"
                 android:textSize="28dp"
                 app:layout_constraintBottom_toTopOf="@+id/textView2"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
                 android:id="@+id/detail_button_scoreboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="view detail"
+                android:text="detail skor"
                 android:onClick="@{() -> viewmodel.showDetail() }"/>
 
             <ImageView

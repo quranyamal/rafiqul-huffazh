@@ -17,4 +17,13 @@
         <item name="android:colorButtonNormal">@color/primaryColor</item>
     </style>
 
+    <style name="MyTheme.NoActionBar.Fullscreen" parent="android:Theme.Material.Light.NoActionBar.Fullscreen" >
+        <item name="android:colorPrimary">@color/primaryColor</item>
+        <item name="android:colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="android:colorAccent">@color/secondaryColor</item>
+        <item name="android:navigationBarColor">@color/primaryColor</item>
+        <item name="android:textColorPrimary">@android:color/primary_text_light</item>
+        <item name="android:colorButtonNormal">@color/primaryColor</item>
+    </style>
+
 </resources>

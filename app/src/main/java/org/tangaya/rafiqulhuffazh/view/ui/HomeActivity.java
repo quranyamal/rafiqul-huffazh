@@ -16,9 +16,12 @@ import org.tangaya.rafiqulhuffazh.viewmodel.HomeViewModel;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityHomeBinding;
 import org.tangaya.rafiqulhuffazh.R;
 
+import timber.log.Timber;
+
 public class HomeActivity extends Activity implements LifecycleOwner, HomeNavigator {
 
     public HomeViewModel mViewModel;
+    private ActivityHomeBinding binding;
     private LifecycleRegistry mLifecycleRegistry;
 
     @Override
@@ -31,7 +34,7 @@ public class HomeActivity extends Activity implements LifecycleOwner, HomeNaviga
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-        ActivityHomeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
         binding.setViewmodel(mViewModel);
 
         final Observer<String> serverStatusObserver = new Observer<String>() {

@@ -1,11 +1,11 @@
 package org.tangaya.rafiqulhuffazh.data.model;
 
 import android.databinding.BaseObservable;
-import android.databinding.BindingAdapter;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
-import org.tangaya.rafiqulhuffazh.util.QuranUtil;
+import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 
 public class Evaluation extends BaseObservable {
 
@@ -14,6 +14,8 @@ public class Evaluation extends BaseObservable {
     public ObservableField<String> qscript = new ObservableField<>();
     public ObservableField<String> description = new ObservableField<>();
     public ObservableField<QuranAyahAudio> audio = new ObservableField<>();
+
+    public ObservableBoolean isCorrect = new ObservableBoolean();
 
     public Evaluation(QuranAyahAudio audio) {
         this.audio.set(audio);
@@ -30,6 +32,7 @@ public class Evaluation extends BaseObservable {
 
     public void setEvalDescription(String desc) {
          description.set(desc);
+         isCorrect.set(desc.equals(MurojaahEvaluator.CORRECT_MESSAGE));
     }
 
     public void setMaxPoints(int maxPts) {

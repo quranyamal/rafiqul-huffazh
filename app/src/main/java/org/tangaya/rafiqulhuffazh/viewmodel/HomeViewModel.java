@@ -2,6 +2,7 @@ package org.tangaya.rafiqulhuffazh.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -13,6 +14,7 @@ public class HomeViewModel extends AndroidViewModel {
     HomeNavigator mNavigator;
 
     public final ObservableField<String> serverStatus = new ObservableField<>();
+    public final ObservableBoolean isConnected = new ObservableBoolean();
 
     private ServerStatusListener listener = ServerStatusListener.getInstance();
 
@@ -32,6 +34,7 @@ public class HomeViewModel extends AndroidViewModel {
 
     public void setServerStatus(String status) {
         serverStatus.set(status);
+        isConnected.set(serverStatus.get().equals("connected"));
     }
 
     public void onActivityCreated(HomeNavigator navigator) {

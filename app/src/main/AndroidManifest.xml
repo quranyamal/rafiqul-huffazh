@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".view.ui.MurojaahActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen"/>
+            android:theme="@style/MyTheme.NoActionBar.Fullscreen"/>
         <activity android:name=".view.ui.DevspaceActivity"/>
         <activity android:name=".view.ui.ServerSettingActivity"/>
         <activity android:name=".util.AudioRecordTest" />
@@ -38,7 +38,7 @@
         <activity android:name=".view.ui.ScoreDetailActivity" />
         <activity
             android:name=".view.ui.TutorialActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
+            android:theme="@style/MyTheme.NoActionBar"/>
     </application>
 
 </manifest>

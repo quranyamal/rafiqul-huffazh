@@ -76,10 +76,11 @@
                 <TextView
                     android:id="@+id/hint_text"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="40dp"
                     android:gravity="center_horizontal"
                     android:text="@{viewmodel.ayahText, default=`بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ`}"
+                    android:textSize="24dp"
                     android:visibility="@{viewmodel.hintVisibility}" />
 
                 <TextView

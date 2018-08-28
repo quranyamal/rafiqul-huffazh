@@ -52,6 +52,8 @@ public class ScoreboardActivity extends Activity implements LifecycleOwner, Scor
             }
         };
         mViewModel.getEvaluationsLiveData().observe(this, evalsObserver);
+
+        setTitle("Finish");
     }
 
 

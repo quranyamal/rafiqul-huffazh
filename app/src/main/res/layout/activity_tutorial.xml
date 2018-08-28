@@ -9,16 +9,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="30dp">
+        android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tutorial_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
+        </android.support.v4.view.ViewPager>
 
         <TextView
             android:id="@+id/tutorial_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="20dp"
             android:text="Tutorial"
             android:textSize="36dp"
             android:textStyle="bold"
@@ -47,18 +51,13 @@
             android:layout_centerVertical="true"
             android:src="@drawable/backward_48" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/tutorial_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_centerInParent="true">
-        </android.support.v4.view.ViewPager>
 
         <TextView
             android:id="@+id/skip_tutorial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:paddingBottom="20dp"
             android:layout_centerHorizontal="true"
             android:text="skip"
             android:textSize="18dp"

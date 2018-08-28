@@ -18,35 +18,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{`ref: `+evaluation.audio.get().arabic}"/>
+                android:orientation="horizontal"
+                android:background="@{evaluation.isCorrect ? @color/green : @color/red}"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{`ref: `+evaluation.audio.get().arabic}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{evaluation.isCorrect ? `BENAR` : `KURANG TEPAT`}"
+                    android:textColor="@color/white"
+                    android:padding="2dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{`rec: `+evaluation.audio.get().arabicTranscription}"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{``+evaluation.description, default=`terdapat elemen hilang`}"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{`eval: `+evaluation.description}"/>
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{`point = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`poin = 9/10`}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`ref: `+evaluation.audio.get().arabic, default=`ref: بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم`}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`rec: `+evaluation.audio.get().arabicTranscription, default=`rec: ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم`}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{`point = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`poin = 9/10`}"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 

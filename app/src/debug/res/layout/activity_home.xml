@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         tools:context=".view.ui.HomeActivity"
         android:orientation="vertical"
-        android:padding="10dp">
-
+        android:padding="7dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,38 +24,51 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
             android:text="Rafiqul Huffazh"
             android:textSize="32dp"
             android:textAlignment="center"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewmodel.serverStatus}"
-            android:layout_marginBottom="30dp"
-            android:layout_gravity="center"
-            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dp"
+                android:text="@{viewmodel.serverStatus, default=`connected`}"
+                android:textColor="@{viewmodel.isConnected ? @color/green : @color/red}"
+                android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+
+            <ImageView
+                android:id="@+id/setting_button_home"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:src="@drawable/settings_50"
+                android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/murojaah_button_home"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="100dp"
             android:text="Murojaah"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:onClick="@{() -> viewmodel.gotoMurojaah()}"/>
-
-        <Button
-            android:id="@+id/setting_button_home"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Server Setting"
-            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Development Space"
+            android:textColor="@color/white"
             android:onClick="@{() -> viewmodel.gotoDevspace()}"/>
 
         <ImageView
@@ -72,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="about"
             android:textAlignment="center"
-            android:onClick="gotoAbout"/>
+            android:onClick="@{() -> viewmodel.gotoAbout()}"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
