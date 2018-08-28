@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -14,8 +15,7 @@
         tools:context=".view.ui.HomeActivity"
         android:orientation="vertical"
         android:padding="10dp">
-
-        <TextView
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="رَ"
@@ -31,27 +31,38 @@
             android:textSize="32dp"
             android:textAlignment="center"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewmodel.serverStatus}"
-            android:layout_marginBottom="30dp"
-            android:layout_gravity="center"
-            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@{viewmodel.serverStatus, default=`connected`}"
+                android:textColor="@color/green"
+                android:layout_gravity="center"
+                android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+
+            <ImageView
+                android:id="@+id/setting_button_home"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
+                android:src="@drawable/settings_50"
+                android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/murojaah_button_home"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="100dp"
             android:text="Murojaah"
+            android:textColor="@color/white"
             android:onClick="@{() -> viewmodel.gotoMurojaah()}"/>
-
-        <Button
-            android:id="@+id/setting_button_home"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Server Setting"
-            android:onClick="@{() -> viewmodel.gotoServerSetting()}"/>
 
         <ImageView
             android:layout_width="16dp"

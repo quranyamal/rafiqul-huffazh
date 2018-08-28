@@ -110,12 +110,12 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_toLeftOf="@id/attempt_button_murojaah"
+                android:layout_toLeftOf="@id/record_button_murojaah"
                 android:clickable="@{viewmodel.isRecording ? true : false}"
                 android:onClick="@{() -> viewmodel.cancelRecording()}"
                 android:src="@{viewmodel.isRecording ? @drawable/cancel_black_100 : @drawable/cancel_grey_100}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/attempt_button_murojaah"
+                app:layout_constraintEnd_toStartOf="@+id/record_button_murojaah"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,12 +133,12 @@
                 android:text="cancel"
                 android:textColor="#000"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/attempt_button_murojaah"
+                app:layout_constraintEnd_toStartOf="@+id/record_button_murojaah"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cancel_icon" />
 
             <ImageView
-                android:id="@+id/attempt_button_murojaah"
+                android:id="@+id/record_button_murojaah"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
@@ -147,7 +147,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:onClick="@{() -> viewmodel.recordAyah()}"
+                android:onClick="@{() -> viewmodel.onClickRecord()}"
                 android:src="@{viewmodel.isRecording ? @drawable/arrow_black_100 : @drawable/mic_black_100}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -163,13 +163,13 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_toRightOf="@+id/attempt_button_murojaah"
+                android:layout_toRightOf="@+id/record_button_murojaah"
                 android:clickable="@{viewmodel.isHintRequested ? false : true}"
                 android:onClick="@{() -> viewmodel.showHint()}"
                 android:src="@{viewmodel.isHintRequested ? @drawable/eye_grey_100 : @drawable/eye_black_100}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/attempt_button_murojaah"
+                app:layout_constraintStart_toEndOf="@+id/record_button_murojaah"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -186,7 +186,7 @@
                 android:textColor="#000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/attempt_button_murojaah"
+                app:layout_constraintStart_toEndOf="@+id/record_button_murojaah"
                 app:layout_constraintTop_toBottomOf="@+id/hint_icon" />
 
         </android.support.constraint.ConstraintLayout>

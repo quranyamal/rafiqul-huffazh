@@ -66,7 +66,7 @@ public class MurojaahActivityTest {
 
         assert !recording.exists();
 
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.ayah_num_text)).perform(click());           // used to play ayah
 
         try {
@@ -75,7 +75,7 @@ public class MurojaahActivityTest {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
 
         //check if recording file exist and not empty
         assert recording.exists();
@@ -97,21 +97,21 @@ public class MurojaahActivityTest {
         intended(hasComponent(MurojaahActivity.class.getName()));
 
         // ayah 1
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_false)));
 
         // ayah 2
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_false)));
 
         //ayah 3
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         onView(withId(R.id.instruction_murojaah)).check(matches(withText(R.string.recording_true)));
 
         // wait for recognition process
@@ -121,7 +121,7 @@ public class MurojaahActivityTest {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.attempt_button_murojaah)).perform(click());
+        onView(withId(R.id.record_button_murojaah)).perform(click());
         intended(hasComponent(ScoreboardActivity.class.getName()));
 
         onView(withId(R.id.detail_button_scoreboard)).perform(click());

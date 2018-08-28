@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,10 +14,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
+import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
@@ -57,38 +60,43 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
 
         mMurojaahDataBinding.setViewmodel(mViewModel);
 
-//        Timber.d("queue size ==> " + mViewModel.getQueueSize());
-//
-//        final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
-//
-//            @Override
-//            public void onChanged(@Nullable Integer numAvailWorkers) {
-//                Timber.d("num worker has been changed ==> " + numAvailWorkers);
-//                Timber.d("queue size ==> " + mViewModel.getQueueSize());
-//                mViewModel.numAvailableWorkers.set(numAvailWorkers);
-//                if (numAvailWorkers>0) {
-//                    if (mViewModel.getQueueSize()>0) {
-//                        mViewModel.pollRecognitionQueue();
-//                    } else {
-//                        Timber.d("recognition task queue empty. do nothing");
-//                    }
-//                } else {
-//                    Timber.d("no worker available. do nothing");
-//                }
-//            }
-//        };
-//        mViewModel.getStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
-//
-//        final Observer<ArrayList<EvaluationOld>> evalsObserver = new Observer<ArrayList<EvaluationOld>>() {
-//            @Override
-//            public void onChanged(@Nullable ArrayList<EvaluationOld> evaluations) {
-//                Timber.d("eval set has changed. num eval = " + evaluations.size());
-//            }
-//        };
-//        mViewModel.getEvalsMutableLiveData().observe(this, evalsObserver);
+        setupObservers();
+    }
 
-        //textView = findViewById(R.id.progressbar_info);
-        //progressBar = findViewById(R.id.recognizing_progressbar);
+    private void setupObservers() {
+        final Observer<String> serverStatusObserver = new Observer<String>() {
+
+            @Override
+            public void onChanged(@Nullable String serverStatus) {
+                Timber.d("server status has changed ==> " + serverStatus);
+                mViewModel.serverStatus.set(serverStatus);
+            }
+        };
+        mViewModel.getServerStatusListener().getStatus().observe(this, serverStatusObserver);
+
+        final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
+
+            @Override
+            public void onChanged(@Nullable Integer numAvailWorkers) {
+                Timber.d("num worker has changed ==> " + numAvailWorkers);
+                mViewModel.numAvailableWorkers.set(numAvailWorkers);
+                if (numAvailWorkers > 0) {
+                    mViewModel.pollTranscriptionQueue();
+                }
+            }
+        };
+        mViewModel.getServerStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+
+        final Observer<QuranAyahAudio> transcribedAudioObserver = new Observer<QuranAyahAudio>() {
+            @Override
+            public void onChanged(@Nullable QuranAyahAudio audio) {
+                Timber.d("new transcribed audio arrived");
+                Timber.d(audio.getTranscription());
+
+                mViewModel.evaluate(audio);
+            }
+        };
+        mViewModel.getTranscribedAudioHolder().observe(this, transcribedAudioObserver);
     }
 
     @Override
@@ -103,10 +111,24 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         mViewModel.deleteRecordingFiles();
     }
 
+    @Override
+    public void onStartRecording(Recording recording) {
+        mRecorder.setOutput(recording);
+        mRecorder.prepare();
+        mRecorder.start();
+        Timber.d("onStartRecording");
+    }
+
+    @Override
+    public void onStopRecording() {
+        mRecorder.stop();
+        mRecorder.reset();
+        Timber.d("onStopRecording");
+    }
+
     public static MurojaahViewModel obtainViewModel(Activity activity) {
 
         return new MurojaahViewModel(activity.getApplication());
-        //return ViewModelProviders.of(activity, factory).get(MurojaahViewModel.class);
     }
 
     @Override
@@ -168,21 +190,6 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
             }
         }).start();
 
-    }
-
-    @Override
-    public void onStartRecording(Recording recording) {
-        mRecorder.setOutput(recording);
-        mRecorder.prepare();
-        mRecorder.start();
-        Timber.d("onStartRecording");
-    }
-
-    @Override
-    public void onStopRecording() {
-        mRecorder.stop();
-        mRecorder.reset();
-        Timber.d("onStopRecording");
     }
 
 }

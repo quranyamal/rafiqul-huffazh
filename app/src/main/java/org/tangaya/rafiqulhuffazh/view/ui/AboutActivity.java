@@ -14,6 +14,8 @@ import org.tangaya.rafiqulhuffazh.viewmodel.AboutViewModel;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 public class AboutActivity extends Activity implements AboutNavigator {
 
     private AboutViewModel mViewModel;
@@ -23,6 +25,8 @@ public class AboutActivity extends Activity implements AboutNavigator {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Timber.d("start onCreate");
+
         mViewModel = new AboutViewModel();
         mViewModel.onActivityCreated(this);
 
@@ -30,6 +34,7 @@ public class AboutActivity extends Activity implements AboutNavigator {
         mBinding.setViewmodel(mViewModel);
 
         setTitle("About");
+        Timber.d("end of onCreate");
     }
 
     @Override
