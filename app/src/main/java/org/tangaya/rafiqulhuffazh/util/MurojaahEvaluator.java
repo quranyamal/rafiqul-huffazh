@@ -52,6 +52,10 @@ public class MurojaahEvaluator {
         eval.setMaxPoints(maxPts);
         eval.setEarnedPoints(maxPts - levenshteinValue);
         evalResult.setValue(eval);
+
+        // debugging stuff
+        eval.diffs.set(dmp.diff_main(audio.getQScript(), audio.getTranscription()));
+
         return eval;
     }
 

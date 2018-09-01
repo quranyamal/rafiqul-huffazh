@@ -6,6 +6,9 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
+import org.tangaya.rafiqulhuffazh.util.diff_match_patch;
+
+import java.util.LinkedList;
 
 public class Evaluation extends BaseObservable {
 
@@ -14,6 +17,9 @@ public class Evaluation extends BaseObservable {
     public ObservableField<String> qscript = new ObservableField<>();
     public ObservableField<String> description = new ObservableField<>();
     public ObservableField<QuranAyahAudio> audio = new ObservableField<>();
+
+    // debugging stuff
+    public ObservableField<LinkedList<diff_match_patch.Diff>> diffs = new ObservableField<>();
 
     public ObservableBoolean isCorrect = new ObservableBoolean();
 
@@ -37,6 +43,10 @@ public class Evaluation extends BaseObservable {
 
     public void setMaxPoints(int maxPts) {
         maxPoints.set(maxPts);
+    }
+
+    public void setDiffs(LinkedList<diff_match_patch.Diff> diffs) {
+        this.diffs.set(diffs);
     }
 
     public void setEarnedPoints(int pts) {

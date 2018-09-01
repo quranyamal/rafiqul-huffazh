@@ -34,7 +34,7 @@ public class MyApplication extends Application {
 
         //connectToServer();
         QuranUtil.init(getApplicationContext().getAssets());
-        QuranScriptConverter.init(getApplicationContext());
+        QuranScriptConverter.init(getApplicationContext().getAssets());
 
         Timber.d("after quran script repo connect");
 

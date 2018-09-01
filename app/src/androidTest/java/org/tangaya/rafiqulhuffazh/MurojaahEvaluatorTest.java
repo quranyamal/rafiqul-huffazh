@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
-import org.tangaya.rafiqulhuffazh.util.QuranScriptFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

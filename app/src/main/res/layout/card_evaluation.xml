@@ -24,14 +24,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@{evaluation.isCorrect ? @color/green : @color/red}"
+                android:background="@{evaluation.isCorrect ? @color/green : @color/red, default=@color/red}"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{evaluation.isCorrect ? `BENAR` : `KURANG TEPAT`}"
+                    android:text="@{evaluation.isCorrect ? `BENAR` : `KURANG TEPAT`, default=`KURANG TEPAT`}"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:padding="2dp"/>
 
@@ -61,6 +62,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{`rec: `+evaluation.audio.get().arabicTranscription, default=`rec: ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم`}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{``+evaluation.diffs}"/>
 
                 <TextView
                     android:layout_width="wrap_content"

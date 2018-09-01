@@ -86,7 +86,6 @@ public class MurojaahViewModel extends AndroidViewModel {
         mNavigator = navigator;
         surahNum.set(surah);
         surahName.set(QuranUtil.getSurahName(surah));
-        EvaluationRepositoryOld.clearEvalData();
         //ayahNum.set(1);
 
         Timber.d("onActivityCreated");
@@ -120,6 +119,13 @@ public class MurojaahViewModel extends AndroidViewModel {
                 incrementAyah();
             }
         }
+    }
+
+    public void transcribeRecording() {
+        transcriber.addToQueue(audio);
+        Timber.d("added to queue");
+
+        pollTranscriptionQueue();
     }
 
     public void pollTranscriptionQueue() {

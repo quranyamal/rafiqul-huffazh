@@ -123,6 +123,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     public void onStopRecording() {
         mRecorder.stop();
         mRecorder.reset();
+        mViewModel.transcribeRecording();
         Timber.d("onStopRecording");
     }
 

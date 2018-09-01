@@ -14,7 +14,8 @@ import java.io.IOException;
 
 public class ServerSettingViewModel extends AndroidViewModel {
 
-    ServerSettingNavigator mNavigator;
+    public static String CONNECTION_STATUS_CONNECTED = "connected";
+    public static String CONNECTION_STATUS_ERROR = "error";
 
     public final ObservableField<String> hostname = new ObservableField<>();
     public final ObservableField<String> port = new ObservableField<>();
@@ -22,6 +23,7 @@ public class ServerSettingViewModel extends AndroidViewModel {
     public final ObservableField<String> errorInfo = new ObservableField<>("");
 
     private ServerStatusListener serverStatusListener;
+    ServerSettingNavigator mNavigator;
 
     public ServerStatusListener getServerStatusListener() {
         return serverStatusListener;
