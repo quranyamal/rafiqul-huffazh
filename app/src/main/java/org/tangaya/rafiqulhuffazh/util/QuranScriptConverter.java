@@ -15,19 +15,27 @@ public class    QuranScriptConverter {
 
     private QuranScriptConverter() {}
 
-    private static BufferedReader brQScript, brArabic;
+    private static BufferedReader brMap;
     private static List<String> qscrptWordList, arabicWordList;
 
     public static int init(AssetManager assetManager) {
 
-        try {
-            brArabic = new BufferedReader(new InputStreamReader(
-                    assetManager.open("quran_arabic_words.txt")));
-            brQScript = new BufferedReader(new InputStreamReader(
-                    assetManager.open("qscript_words.txt")));
+        qscrptWordList = new ArrayList<>();
+        arabicWordList = new ArrayList<>();
 
-            arabicWordList = Arrays.asList(brArabic.readLine().split(" "));
-            qscrptWordList = Arrays.asList(brQScript.readLine().split(" "));
+        try {
+            brMap = new BufferedReader(new InputStreamReader(
+                    assetManager.open("qscript_to_arabic_map.txt")));
+
+            String line;
+
+            while((line = brMap.readLine()) != null) {
+                String str[] = line.split(" ");
+
+                qscrptWordList.add(str[0]);
+                arabicWordList.add(str[1]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
