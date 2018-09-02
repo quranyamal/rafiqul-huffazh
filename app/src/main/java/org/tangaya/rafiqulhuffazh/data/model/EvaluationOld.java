@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
-import org.tangaya.rafiqulhuffazh.util.diff_match_patch;
+import org.tangaya.rafiqulhuffazh.util.diff.diff_match_patch;
 
 
 public class EvaluationOld extends BaseObservable {

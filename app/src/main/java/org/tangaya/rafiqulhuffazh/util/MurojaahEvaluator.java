@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
+import org.tangaya.rafiqulhuffazh.util.diff.AdvancedWordBasedDiff;
+import org.tangaya.rafiqulhuffazh.util.diff.diff_match_patch;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,6 +32,7 @@ public class MurojaahEvaluator {
     public static String INCORRECT_MESSAGE_RETURNING_TO_PREV_AYAH = "mundur ke ayat sebelumnya";
 
     private static diff_match_patch dmp = new diff_match_patch();
+    //private static AdvancedWordBasedDiff dmp = new AdvancedWordBasedDiff();
 
     private MurojaahEvaluator() {}
 
@@ -54,7 +57,9 @@ public class MurojaahEvaluator {
         evalResult.setValue(eval);
 
         // debugging stuff
-        eval.diffs.set(dmp.diff_main(audio.getQScript(), audio.getTranscription()));
+        //eval.diffs.set(dmp.diff_main(audio.getQScript(), audio.getTranscription()));
+        eval.diffs.set(AdvancedWordBasedDiff.getWordBasedDiff(audio.getQScript(), audio.getTranscription()));
+        eval.setColoredEvalText();
 
         return eval;
     }
@@ -85,7 +90,8 @@ public class MurojaahEvaluator {
             }
         }
 
-        LinkedList<diff_match_patch.Diff> diffs = dmp.diff_main(reference, recognized);
+        //LinkedList<diff_match_patch.Diff> diffs = dmp.diff_main(reference, recognized);
+        LinkedList<diff_match_patch.Diff> diffs = AdvancedWordBasedDiff.getWordBasedDiff(reference, recognized);
         Set<diff_match_patch.Operation> oprSet = new HashSet<>();
 
         for (diff_match_patch.Diff diff : diffs) {

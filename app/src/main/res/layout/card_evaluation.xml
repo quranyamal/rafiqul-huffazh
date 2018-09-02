@@ -40,9 +40,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{``+evaluation.description, default=`terdapat elemen hilang`}"
+                    android:text="@{`sub-score = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`sub-score = 9/10`}"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -54,24 +55,22 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{`ref: `+evaluation.audio.get().arabic, default=`ref: بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم`}"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{`rec: `+evaluation.audio.get().arabicTranscription, default=`rec: ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم`}"/>
+                    android:text="@{evaluation.coloredEvalText, default=`colored text`}"
+                    android:textSize="28dp"
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{``+evaluation.diffs}"/>
+                    android:text="@{``+evaluation.diffs, default=`diffs`}"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{`point = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`poin = 9/10`}"/>
+                    android:layout_width="match_parent"
+                    android:text="@{``+evaluation.description, default=`terdapat elemen hilang`}"/>
+
             </LinearLayout>
 
 

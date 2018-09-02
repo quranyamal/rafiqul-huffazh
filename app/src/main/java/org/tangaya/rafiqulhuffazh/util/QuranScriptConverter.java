@@ -64,6 +64,10 @@ public class    QuranScriptConverter {
     public static String getArabicElmt(String qscriptWord, String qscriptWordBefore) {
         System.out.println("running getArabicElmt("+qscriptWord+","+qscriptWordBefore+")");
 
+        if (qscriptWord.equals("") && qscriptWordBefore.equals("")) {
+            return "";
+        }
+
         ArrayList<Integer> idxList = new ArrayList<>();
 
         for (int i=0; i<qscrptWordList.size(); i++) {
