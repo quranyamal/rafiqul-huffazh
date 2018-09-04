@@ -12,6 +12,7 @@
         android:id="@+id/eval_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="3dp"
         android:layout_marginBottom="5dp"
         app:cardCornerRadius="4dp"
         android:elevation="8dp">
@@ -27,7 +28,8 @@
                 android:orientation="horizontal"
                 android:background="@{evaluation.isCorrect ? @color/green : @color/red, default=@color/red}"
                 android:paddingLeft="3dp"
-                android:paddingRight="3dp">
+                android:paddingRight="3dp"
+                android:layout_marginBottom="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,7 +49,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{`sub-score = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`sub-score = 9/10`}"
+                    android:text="@{`similarity = `+evaluation.earnedPoints+`/`+evaluation.maxPoints, default=`similarity = 9/10`}"
+                    android:textSize="10sp"
                     android:textAlignment="textEnd"
                     android:textColor="@color/white" />
 
@@ -65,19 +68,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{evaluation.coloredEvalText, default=`colored text`}"
-                    android:textSize="28dp"
+                    android:textSize="26dp"
                     android:textAlignment="center"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{``+evaluation.diffs, default=`diffs`}"/>
-
-                <TextView
-                    android:id="@+id/eval_description"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="@{``+evaluation.description, default=`terdapat elemen hilang`}"/>
+                    android:text="@{``+evaluation.description, default=`terdapat elemen hilang`}"
+                    android:textAlignment="center"/>
 
             </LinearLayout>
 

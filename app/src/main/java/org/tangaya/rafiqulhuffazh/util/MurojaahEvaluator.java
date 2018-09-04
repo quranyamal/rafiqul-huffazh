@@ -54,6 +54,8 @@ public class MurojaahEvaluator {
 
         eval.setMaxPoints(maxPts);
         eval.setEarnedPoints(maxPts - levenshteinValue);
+        eval.setResultType();
+
         evalResult.setValue(eval);
 
         // debugging stuff

@@ -48,7 +48,7 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
 
         holder.mBinding.setEvaluation(evaluations.get(position));
 
-        holder.mBinding.evalDescription.setOnClickListener(new View.OnClickListener() {
+        holder.mBinding.evalCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onEvalDescriptionClicked(evaluations.get(position));

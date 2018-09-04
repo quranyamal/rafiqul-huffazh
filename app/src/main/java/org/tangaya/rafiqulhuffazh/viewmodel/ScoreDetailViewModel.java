@@ -14,7 +14,6 @@ public class ScoreDetailViewModel extends AndroidViewModel {
 
     private EvaluationRepository evalRepo;
     public MutableLiveData<ArrayList<Evaluation>> evaluationsLiveData;
-    public ArrayList<Evaluation> evals = new ArrayList<>();
 
     public ScoreDetailViewModel(@NonNull Application application) {
         super(application);

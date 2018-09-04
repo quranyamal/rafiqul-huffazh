@@ -1,21 +1,25 @@
 package org.tangaya.rafiqulhuffazh.view.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreDetailBinding;
+import org.tangaya.rafiqulhuffazh.databinding.DialogEvalDetailBinding;
 import org.tangaya.rafiqulhuffazh.view.adapter.EvalAdapter;
 import org.tangaya.rafiqulhuffazh.viewmodel.ScoreDetailViewModel;
 
@@ -74,6 +78,21 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner, Eva
     @Override
     public void onEvalDescriptionClicked(Evaluation eval) {
         Timber.d("onEvalDescriptionClicked");
-        Toast.makeText(getApplicationContext(), "eval-"+eval.ayah.get()+ " clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "eval-"+eval.ayah.get()+ " clicked", Toast.LENGTH_SHORT).show();
+
+        DialogEvalDetailBinding binding = DialogEvalDetailBinding
+                .inflate(LayoutInflater.from(getApplicationContext()));
+
+        binding.setEvaluation(eval);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(binding.getRoot())
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
