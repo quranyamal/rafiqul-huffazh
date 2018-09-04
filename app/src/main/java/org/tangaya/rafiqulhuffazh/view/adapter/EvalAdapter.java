@@ -4,7 +4,9 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.tangaya.rafiqulhuffazh.R;
@@ -13,15 +15,19 @@ import org.tangaya.rafiqulhuffazh.databinding.CardEvaluationBinding;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> {
 
     private Context context;
     private ArrayList<Evaluation> evaluations;
     private LayoutInflater layoutInflater;
+    private EvalAdapterListener listener;
 
-    public EvalAdapter(Context context, ArrayList<Evaluation> evaluations) {
+    public EvalAdapter(Context context, ArrayList<Evaluation> evaluations, EvalAdapterListener listener) {
         this.context =context;
         this.evaluations = evaluations;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,9 +44,18 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         holder.mBinding.setEvaluation(evaluations.get(position));
+
+        holder.mBinding.evalDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onEvalDescriptionClicked(evaluations.get(position));
+                Timber.d("evalCard onClick:" + position);
+                Log.d("EvalAdapter", "onClick set " + position);
+            }
+        });
     }
 
     @Override
@@ -54,8 +69,11 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
 
         public MyViewHolder(CardEvaluationBinding binding) {
             super(binding.getRoot());
-
             mBinding = binding;
         }
+    }
+
+    public interface EvalAdapterListener {
+        void onEvalDescriptionClicked(Evaluation eval);
     }
 }

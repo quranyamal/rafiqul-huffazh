@@ -4,8 +4,10 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.databinding.generated.callback.OnClickListener;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
@@ -20,6 +22,10 @@ public class Evaluation extends BaseObservable {
     public ObservableField<String> qscript = new ObservableField<>();
     public ObservableField<String> description = new ObservableField<>();
     public ObservableField<QuranAyahAudio> audio = new ObservableField<>();
+    public ObservableInt surah = new ObservableInt();
+    public ObservableInt ayah = new ObservableInt();
+
+    public ObservableField<Void> clickListener = new ObservableField<>();
 
     public ObservableField<Spanned> coloredEvalText = new ObservableField<>();
 
@@ -30,7 +36,9 @@ public class Evaluation extends BaseObservable {
 
     public Evaluation(QuranAyahAudio audio) {
         this.audio.set(audio);
-
+        surah.set(audio.surah);
+        ayah.set(audio.ayah);
+        clickListener.set(onClickEval());
     }
 
     public int getEarnedPoints() {
@@ -73,6 +81,11 @@ public class Evaluation extends BaseObservable {
 
     public void setEarnedPoints(int pts) {
         earnedPoints.set(pts);
+    }
+
+    public Void onClickEval() {
+        Log.d("Evaluation", "onClickEval");
+        return null;
     }
 
 }
