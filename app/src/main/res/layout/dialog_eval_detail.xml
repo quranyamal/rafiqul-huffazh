@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="evaluation"
+            type="org.tangaya.rafiqulhuffazh.data.model.Evaluation" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@{evaluation.isCorrect ? @color/green : @color/red, default=@color/red}"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Evaluation Detail"
+                android:textAlignment="center"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:paddingTop="5dp"
+                android:textColor="#eee"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{evaluation.surahName + `: ` + evaluation.ayah, default=`[surah name]`}"
+                android:textAlignment="center"
+                android:paddingBottom="5dp"
+                android:textColor="#eee"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="reference"
+                android:textAlignment="center"
+                android:textColor="#333"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{evaluation.reference}"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                android:textColor="#333"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="recognized"
+                android:textAlignment="center"
+                android:textColor="#333"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{evaluation.recognized}"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                android:textColor="#333"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:text="@{`` + evaluation.diffs}"
+                android:textAlignment="center"
+                android:textColor="#333"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
