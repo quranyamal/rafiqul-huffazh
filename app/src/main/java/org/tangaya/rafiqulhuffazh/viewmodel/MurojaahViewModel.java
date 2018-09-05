@@ -11,47 +11,38 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
-import org.tangaya.rafiqulhuffazh.data.repository.AudioRepository;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
-import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import timber.log.Timber;
 
 public class MurojaahViewModel extends AndroidViewModel {
 
-    public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableField<String> serverStatus = new ObservableField<>();
+    public final ObservableInt numAvailableWorkers = new ObservableInt();
 
     public final ObservableField<Integer> surahNum = new ObservableField<>();
-    public final ObservableField<String> surahName = new ObservableField<>();
     public final ObservableField<Integer> ayahNum = new ObservableField<>(1);
-    public final ObservableField<Integer> attemptState= new ObservableField<>();
+    public final ObservableField<String> surahName = new ObservableField<>();
 
-    public final ObservableField<String> hintText = new ObservableField<>();
+    public final ObservableField<String> ayahText = new ObservableField<>();
+    public final ObservableBoolean isHintRequested = new ObservableBoolean();
     public final ObservableField<Integer> hintVisibility = new ObservableField<>();
-    public final ObservableField<String> instructionText = new ObservableField<>();
 
     public final ObservableBoolean isRecording = new ObservableBoolean();
-    public final ObservableBoolean isHintRequested = new ObservableBoolean();
     public final ObservableBoolean isPlaying = new ObservableBoolean();
-    public final ObservableInt numAvailableWorkers = new ObservableInt();
 
     private QuranAyahAudio audio = null;
     private boolean isMockRecording = false;
-
 
     private MutableLiveData<QuranAyahAudio> transcribedAudioHolder = new MutableLiveData<>();
 
@@ -59,10 +50,9 @@ public class MurojaahViewModel extends AndroidViewModel {
     private Context mContext;
     private MurojaahNavigator mNavigator;
 
-    private QuranTranscriber transcriber;
-    private MurojaahEvaluator evaluator;
-    private EvaluationRepository evalRepo;
-    private ServerStatusListener serverStatusListener;
+    private QuranTranscriber quranTranscriber;
+    private MurojaahEvaluator murojaahEvaluator;
+    private EvaluationRepository evaluationRepository;
 
     public MurojaahViewModel(@NonNull Application context) {
         super(context);
@@ -73,12 +63,10 @@ public class MurojaahViewModel extends AndroidViewModel {
         isHintRequested.set(false);
         isPlaying.set(false);
 
-        serverStatusListener = ServerStatusListener.getInstance();
-        transcriber = QuranTranscriber.getInstance(transcribedAudioHolder);
-        evaluator = MurojaahEvaluator.getInstance();
-        evalRepo = EvaluationRepository.getInstance();
+        quranTranscriber = QuranTranscriber.getInstance(transcribedAudioHolder);
+        murojaahEvaluator = MurojaahEvaluator.getInstance();
+        evaluationRepository = EvaluationRepository.getInstance();
 
-        serverStatus.set(serverStatusListener.getStatus().getValue());
         Timber.d("MurojaahViewModel constructor");
     }
 
@@ -89,10 +77,6 @@ public class MurojaahViewModel extends AndroidViewModel {
         //ayahNum.set(1);
 
         Timber.d("onActivityCreated");
-    }
-
-    public ServerStatusListener getServerStatusListener() {
-        return serverStatusListener;
     }
 
     public MutableLiveData<QuranAyahAudio> getTranscribedAudioHolder() {
@@ -122,7 +106,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     public void transcribeRecording() {
-        transcriber.addToQueue(audio);
+        quranTranscriber.addToQueue(audio);
         Timber.d("added to queue");
 
         pollTranscriptionQueue();
@@ -132,15 +116,15 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         if (numAvailableWorkers.get()>0) {
             Timber.d("idle worker:"+numAvailableWorkers.get()+" processing queue");
-            transcriber.poll();
+            quranTranscriber.poll();
         } else {
             Timber.d("waiting for idle worker");
         }
     }
 
     public void evaluate(QuranAyahAudio audio) {
-        Evaluation eval = evaluator.evaluate(audio);
-        evalRepo.add(eval);
+        Evaluation eval = murojaahEvaluator.evaluate(audio);
+        evaluationRepository.add(eval);
     }
 
     public void showHint() {

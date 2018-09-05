@@ -33,7 +33,7 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     private int SURAH_NUM;
 
     public MurojaahViewModel mViewModel;
-    private ActivityMurojaahBinding mMurojaahDataBinding;
+    private ActivityMurojaahBinding mBinding;
     private LifecycleRegistry mLifecycleRegistry;
     private MyAudioRecorder mRecorder = MyAudioRecorder.getInstance();
 
@@ -44,9 +44,8 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-        mMurojaahDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
-        mMurojaahDataBinding.setLifecycleOwner(this);
-
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_murojaah);
+        mBinding.setLifecycleOwner(this);
 
         SharedPreferences sharedPref = ((MyApplication) getApplication()).getPreferences();
 
@@ -58,7 +57,10 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
             mViewModel.onActivityCreated(this, SURAH_NUM);
         }
 
-        mMurojaahDataBinding.setViewmodel(mViewModel);
+        mBinding.setViewmodel(mViewModel);
+
+        mViewModel.setServerStatus(((MyApplication)getApplication())
+                .getServerStatusListener().getStatus().getValue());
 
         setupObservers();
     }
@@ -72,7 +74,8 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
                 mViewModel.serverStatus.set(serverStatus);
             }
         };
-        mViewModel.getServerStatusListener().getStatus().observe(this, serverStatusObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getStatus().observe(this, serverStatusObserver);
 
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
@@ -85,7 +88,8 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
                 }
             }
         };
-        mViewModel.getServerStatusListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getNumWorkersAvailable().observe(this, numWorkerObserver);
 
         final Observer<QuranAyahAudio> transcribedAudioObserver = new Observer<QuranAyahAudio>() {
             @Override

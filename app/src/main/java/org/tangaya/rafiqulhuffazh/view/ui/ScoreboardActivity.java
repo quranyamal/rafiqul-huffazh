@@ -15,7 +15,6 @@ import android.os.Bundle;
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreboardBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.ScoreboardNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.ScoreboardViewModel;

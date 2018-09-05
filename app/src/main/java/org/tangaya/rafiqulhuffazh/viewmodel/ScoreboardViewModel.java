@@ -9,7 +9,6 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 import org.tangaya.rafiqulhuffazh.MyApplication;

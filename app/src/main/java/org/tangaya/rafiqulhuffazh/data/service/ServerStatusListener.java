@@ -23,7 +23,7 @@ public class ServerStatusListener extends WebSocketAdapter {
     private static ServerStatusListener INSTANCE = null;
 
     private WebSocket serverStatusWebSocket;
-    private static String statusEndpoint;
+    private static String serverStatusEndpoint;
 
     public static String STATUS_CONNECTED = "connected";
     public static String STATUS_CONNECTING = "connecting...";
@@ -70,14 +70,14 @@ public class ServerStatusListener extends WebSocketAdapter {
 
     public void connect() throws IOException {
 
-        statusEndpoint = ServerSetting.getStatusEndpoint();
+        serverStatusEndpoint = ServerSetting.getStatusEndpoint();
 
         if (!status.getValue().equals(STATUS_CONNECTED)) {
-            serverStatusWebSocket = new WebSocketFactory().createSocket(statusEndpoint);
+            serverStatusWebSocket = new WebSocketFactory().createSocket(serverStatusEndpoint);
             serverStatusWebSocket.addListener(this);
             serverStatusWebSocket.connectAsynchronously();
             status.setValue(STATUS_CONNECTING);
-            Timber.d("connecting to " + statusEndpoint);
+            Timber.d("connecting to " + serverStatusEndpoint);
         } else {
             Timber.d("connected to the server, do noting");
         }

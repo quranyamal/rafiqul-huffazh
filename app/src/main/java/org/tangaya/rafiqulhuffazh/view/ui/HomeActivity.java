@@ -11,39 +11,40 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.view.navigator.HomeNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.HomeViewModel;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityHomeBinding;
 import org.tangaya.rafiqulhuffazh.R;
 
-import timber.log.Timber;
 
 public class HomeActivity extends Activity implements LifecycleOwner, HomeNavigator {
 
-    public HomeViewModel mViewModel;
+    private HomeViewModel viewModel;
     private ActivityHomeBinding binding;
-    private LifecycleRegistry mLifecycleRegistry;
+    private LifecycleRegistry lifecycleRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = new HomeViewModel(getApplication());
-        mViewModel.onActivityCreated(this);
+        viewModel = new HomeViewModel(getApplication());
+        viewModel.onActivityCreated(this);
 
-        mLifecycleRegistry = new LifecycleRegistry(this);
-        mLifecycleRegistry.markState(Lifecycle.State.CREATED);
+        lifecycleRegistry = new LifecycleRegistry(this);
+        lifecycleRegistry.markState(Lifecycle.State.CREATED);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-        binding.setViewmodel(mViewModel);
+        binding.setViewmodel(viewModel);
 
         final Observer<String> serverStatusObserver = new Observer<String>() {
             @Override
             public void onChanged(@Nullable String status) {
-                mViewModel.setServerStatus(status);
+                viewModel.setServerStatus(status);
             }
         };
-        mViewModel.getServerStatusListener().getStatus().observe(this, serverStatusObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getStatus().observe(this, serverStatusObserver);
     }
 
     @Override
@@ -73,6 +74,6 @@ public class HomeActivity extends Activity implements LifecycleOwner, HomeNaviga
     @NonNull
     @Override
     public Lifecycle getLifecycle() {
-        return mLifecycleRegistry;
+        return lifecycleRegistry;
     }
 }

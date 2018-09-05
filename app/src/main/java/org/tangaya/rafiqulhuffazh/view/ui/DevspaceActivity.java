@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
@@ -59,7 +59,8 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
                 mViewModel.serverStatus.set(serverStatus);
             }
         };
-        mViewModel.getServerListener().getStatus().observe(this, serverStatusObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getStatus().observe(this, serverStatusObserver);
 
         final Observer<Integer> numWorkerObserver = new Observer<Integer>() {
 
@@ -72,7 +73,8 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
                 }
             }
         };
-        mViewModel.getServerListener().getNumWorkersAvailable().observe(this, numWorkerObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getNumWorkersAvailable().observe(this, numWorkerObserver);
 
         final Observer<QuranAyahAudio> transcribedAudioObserver = new Observer<QuranAyahAudio>() {
             @Override

@@ -6,7 +6,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.view.navigator.HomeNavigator;
 
 public class HomeViewModel extends AndroidViewModel {
@@ -15,12 +14,6 @@ public class HomeViewModel extends AndroidViewModel {
 
     public final ObservableField<String> serverStatus = new ObservableField<>();
     public final ObservableBoolean isConnected = new ObservableBoolean();
-
-    private ServerStatusListener listener = ServerStatusListener.getInstance();
-
-    public ServerStatusListener getServerStatusListener() {
-        return listener;
-    }
 
     public HomeViewModel(@NonNull Application application) {
         super(application);

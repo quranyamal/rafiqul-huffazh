@@ -4,7 +4,6 @@ import android.databinding.BaseObservable;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.databinding.generated.callback.OnClickListener;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;

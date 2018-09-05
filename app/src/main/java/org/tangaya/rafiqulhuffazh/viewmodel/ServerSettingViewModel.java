@@ -5,12 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
-import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.view.navigator.ServerSettingNavigator;
-
-import java.io.IOException;
 
 public class ServerSettingViewModel extends AndroidViewModel {
 
@@ -22,20 +18,13 @@ public class ServerSettingViewModel extends AndroidViewModel {
     public final ObservableField<String> connectionStatus = new ObservableField<>();
     public final ObservableField<String> errorInfo = new ObservableField<>("");
 
-    private ServerStatusListener serverStatusListener;
-    ServerSettingNavigator mNavigator;
-
-    public ServerStatusListener getServerStatusListener() {
-        return serverStatusListener;
-    }
+    private ServerSettingNavigator mNavigator;
 
     public ServerSettingViewModel(@NonNull Application application) {
         super(application);
 
         hostname.set(ServerSetting.getHostname());
         port.set(ServerSetting.getPort());
-
-        serverStatusListener = ServerStatusListener.getInstance();
     }
 
     public void onActivityCreated(ServerSettingNavigator navigator) {
@@ -43,16 +32,7 @@ public class ServerSettingViewModel extends AndroidViewModel {
     }
 
     public void connect() {
-        ServerSetting.setHostname(hostname.get());
-        ServerSetting.setPort(port.get());
-        ServerSetting.applySetting();
-
-        try {
-            serverStatusListener.connect();
-        } catch (IOException e) {
-            errorInfo.set("invalid address");
-            e.printStackTrace();
-        }
+        mNavigator.onClickConnect();
     }
 
     public void saveSetting() {

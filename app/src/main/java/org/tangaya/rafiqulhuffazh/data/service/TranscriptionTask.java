@@ -1,24 +1,19 @@
 package org.tangaya.rafiqulhuffazh.data.service;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.tangaya.rafiqulhuffazh.data.model.EvaluationOld;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
 import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
-import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepositoryOld;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.QuranScriptConverter;
-import org.tangaya.rafiqulhuffazh.util.QuranUtil;
 
 import java.io.BufferedInputStream;
 import java.io.File;

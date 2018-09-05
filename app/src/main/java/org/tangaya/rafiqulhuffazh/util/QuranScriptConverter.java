@@ -6,12 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import timber.log.Timber;
 
-public class    QuranScriptConverter {
+public class QuranScriptConverter {
 
     private QuranScriptConverter() {}
 
@@ -156,32 +155,5 @@ public class    QuranScriptConverter {
 
         return arabic.trim();
     }
-
-    public static void main(String[] args) {
-
-//        Path currentRelativePath = Paths.get("");
-//        String s = currentRelativePath.toAbsolutePath().toString();
-//        System.out.println("Current relative path is: " + s);
-//
-//        connect();
-
-        System.out.println(toArabic("bismil lAhir roHmAnir roHIm"));
-        System.out.println(toArabic("ealHamdu lillAhi robbil EAlamIn"));
-        System.out.println(toArabic("earroHmAnir roHIm"));
-        System.out.println(toArabic("mAliki yWmid dIn"));
-        System.out.println(toArabic("eiyyAka naEbudu waeiyyAka nastaEIn"));
-        System.out.println(toArabic("eihdinAS SirOpol mustaqIm"));
-        System.out.println(toArabic("SirOpol lacIna eanEamta EalYhim gVril magMUbi EalYhim walAM MOOOllIn "));
-
-        System.out.println();
-
-        System.out.println(toArabic("qul eaEUcu birobbin nAs"));
-        System.out.println(toArabic("malikin nAs"));
-        System.out.println(toArabic("eilAhin nAs"));
-        System.out.println(toArabic("miN Xarril waswAsil xonnAs"));
-        System.out.println(toArabic("eallacI yuwaswisu fI SudUrin nAs"));
-        System.out.println(toArabic("minal jinnati wannAs"));
-    }
-
 }
 

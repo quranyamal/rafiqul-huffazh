@@ -1,18 +1,13 @@
 package org.tangaya.rafiqulhuffazh.view.ui;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityAboutBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.AboutNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.AboutViewModel;
-
-import java.util.Locale;
 
 import timber.log.Timber;
 

@@ -14,7 +14,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.widget.Toast;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;

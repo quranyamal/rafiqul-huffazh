@@ -13,11 +13,8 @@ import android.util.Log;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
-import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.data.repository.EvaluationRepository;
 import org.tangaya.rafiqulhuffazh.data.service.QuranTranscriber;
-import org.tangaya.rafiqulhuffazh.data.service.RecognitionTask;
-import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
 import org.tangaya.rafiqulhuffazh.util.AudioFileHelper;
 import org.tangaya.rafiqulhuffazh.util.MurojaahEvaluator;
 import org.tangaya.rafiqulhuffazh.view.navigator.DevspaceNavigator;
@@ -44,7 +41,6 @@ public class DevspaceViewModel extends AndroidViewModel {
     private QuranTranscriber transcriber;
     private MurojaahEvaluator evaluator;
     private EvaluationRepository evalRepo;
-    private ServerStatusListener serverStatusListener;
 
     private MutableLiveData<QuranAyahAudio> transcribedAudioHolder = new MutableLiveData<>();
 
@@ -70,7 +66,6 @@ public class DevspaceViewModel extends AndroidViewModel {
     private DevspaceViewModel(@NonNull Application application) {
         super(application);
 
-        serverStatusListener = ServerStatusListener.getInstance();
         transcriber = QuranTranscriber.getInstance(transcribedAudioHolder);
         evaluator = MurojaahEvaluator.getInstance();
         evalRepo = EvaluationRepository.getInstance();
@@ -81,13 +76,8 @@ public class DevspaceViewModel extends AndroidViewModel {
         if ( INSTANCE == null) {
             INSTANCE = new DevspaceViewModel(application);
         }
-        RecognitionTask.ENDPOINT = ServerSetting.getRecognitionEndpoint();
 
         return INSTANCE;
-    }
-
-    public ServerStatusListener getServerListener() {
-        return serverStatusListener;
     }
 
     public void onActivityCreated(DevspaceNavigator navigator) {

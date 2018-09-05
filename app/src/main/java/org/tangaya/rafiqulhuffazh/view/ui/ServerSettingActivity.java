@@ -10,19 +10,20 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
-import org.tangaya.rafiqulhuffazh.data.service.ServerStatusListener;
+import org.tangaya.rafiqulhuffazh.data.model.ServerSetting;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityServerSettingBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.ServerSettingNavigator;
 import org.tangaya.rafiqulhuffazh.viewmodel.ServerSettingViewModel;
 
+import java.io.IOException;
+
 public class ServerSettingActivity extends Activity implements LifecycleOwner, ServerSettingNavigator {
 
-    public ServerSettingViewModel mViewModel;
-    private ActivityServerSettingBinding binding;
+    private ServerSettingViewModel mViewModel;
+    private ActivityServerSettingBinding mBinding;
     private LifecycleRegistry mLifecycleRegistry;
 
     @Override
@@ -32,14 +33,11 @@ public class ServerSettingActivity extends Activity implements LifecycleOwner, S
         mViewModel = new ServerSettingViewModel(this.getApplication());
         mViewModel.onActivityCreated(this);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_server_setting);
-        binding.setViewmodel(mViewModel);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_server_setting);
+        mBinding.setViewmodel(mViewModel);
 
         mLifecycleRegistry = new LifecycleRegistry(this);
         mLifecycleRegistry.markState(Lifecycle.State.CREATED);
-
-//        Toolbar toolbar = findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
 
         setTitle("Server Setting");
 
@@ -48,14 +46,28 @@ public class ServerSettingActivity extends Activity implements LifecycleOwner, S
             public void onChanged(@Nullable String connectionStatus) {
 
                 mViewModel.connectionStatus.set(connectionStatus);
-
-                if (connectionStatus.equals(ServerStatusListener.STATUS_ERROR)) {
+                if (connectionStatus.equals("connection error")) {
                     mViewModel.errorInfo.set("connection refused");
                 }
                 //todo: set editable false in case of connected
             }
         };
-        mViewModel.getServerStatusListener().getStatus().observe(this, connectionStatusObserver);
+        ((MyApplication)getApplication()).getServerStatusListener()
+                .getStatus().observe(this, connectionStatusObserver);
+    }
+
+    @Override
+    public void onClickConnect() {
+        ServerSetting.setHostname(mViewModel.hostname.get());
+        ServerSetting.setPort(mViewModel.port.get());
+        ServerSetting.applySetting();
+
+        try {
+            ((MyApplication)getApplication()).getServerStatusListener().connect();
+        } catch (IOException e) {
+            mViewModel.errorInfo.set("invalid address");
+            e.printStackTrace();
+        }
     }
 
     @Override
