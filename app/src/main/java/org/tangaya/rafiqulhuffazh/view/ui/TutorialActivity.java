@@ -23,7 +23,8 @@ public class TutorialActivity extends Activity implements TutorialNavigator {
     private int[] layouts = {R.layout.slide_tutorial_one,
             R.layout.slide_tutorial_two,
             R.layout.slide_tutorial_three,
-            R.layout.slide_tutorial_four};
+            R.layout.slide_tutorial_four,
+            R.layout.slide_tutorial_five};
     private TutorialPagerAdapter mPagerAdapter;
 
     @Override

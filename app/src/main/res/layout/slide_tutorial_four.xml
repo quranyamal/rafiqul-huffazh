@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff7db">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -28,7 +29,7 @@
         android:layout_marginTop="8dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="tombol di atas dapat digunakan untuk membatalkan rekaman pada ayat bersangkutan"
+        android:text="Jika Anda ingin membatalkan rekaman dan memperbaiki bacaan ayat, gunakan tombol ini dan rekam kembali bacaan Anda"
         android:textSize="18dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:text="رَ"
             android:textSize="72dp"
+            android:textColor="@color/primaryTextColor"
             android:layout_gravity="center_horizontal"/>
 
         <TextView
@@ -29,6 +30,7 @@
             android:paddingBottom="30dp"
             android:text="Rafiqul Huffazh"
             android:textSize="32dp"
+            android:textColor="@color/primaryTextColor"
             android:textAlignment="center"/>
 
         <LinearLayout

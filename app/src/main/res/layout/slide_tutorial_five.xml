@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     android:background="#ffeeee">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/eye_black_100"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,12 +15,12 @@
         android:layout_marginTop="8dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="Jika Anda membutuhkan bantuan untuk melanjutkan bacaan, gunakan tombol ini. Aplikasi akan manampilkan teks ayat"
+        android:text="Selesai"
         android:textSize="18dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:layout_editor_absoluteY="81dp"
-    android:background="#ffcc74">
+    android:background="#fff7db">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -31,7 +31,7 @@
         android:layout_marginTop="8dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        android:text="saat merekam, tombol rekam berubah menjadi seperti di atas. gunakan tombol tersebut untuk berhenti merekam saat selesai membaca ayat"
+        android:text="Saat merekam, tombol rekam berubah menjadi seperti di atas. Gunakan tombol ini untuk menyudahi rekaman bacaan pada tiap ayat"
         android:textSize="18dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
