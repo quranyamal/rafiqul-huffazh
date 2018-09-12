@@ -27,7 +27,6 @@ public class DevspaceViewModel extends AndroidViewModel {
 
     private static DevspaceViewModel INSTANCE = null;
 
-
     public final ObservableInt surah = new ObservableInt(1);
     public final ObservableInt ayah = new ObservableInt(1);
     public final ObservableField<String> result= new ObservableField<>();

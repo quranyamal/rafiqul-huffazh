@@ -12,14 +12,14 @@ import java.util.ArrayList;
 
 public class ScoreDetailViewModel extends AndroidViewModel {
 
-    private EvaluationRepository evalRepo;
+    private EvaluationRepository evaluationRepository;
     public MutableLiveData<ArrayList<Evaluation>> evaluationsLiveData;
 
     public ScoreDetailViewModel(@NonNull Application application) {
         super(application);
 
-        evalRepo = EvaluationRepository.getInstance();
-        evaluationsLiveData = evalRepo.getEvaluationsLiveData();
+        evaluationRepository = EvaluationRepository.getInstance();
+        evaluationsLiveData = evaluationRepository.getEvaluationsLiveData();
     }
 
     public MutableLiveData<ArrayList<Evaluation>> getEvaluationsLiveData() {

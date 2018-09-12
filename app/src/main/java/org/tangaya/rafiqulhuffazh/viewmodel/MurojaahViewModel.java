@@ -48,7 +48,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     private MyAudioPlayer myAudioPlayer;
     private Context mContext;
-    private MurojaahNavigator mNavigator;
+    private MurojaahNavigator navigator;
 
     private QuranTranscriber quranTranscriber;
     private MurojaahEvaluator murojaahEvaluator;
@@ -71,7 +71,7 @@ public class MurojaahViewModel extends AndroidViewModel {
     }
 
     public void onActivityCreated(MurojaahNavigator navigator, int surah) {
-        mNavigator = navigator;
+        this.navigator = navigator;
         surahNum.set(surah);
         surahName.set(QuranUtil.getSurahName(surah));
         //ayahNum.set(1);
@@ -91,14 +91,14 @@ public class MurojaahViewModel extends AndroidViewModel {
 
         if (!isRecording.get()) {
             audio = new Recording(surahNum.get(), ayahNum.get());
-            mNavigator.onStartRecording((Recording) audio);
+            navigator.onStartRecording((Recording) audio);
             isRecording.set(true);
         } else {
-            mNavigator.onStopRecording();
+            navigator.onStopRecording();
             isRecording.set(false);
 
             if (isEndOfSurah()) {
-                mNavigator.onMurojaahFinished();
+                navigator.onMurojaahFinished();
             } else {
                 incrementAyah();
             }
@@ -146,7 +146,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 //        Timber.d("startRecording");
 //        // todo: fix filename of recording. save file to cache directory
 //        if (!isMockRecording) {
-//            mNavigator.onStartRecording(new Recording(surahNum.get(), ayahNum.get()));
+//            navigator.onStartRecording(new Recording(surahNum.get(), ayahNum.get()));
 //        }
 //        isRecording.set(true);
 //    }
@@ -155,7 +155,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 //        Timber.d("finishRecording");
 //
 //        if (!isMockRecording) {
-//            mNavigator.onStopRecording();
+//            navigator.onStopRecording();
 //        }
 //
 //        Recording recording = new Recording(surahNum.get(), ayahNum.get());
@@ -166,11 +166,11 @@ public class MurojaahViewModel extends AndroidViewModel {
 //        isRecording.set(false);
 //
 //        if (isEndOfSurah()) {
-//            mNavigator.on
+//            navigator.on
 
     public void cancelRecording() {
         if (!isMockRecording) {
-            mNavigator.onStopRecording();
+            navigator.onStopRecording();
         }
 
         isRecording.set(false);
