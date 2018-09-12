@@ -1,4 +1,4 @@
 # Rafiqul Huffazh
-An Android application to help users in memorizing the Quran using Automatic Speech Recognition (ASR) technology
+An Android application using Automatic Speech Recognition (ASR) technology to help users in memorizing the Quran. ASR Architecture type used in this application is Speech Recognition in the Cloud (client-server). The server adopted from [Kaldi GStreamer Server](https://github.com/alumae/kaldi-gstreamer-server).
 
-This app requires an ASR server to recognize Quran recitation
+System architecture of Rafiqul Huffazh:
