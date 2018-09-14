@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.Evaluation;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityScoreDetailBinding;
 import org.tangaya.rafiqulhuffazh.databinding.DialogEvalDetailBinding;
 import org.tangaya.rafiqulhuffazh.view.adapter.EvalAdapter;
@@ -32,6 +33,7 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner, Eva
     private ActivityScoreDetailBinding mBinding;
     private LifecycleRegistry mLifecycleRegistry;
     private EvalAdapter.EvalAdapterListener listener;
+    private MyAudioPlayer myAudioPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner, Eva
                 recyclerView.setAdapter(mAdapter);
             }
         });
+
+        myAudioPlayer = MyAudioPlayer.getInstance();
     }
 
     @Override
@@ -66,7 +70,6 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner, Eva
         super.onStart();
         mLifecycleRegistry.markState(Lifecycle.State.STARTED);
     }
-
 
     @NonNull
     @Override
@@ -93,5 +96,15 @@ public class ScoreDetailActivity extends Activity implements LifecycleOwner, Eva
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onReferenceSpeakerClicked(Evaluation eval) {
+        myAudioPlayer.play(MyAudioPlayer.Source.QARI1, eval.surah.get(), eval.ayah.get());
+    }
+
+    @Override
+    public void onRecordingSpeakerClicked(Evaluation eval) {
+        myAudioPlayer.play(MyAudioPlayer.Source.RECORDING, eval.surah.get(), eval.ayah.get());
     }
 }

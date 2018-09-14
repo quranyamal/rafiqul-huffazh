@@ -56,6 +56,20 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
                 Log.d("EvalAdapter", "onClick set " + position);
             }
         });
+
+        holder.mBinding.referenceSpeaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onReferenceSpeakerClicked(evaluations.get(position));
+            }
+        });
+
+        holder.mBinding.recordingSpeaker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onRecordingSpeakerClicked(evaluations.get(position));
+            }
+        });
     }
 
     @Override
@@ -75,5 +89,9 @@ public class EvalAdapter extends RecyclerView.Adapter<EvalAdapter.MyViewHolder> 
 
     public interface EvalAdapterListener {
         void onEvalDescriptionClicked(Evaluation eval);
+
+        void onReferenceSpeakerClicked(Evaluation eval);
+
+        void onRecordingSpeakerClicked(Evaluation eval);
     }
 }

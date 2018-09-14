@@ -114,11 +114,11 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         mLifecycleRegistry.markState(Lifecycle.State.STARTED);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mViewModel.deleteRecordingFiles();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        mViewModel.deleteRecordingFiles();
+//    }
 
     @Override
     public void onStartRecording(Recording recording) {
