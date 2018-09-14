@@ -10,6 +10,8 @@ public interface MurojaahNavigator {
 
     void onStopRecording();
 
+    void onPlayVerse(int surah, int ayah);
+
     void gotoResult();
 
 }

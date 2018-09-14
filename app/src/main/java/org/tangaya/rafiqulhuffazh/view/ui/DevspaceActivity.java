@@ -30,7 +30,7 @@ public class DevspaceActivity extends Activity implements LifecycleOwner, Devspa
     private LifecycleRegistry mLifecycleRegistry;
 
     private MyAudioRecorder mRecorder = MyAudioRecorder.getInstance();
-    MyAudioPlayer mPlayer = new MyAudioPlayer();
+    MyAudioPlayer mPlayer = MyAudioPlayer.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

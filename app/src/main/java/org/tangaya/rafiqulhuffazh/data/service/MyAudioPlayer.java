@@ -22,7 +22,9 @@ public class MyAudioPlayer extends MediaPlayer {
         QARI1
     }
 
-    public MyAudioPlayer() {
+    private static MyAudioPlayer INSTANCE = null;
+
+    private MyAudioPlayer() {
         setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         setOnCompletionListener(new OnCompletionListener() {
@@ -31,6 +33,14 @@ public class MyAudioPlayer extends MediaPlayer {
                 reset();
             }
         });
+    }
+
+    public static MyAudioPlayer getInstance() {
+
+        if (INSTANCE == null) {
+            INSTANCE = new MyAudioPlayer();
+        }
+        return INSTANCE;
     }
 
     public void play(Uri fileUri) {

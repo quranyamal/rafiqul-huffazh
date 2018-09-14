@@ -21,6 +21,7 @@ import org.tangaya.rafiqulhuffazh.MyApplication;
 import org.tangaya.rafiqulhuffazh.R;
 import org.tangaya.rafiqulhuffazh.data.model.QuranAyahAudio;
 import org.tangaya.rafiqulhuffazh.data.model.Recording;
+import org.tangaya.rafiqulhuffazh.data.service.MyAudioPlayer;
 import org.tangaya.rafiqulhuffazh.data.service.MyAudioRecorder;
 import org.tangaya.rafiqulhuffazh.databinding.ActivityMurojaahBinding;
 import org.tangaya.rafiqulhuffazh.view.navigator.MurojaahNavigator;
@@ -35,7 +36,8 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
     public MurojaahViewModel mViewModel;
     private ActivityMurojaahBinding mBinding;
     private LifecycleRegistry mLifecycleRegistry;
-    private MyAudioRecorder mRecorder = MyAudioRecorder.getInstance();
+    private MyAudioRecorder mRecorder;
+    private MyAudioPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,9 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
                 .getServerStatusListener().getStatus().getValue());
 
         setupObservers();
+
+        mRecorder = MyAudioRecorder.getInstance();
+        mPlayer = MyAudioPlayer.getInstance();
     }
 
     private void setupObservers() {
@@ -129,6 +134,11 @@ public class MurojaahActivity extends Activity implements LifecycleOwner, Muroja
         mRecorder.reset();
         mViewModel.transcribeRecording();
         Timber.d("onStopRecording");
+    }
+
+    @Override
+    public void onPlayVerse(int surah, int ayah) {
+        mPlayer.play(MyAudioPlayer.Source.QARI1, surah, ayah);
     }
 
     public static MurojaahViewModel obtainViewModel(Activity activity) {

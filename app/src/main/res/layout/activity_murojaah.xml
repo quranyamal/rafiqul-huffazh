@@ -74,14 +74,24 @@
                     android:textStyle="bold"/>
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_horizontal"
+                    android:text="ketuk untuk memutar audio"
+                    android:textSize="12dp"
+                    android:visibility="@{viewmodel.hintVisibility}"
+                    android:onClick="@{() -> viewmodel.playVerse() }"/>
+
+                <TextView
                     android:id="@+id/hint_text"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_marginTop="40dp"
                     android:gravity="center_horizontal"
                     android:text="@{viewmodel.ayahText, default=`بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ`}"
                     android:textSize="24dp"
-                    android:visibility="@{viewmodel.hintVisibility}" />
+                    android:visibility="@{viewmodel.hintVisibility}"
+                    android:onClick="@{() -> viewmodel.playVerse() }"/>
 
                 <TextView
                     android:layout_width="wrap_content"

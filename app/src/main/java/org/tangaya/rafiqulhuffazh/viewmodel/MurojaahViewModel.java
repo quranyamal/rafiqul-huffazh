@@ -36,7 +36,7 @@ public class MurojaahViewModel extends AndroidViewModel {
 
     public final ObservableField<String> ayahText = new ObservableField<>();
     public final ObservableBoolean isHintRequested = new ObservableBoolean();
-    public final ObservableField<Integer> hintVisibility = new ObservableField<>();
+    public final ObservableField<Integer> hintVisibility = new ObservableField<>(View.INVISIBLE);
 
     public final ObservableBoolean isRecording = new ObservableBoolean();
     public final ObservableBoolean isPlaying = new ObservableBoolean();
@@ -93,6 +93,7 @@ public class MurojaahViewModel extends AndroidViewModel {
             audio = new Recording(surahNum.get(), ayahNum.get());
             mNavigator.onStartRecording((Recording) audio);
             isRecording.set(true);
+            hintVisibility.set(View.INVISIBLE);
         } else {
             mNavigator.onStopRecording();
             isRecording.set(false);
@@ -134,40 +135,6 @@ public class MurojaahViewModel extends AndroidViewModel {
         isHintRequested.set(true);
     }
 
-//    public void recordAyah() {
-//        if (isRecording.get()) {
-//            finishRecording();
-//        } else {
-//            startRecording();
-//        }
-//    }
-
-//    void startRecording() {
-//        Timber.d("startRecording");
-//        // todo: fix filename of recording. save file to cache directory
-//        if (!isMockRecording) {
-//            mNavigator.onStartRecording(new Recording(surahNum.get(), ayahNum.get()));
-//        }
-//        isRecording.set(true);
-//    }
-
-//    void finishRecording() {
-//        Timber.d("finishRecording");
-//
-//        if (!isMockRecording) {
-//            mNavigator.onStopRecording();
-//        }
-//
-//        Recording recording = new Recording(surahNum.get(), ayahNum.get());
-////        mAudioRepository.addRecording(recording);
-//
-//        //pollRecognitionQueue();
-//        //Timber.d("recognitionTaskQueue size: " + mTranscriber.getQueueSize());
-//        isRecording.set(false);
-//
-//        if (isEndOfSurah()) {
-//            mNavigator.on
-
     public void cancelRecording() {
         if (!isMockRecording) {
             mNavigator.onStopRecording();
@@ -176,14 +143,9 @@ public class MurojaahViewModel extends AndroidViewModel {
         isRecording.set(false);
     }
 
-//    public void playReference() {
-//        if (!isPlaying.get()) {
-//            myAudioPlayer.play(Uri.parse(getTestFilePath()));
-//        } else {
-//            myAudioPlayer.stop();
-//        }
-//        isPlaying.set(!isPlaying.get());
-//    }
+    public void playVerse() {
+        mNavigator.onPlayVerse(surahNum.get(), ayahNum.get());
+    }
 
     private boolean isEndOfSurah() {
         return !QuranUtil.isValidAyahNum(surahNum.get(), ayahNum.get()+1);
