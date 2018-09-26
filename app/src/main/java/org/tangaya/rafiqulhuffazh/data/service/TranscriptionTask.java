@@ -108,7 +108,12 @@ public class TranscriptionTask extends WebSocketAdapter {
         if (isTranscriptionFinal(text)) {
             String transcription = new JSONObject(text).getJSONObject("result").getJSONArray("hypotheses")
                     .getJSONObject(0).getString("transcript");
-            transcription = transcription.substring(0, transcription.length()-1);
+
+            if (transcription.substring(transcription.length()-1, transcription.length()).equals(".")) {
+                // hmm-gmm decoder puts a dot at the end of transcription
+                // it should be removed
+                transcription = transcription.substring(0, transcription.length()-1);
+            }
 
             inputAudio.setTranscription(transcription);
             inputAudio.setArabicTranscription(QuranScriptConverter.toArabic(transcription));
